@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://c0p7l1km7aafi"]
+[gd_scene load_steps=3 format=3 uid="uid://dk1owigwb56dl"]
 
 [ext_resource type="Texture2D" uid="uid://cpuc5buvv1l8y" path="res://Sprite/ChessBoard_Wood.png" id="1_7jmrq"]
 [ext_resource type="Script" path="res://Script/chess_board.gd" id="2_b6u5r"]
