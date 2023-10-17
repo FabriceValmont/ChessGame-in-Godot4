@@ -4,6 +4,6 @@
 [ext_resource type="Script" path="res://Script/rook.gd" id="2_jh56t"]
 
 [node name="Rook" type="Sprite2D"]
+position = Vector2(50, 50)
 texture = ExtResource("1_l0ogf")
-centered = false
 script = ExtResource("2_jh56t")

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GodsChess_PC"
-run/main_scene="res://Scene/rook.tscn"
+run/main_scene="res://Scene/chess_board.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://Sprite/Logo_GodsChess.png"
 

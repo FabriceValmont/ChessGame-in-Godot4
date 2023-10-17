@@ -3,6 +3,7 @@ extends Sprite2D
 var dragging = false
 var click_radius = 100
 
+var drag_offset = Vector2()
 
 func _ready():
 	pass
@@ -16,26 +17,22 @@ func _input(event):
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
 				dragging = true
+				drag_offset = event.position - self.position
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
-			if global_position.x <= 300:
-				self.position.x = 0
-				self.position.y = 0
-			else:
-				self.position.x = 300
-				self.position.y = 0
+			for i in range (0,8):
+				print("Retour boucle", i)
+				if global_position.x >= i*100 and global_position.x <= (i*100)+100:
+					print("case visé", i)
+					self.position.x = (i*100) + 50
+					self.position.y = 50
+					break
+				elif global_position.x >= 800:
+					print("Case de départ")
+					self.position.x = 50
+					self.position.y = 50
 			dragging = false
 
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
-
-#	var mouse_pos = get_local_mouse_position()
-#	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-#		if mouse_pos.x >= 0 and mouse_pos.x <= texture.get_width()\
-#		and mouse_pos.y >= 0 and mouse_pos.y <= texture.get_height():
-#			if event.is_pressed():
-#				global_position.x = get_global_mouse_position().x
-#				global_position.y = get_global_mouse_position().y
-#				print(MOUSE_BUTTON_LEFT)
-#				print("click")
