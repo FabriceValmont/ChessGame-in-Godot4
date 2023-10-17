@@ -15,6 +15,10 @@ run/main_scene="res://Scene/chess_board.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://Sprite/Logo_GodsChess.png"
 
+[autoload]
+
+VariableGlobal="*res://Script/variable_global.gd"
+
 [display]
 
 window/size/viewport_width=900

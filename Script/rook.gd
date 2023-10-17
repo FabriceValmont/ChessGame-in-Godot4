@@ -3,8 +3,8 @@ extends Sprite2D
 var dragging = false
 var click_radius = 100
 var drag_offset = Vector2()
-var new_position_x = self.position.x
-var new_position_y = self.position.y
+var new_position = {"x": self.position.x, "y": self.position.y }
+var move_case = VariableGlobal.one_move_case
 
 func _ready():
 	pass
@@ -22,18 +22,17 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			for i in range (0,8):
-				print("Retour boucle", i)
-				if global_position.x >= i*100 and global_position.x <= (i*100)+100:
-					print("case visé", i)
-					self.position.x = (i*100) + 50
-					self.position.y = 50
-					new_position_x = self.position.x
-					new_position_y = self.position.y
+				if global_position.x >= i*move_case and global_position.x <= (i*move_case)+move_case \
+				and global_position.y >= new_position.y - 50 and global_position.y <= new_position.y + 50:
+					self.position = Vector2((i*move_case) + 50, new_position.y)
+					new_position = {"x": self.position.x, "y": self.position.y }
 					break
-				elif global_position.x >= 800:
-					print("Case de départ")
-					self.position.x = new_position_x
-					self.position.y = new_position_y
+				elif global_position.x >= new_position.x - 50 and global_position.x <= new_position.x + 50 \
+				and global_position.y >= i*move_case and global_position.y <= (i*move_case)+move_case:
+					self.position = Vector2(new_position.x, (i*move_case) + 50)
+					new_position = {"x": self.position.x, "y": self.position.y }
+					break
+			self.position = Vector2(new_position.x, new_position.y)
 			dragging = false
 
 	if event is InputEventMouseMotion and dragging:
