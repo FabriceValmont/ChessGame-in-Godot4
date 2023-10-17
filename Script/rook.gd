@@ -2,8 +2,9 @@ extends Sprite2D
 
 var dragging = false
 var click_radius = 100
-
 var drag_offset = Vector2()
+var new_position_x = self.position.x
+var new_position_y = self.position.y
 
 func _ready():
 	pass
@@ -26,11 +27,13 @@ func _input(event):
 					print("case visé", i)
 					self.position.x = (i*100) + 50
 					self.position.y = 50
+					new_position_x = self.position.x
+					new_position_y = self.position.y
 					break
 				elif global_position.x >= 800:
 					print("Case de départ")
-					self.position.x = 50
-					self.position.y = 50
+					self.position.x = new_position_x
+					self.position.y = new_position_y
 			dragging = false
 
 	if event is InputEventMouseMotion and dragging:
