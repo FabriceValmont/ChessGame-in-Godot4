@@ -19,9 +19,14 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
 var i = 9
 var j = 2
+@onready var name_of_piece = get_node(".").get_name()
 
 func _ready():
-	pass
+	if name_of_piece == "Rook2":
+		i = 9
+		j = 9
+		new_position = Vector2(750,750)
+	print(name_of_piece, " i: ", i, " j: ", j )
 
 func _process(delta):
 	pass
@@ -54,9 +59,9 @@ func _input(event):
 					break
 			self.position = Vector2(new_position.x, new_position.y)
 			dragging = false
-#			chessBoard[i][j] = 
 		for f in range(0,12):
-			print(chessBoard[f])
+			if name_of_piece == "Rook2":
+				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:

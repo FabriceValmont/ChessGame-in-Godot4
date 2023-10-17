@@ -11,3 +11,6 @@ script = ExtResource("2_b6u5r")
 
 [node name="Rook" parent="." instance=ExtResource("3_k58gi")]
 position = Vector2(50, 750)
+
+[node name="Rook2" parent="." instance=ExtResource("3_k58gi")]
+position = Vector2(750, 750)
