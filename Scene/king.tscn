@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6kewwu2vfsn1"]
+
+[ext_resource type="Texture2D" uid="uid://wewxrmyo7nx3" path="res://Sprite/king_white.png" id="1_wbn2v"]
+[ext_resource type="Script" path="res://Script/king.gd" id="2_p31jf"]
+
+[node name="King" type="Sprite2D"]
+position = Vector2(50, 50)
+texture = ExtResource("1_wbn2v")
+script = ExtResource("2_p31jf")

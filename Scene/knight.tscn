@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://b0shduipojcvd"]
 
 [ext_resource type="Texture2D" uid="uid://dfk0cnxp52a58" path="res://Sprite/knight_white.png" id="1_jaukq"]
-[ext_resource type="Script" path="res://Knight.gd" id="1_m3d0s"]
+[ext_resource type="Script" path="res://Script/Knight.gd" id="2_3b4is"]
 
 [node name="Knight" type="Sprite2D"]
 position = Vector2(50, 50)
 texture = ExtResource("1_jaukq")
-script = ExtResource("1_m3d0s")
+script = ExtResource("2_3b4is")

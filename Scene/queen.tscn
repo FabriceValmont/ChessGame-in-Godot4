@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://bs0bubiteqv4c"]
 
 [ext_resource type="Texture2D" uid="uid://bmtmgrni0a3nc" path="res://Sprite/queen_white.png" id="1_0ifmu"]
-[ext_resource type="Script" path="res://queen.gd" id="2_jk3mu"]
+[ext_resource type="Script" path="res://Script/queen.gd" id="2_73kd2"]
 
-[node name="queen" type="Sprite2D"]
+[node name="Queen" type="Sprite2D"]
 position = Vector2(50, 50)
 texture = ExtResource("1_0ifmu")
-script = ExtResource("2_jk3mu")
+script = ExtResource("2_73kd2")
