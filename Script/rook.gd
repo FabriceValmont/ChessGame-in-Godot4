@@ -1,7 +1,7 @@
 extends Sprite2D
 
 var dragging = false
-var click_radius = 100
+var click_radius = 50
 var drag_offset = Vector2()
 var new_position = Vector2(50, 750)
 var move_case = VariableGlobal.one_move_case

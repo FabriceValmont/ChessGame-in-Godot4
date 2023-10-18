@@ -1,7 +1,7 @@
 extends Sprite2D
 
 var dragging = false
-var click_radius = 100
+var click_radius = 50
 var drag_offset = Vector2()
 var new_position = Vector2(250, 750)
 var move_case = VariableGlobal.one_move_case
@@ -69,4 +69,6 @@ func move(dx, dy) :
 			j=j+(dx*f)
 			chessBoard[i][j] = "bishop_white"
 			break
+		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
+			self.position = Vector2(new_position.x, new_position.y)
 

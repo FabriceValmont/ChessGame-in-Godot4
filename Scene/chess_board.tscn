@@ -18,3 +18,6 @@ position = Vector2(750, 750)
 
 [node name="Bishop" parent="." instance=ExtResource("4_1u444")]
 position = Vector2(250, 750)
+
+[node name="Bishop2" parent="." instance=ExtResource("4_1u444")]
+position = Vector2(551, 750)
