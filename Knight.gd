@@ -3,7 +3,7 @@ extends Sprite2D
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
-var newPosition = Vector2(250, 750)
+var newPosition = Vector2(150, 750)
 var moveCase = VariableGlobal.one_move_case
 var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
@@ -18,14 +18,14 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
 var i = 9
-var j = 4
+var j = 3
 @onready var name_of_piece = get_node(".").get_name()
 
 func _ready():
-	if name_of_piece == "Bishop2":
+	if name_of_piece == "Rook2":
 		i = 9
-		j = 7
-		newPosition = Vector2(550,750)
+		j = 8
+		newPosition = Vector2(650,750)
 	print(name_of_piece, " i: ", i, " j: ", j )
 
 func _process(delta):
@@ -40,25 +40,28 @@ func _input(event):
 				dragOffset = event.position - self.position
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
-			move(1,1)
-			move(1,-1)
-			move(-1,1)
-			move(-1,-1)
+			for f in range (0,8):
+				move(1,-2)
+				move(-1,-2)
+				move(1,2)
+				move(-1,2)
+				move(2,-1)
+				move(-2,-1)
+				move(2,1)
+				move(-2,1)
 			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
-		
-#		for f in range(0,12):
-#			if name_of_piece == "Bishop":
-#				print(chessBoard[f])
+		for f in range(0,12):
+			if name_of_piece == "Rook2":
+				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
 		
-		
 func move(dx, dy) :
-#	En bas à droite(1,1), En haut à droite(1,-1), En bas à gauche (-1,1), en haut à gauche(-1,-1)
+#	A droite(1,0), En haut(0,1), A gauche(-1,0), En bas(0,-1)
 	for f in range (0,8):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
@@ -69,7 +72,7 @@ func move(dx, dy) :
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)
 			j=j+(dx*f)
-			chessBoard[i][j] = "bishop_white"
+			chessBoard[i][j] = "knight_white"
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(newPosition.x, newPosition.y)

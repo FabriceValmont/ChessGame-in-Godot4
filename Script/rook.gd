@@ -1,10 +1,10 @@
 extends Sprite2D
 
 var dragging = false
-var click_radius = 50
-var drag_offset = Vector2()
-var new_position = Vector2(50, 750)
-var move_case = VariableGlobal.one_move_case
+var clickRadius = 50
+var dragOffset = Vector2()
+var newPosition = Vector2(50, 750)
+var moveCase = VariableGlobal.one_move_case
 var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "rook_black", "knight_black", "bishop_black", "queen_black", "king_black", "bishop_black", "knight_black", "rook_black", "x", "x"],
@@ -25,7 +25,7 @@ func _ready():
 	if name_of_piece == "Rook2":
 		i = 9
 		j = 9
-		new_position = Vector2(750,750)
+		newPosition = Vector2(750,750)
 	print(name_of_piece, " i: ", i, " j: ", j )
 
 func _process(delta):
@@ -33,11 +33,11 @@ func _process(delta):
 
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if (event.position - self.position).length() < click_radius:
+		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
 				dragging = true
-				drag_offset = event.position - self.position
+				dragOffset = event.position - self.position
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			for f in range (0,8):
@@ -45,7 +45,7 @@ func _input(event):
 				move(0,1)
 				move(-1,0)
 				move(0,-1)
-			self.position = Vector2(new_position.x, new_position.y)
+			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
 		for f in range(0,12):
 			if name_of_piece == "Rook2":
@@ -59,16 +59,16 @@ func _input(event):
 func move(dx, dy) :
 #	A droite(1,0), En haut(0,1), A gauche(-1,0), En bas(0,-1)
 	for f in range (0,8):
-		var targetCaseX = dx*(f*move_case)
-		var targetCaseY = dy*(f*move_case)
-		if global_position.x >= (new_position.x - 50) + targetCaseX  and global_position.x <= (new_position.x + 50) + targetCaseX \
-		and global_position.y >= (new_position.y - 50) + targetCaseY and global_position.y <= (new_position.y + 50) + targetCaseY:
-			self.position = Vector2((new_position.x + targetCaseX), (new_position.y + targetCaseY))
-			new_position = Vector2(self.position.x, self.position.y)
+		var targetCaseX = dx*(f*moveCase)
+		var targetCaseY = dy*(f*moveCase)
+		if global_position.x >= (newPosition.x - 50) + targetCaseX  and global_position.x <= (newPosition.x + 50) + targetCaseX \
+		and global_position.y >= (newPosition.y - 50) + targetCaseY and global_position.y <= (newPosition.y + 50) + targetCaseY:
+			self.position = Vector2((newPosition.x + targetCaseX), (newPosition.y + targetCaseY))
+			newPosition = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)
 			j=j+(dx*f)
 			chessBoard[i][j] = "rook_white"
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
-			self.position = Vector2(new_position.x, new_position.y)
+			self.position = Vector2(newPosition.x, newPosition.y)
