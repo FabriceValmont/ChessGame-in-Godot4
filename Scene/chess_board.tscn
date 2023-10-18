@@ -61,3 +61,5 @@ position = Vector2(651, 650)
 
 [node name="Pawn8" parent="." instance=ExtResource("8_gwsh5")]
 position = Vector2(751, 650)
+
+[node name="Rook3" parent="." instance=ExtResource("3_k58gi")]

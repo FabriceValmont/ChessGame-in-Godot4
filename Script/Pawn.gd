@@ -43,15 +43,22 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if initialPosition == true:
-				move(0,-1)
-				move(-1,-1)
-				move(1,-1)
-				move(0,-2)
+				if chessBoard[i-1][j] == "0":
+					move(0,-1)
+				if chessBoard[i-2][j] == "0":
+					move(0,-2)
+				if chessBoard[i-1][j-1] != "0":
+					move(-1,-1)
+				if chessBoard[i-1][j+1] != "0":
+					move(1,-1)
 				initialPosition = false
 			else :
-				move(0,-1)
-				move(-1,-1)
-				move(1,-1)
+				if chessBoard[i-1][j] == "0":
+					move(0,-1)
+				if chessBoard[i-1][j-1] != "0":
+					move(-1,-1)
+				if chessBoard[i-1][j+1] != "0":
+					move(1,-1)
 			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
 		

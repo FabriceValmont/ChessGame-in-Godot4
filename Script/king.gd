@@ -20,6 +20,7 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 var i = 9
 var j = 6
 @onready var name_of_piece = get_node(".").get_name()
+var initialPosition = true
 
 func _ready():
 	print(name_of_piece, " i: ", i, " j: ", j )
@@ -44,7 +45,7 @@ func _input(event):
 			move(1,-1)
 			move(-1,1)
 			move(-1,-1)
-			
+			initialPosition = false
 			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
 		

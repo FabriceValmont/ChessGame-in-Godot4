@@ -19,14 +19,29 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
 var i = 9
 var j = 2
-@onready var name_of_piece = get_node(".").get_name()
+@onready var nameOfPiece = get_name()
+var initialPosition = true
+var white = true
+var textureBlackRook = preload("res://Sprite/Piece/Black/rook_black.png")
 
 func _ready():
-	if name_of_piece == "Rook2":
+	await get_tree().process_frame
+	if self.position.y == 50 :
+		white = false
+	if white != true :
+		i = 2
+		j = 2
+		newPosition = Vector2(50, 50)
+		texture = textureBlackRook
+		set_name("RookBlack")
+		print(get_name())
+		nameOfPiece = get_name()
+	if nameOfPiece == "Rook2":
 		i = 9
 		j = 9
 		newPosition = Vector2(750,750)
-	print(name_of_piece, " i: ", i, " j: ", j )
+		
+	print(nameOfPiece, " i: ", i, " j: ", j )
 
 func _process(delta):
 	pass
@@ -45,10 +60,11 @@ func _input(event):
 				move(0,1)
 				move(-1,0)
 				move(0,-1)
+				initialPosition = false
 			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
 		for f in range(0,12):
-			if name_of_piece == "Rook2":
+			if nameOfPiece == "Rook2":
 				print(chessBoard[f])
 		
 

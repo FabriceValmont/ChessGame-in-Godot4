@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://o6jo28i7gxhj"
-path="res://.godot/imported/pawn_white.png-33bd0e56816c407008229bb39b265c7a.ctex"
+uid="uid://bq6806j5rj4mi"
+path="res://.godot/imported/bishop_white.png-5a9e494f04b579bbeba199395055519f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprite/pawn_white.png"
-dest_files=["res://.godot/imported/pawn_white.png-33bd0e56816c407008229bb39b265c7a.ctex"]
+source_file="res://Sprite/Piece/White/bishop_white.png"
+dest_files=["res://.godot/imported/bishop_white.png-5a9e494f04b579bbeba199395055519f.ctex"]
 
 [params]
 

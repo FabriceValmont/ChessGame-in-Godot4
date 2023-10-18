@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhwoq0ccj15bk"]
 
-[ext_resource type="Texture2D" uid="uid://dnqtha6t7oxwj" path="res://Sprite/rook_white.png" id="1_l0ogf"]
+[ext_resource type="Texture2D" uid="uid://dnqtha6t7oxwj" path="res://Sprite/Piece/White/rook_white.png" id="1_l6yr4"]
 [ext_resource type="Script" path="res://Script/rook.gd" id="2_jh56t"]
 
 [node name="Rook" type="Sprite2D"]
 position = Vector2(50, 50)
-texture = ExtResource("1_l0ogf")
+texture = ExtResource("1_l6yr4")
 script = ExtResource("2_jh56t")
