@@ -3,7 +3,7 @@ extends Sprite2D
 var dragging = false
 var click_radius = 100
 var drag_offset = Vector2()
-var new_position = Vector2(50, 750)
+var new_position = Vector2(250, 750)
 var move_case = VariableGlobal.one_move_case
 var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
@@ -18,14 +18,14 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
 var i = 9
-var j = 2
+var j = 4
 @onready var name_of_piece = get_node(".").get_name()
 
 func _ready():
-	if name_of_piece == "Rook2":
+	if name_of_piece == "Bishop2":
 		i = 9
-		j = 9
-		new_position = Vector2(750,750)
+		j = 7
+		new_position = Vector2(550,750)
 	print(name_of_piece, " i: ", i, " j: ", j )
 
 func _process(delta):
@@ -41,27 +41,51 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			for f in range (0,8):
-				if global_position.x >= f*move_case and global_position.x <= (f*move_case)+move_case \
-				and global_position.y >= new_position.y - 50 and global_position.y <= new_position.y + 50:
-					self.position = Vector2((f*move_case) + 50, new_position.y)
+#				En bas à droite
+				if global_position.x >= (new_position.x - 50) + f*move_case  and global_position.x <= (new_position.x + 50) + (f*move_case) \
+				and global_position.y >= (new_position.y - 50) + f*move_case and global_position.y <= (new_position.y + 50) + (f*move_case):
+					self.position = Vector2((new_position.x + f*move_case), (new_position.y + f*move_case))
 					new_position = Vector2(self.position.x, self.position.y)
 					chessBoard[i][j] = "0"
-					j=f+2
-					chessBoard[i][j] = "rook_white"
+					i=i+1
+					j=j+1
+					chessBoard[i][j] = "bishop_white"
 					break
-				elif global_position.x >= new_position.x - 50 and global_position.x <= new_position.x + 50 \
-				and global_position.y >= f*move_case and global_position.y <= (f*move_case)+move_case:
-					self.position = Vector2(new_position.x, (f*move_case) + 50)
+#					En haut à gauche
+				if global_position.x >= (new_position.x - 50) - f*move_case  and global_position.x <= (new_position.x + 50) - (f*move_case) \
+				and global_position.y >= (new_position.y - 50) - f*move_case and global_position.y <= (new_position.y + 50) - (f*move_case):
+					self.position = Vector2((new_position.x - f*move_case), (new_position.y - f*move_case))
 					new_position = Vector2(self.position.x, self.position.y)
 					chessBoard[i][j] = "0"
-					i=f+2
-					chessBoard[i][j] = "rook_white"
+					i=i-f
+					j=j-f
+					chessBoard[i][j] = "bishop_white"
+					break
+#					En bas à gauche
+				if global_position.x >= (new_position.x - 50) - f*move_case  and global_position.x <= (new_position.x + 50) - (f*move_case) \
+				and global_position.y >= (new_position.y - 50) + f*move_case and global_position.y <= (new_position.y + 50) + (f*move_case):
+					self.position = Vector2((new_position.x - f*move_case), (new_position.y + f*move_case))
+					new_position = Vector2(self.position.x, self.position.y)
+					chessBoard[i][j] = "0"
+					i=i-f
+					j=j+f
+					chessBoard[i][j] = "bishop_white"
+					break
+#					En haut à droite
+				if global_position.x >= (new_position.x - 50) + f*move_case  and global_position.x <= (new_position.x + 50) + (f*move_case) \
+				and global_position.y >= (new_position.y - 50) - f*move_case and global_position.y <= (new_position.y + 50) - (f*move_case):
+					self.position = Vector2((new_position.x + f*move_case), (new_position.y - f*move_case))
+					new_position = Vector2(self.position.x, self.position.y)
+					chessBoard[i][j] = "0"
+					i=i+f
+					j=j-f
+					chessBoard[i][j] = "bishop_white"
 					break
 			self.position = Vector2(new_position.x, new_position.y)
 			dragging = false
-#		for f in range(0,12):
-#			if name_of_piece == "Rook2":
-#				print(chessBoard[f])
+		for f in range(0,12):
+			if name_of_piece == "Bishop":
+				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:

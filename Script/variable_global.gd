@@ -20,8 +20,8 @@ func createBoard(rowSize,columnSize):
 			row.append(null)
 		chessBoard.append(row)
 	
-	print(chessBoard)
-	print("ChessBoard created. Size: ", rowSize, "x", columnSize)
+#	print(chessBoard)
+#	print("ChessBoard created. Size: ", rowSize, "x", columnSize)
 
 func initialisingChessBoard():
 	for i in range(2,3):
@@ -42,5 +42,5 @@ func initialisingChessBoard():
 			if chessBoard[i][j] ==  null :
 				chessBoard[i][j] = "x"
 	
-	for i in range(0,12):
-		print(chessBoard[i])
+#	for i in range(0,12):
+##		print(chessBoard[i])

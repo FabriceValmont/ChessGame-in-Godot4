@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dk1owigwb56dl"]
+[gd_scene load_steps=5 format=3 uid="uid://dk1owigwb56dl"]
 
 [ext_resource type="Texture2D" uid="uid://cpuc5buvv1l8y" path="res://Sprite/ChessBoard_Wood.png" id="1_7jmrq"]
 [ext_resource type="Script" path="res://Script/chess_board.gd" id="2_b6u5r"]
 [ext_resource type="PackedScene" uid="uid://bhwoq0ccj15bk" path="res://Scene/rook.tscn" id="3_k58gi"]
+[ext_resource type="PackedScene" uid="uid://bwaatam8t06s4" path="res://Scene/bishop.tscn" id="4_1u444"]
 
 [node name="ChessBoard" type="Sprite2D"]
 texture = ExtResource("1_7jmrq")
@@ -14,3 +15,6 @@ position = Vector2(50, 750)
 
 [node name="Rook2" parent="." instance=ExtResource("3_k58gi")]
 position = Vector2(750, 750)
+
+[node name="Bishop" parent="." instance=ExtResource("4_1u444")]
+position = Vector2(250, 750)
