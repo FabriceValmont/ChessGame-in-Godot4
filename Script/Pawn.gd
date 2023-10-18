@@ -3,7 +3,7 @@ extends Sprite2D
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
-var newPosition = Vector2(350, 650)
+var newPosition = Vector2(50, 650)
 var moveCase = VariableGlobal.one_move_case
 var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
@@ -18,12 +18,17 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
 var i = 8
-var j = 5
+var j = 2
 @onready var name_of_piece = get_node(".").get_name()
 var initialPosition = true
 
 func _ready():
-	print(name_of_piece, " i: ", i, " j: ", j )
+	for f in range(2, 9):
+		if name_of_piece == "Pawn" + str(f) :
+			j = f + 1
+			newPosition.x = (50 + f * 100) - 100  
+			newPosition.y = 650  
+			print(name_of_piece, " i: ", i, " j: ", j, " new position: ", newPosition) 
 
 func _process(delta):
 	pass
