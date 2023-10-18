@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfauaecg0j45v"]
+
+[ext_resource type="Texture2D" uid="uid://o6jo28i7gxhj" path="res://Sprite/pawn_white.png" id="1_k3h0k"]
+[ext_resource type="Script" path="res://Script/Pawn.gd" id="2_gku6o"]
+
+[node name="Pawn" type="Sprite2D"]
+position = Vector2(50, 50)
+texture = ExtResource("1_k3h0k")
+script = ExtResource("2_gku6o")

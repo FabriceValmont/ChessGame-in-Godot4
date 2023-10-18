@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dk1owigwb56dl"]
+[gd_scene load_steps=9 format=3 uid="uid://dk1owigwb56dl"]
 
 [ext_resource type="Texture2D" uid="uid://cpuc5buvv1l8y" path="res://Sprite/ChessBoard_Wood.png" id="1_7jmrq"]
 [ext_resource type="Script" path="res://Script/chess_board.gd" id="2_b6u5r"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b0shduipojcvd" path="res://Scene/knight.tscn" id="5_74qwt"]
 [ext_resource type="PackedScene" uid="uid://bs0bubiteqv4c" path="res://Scene/queen.tscn" id="6_x1dto"]
 [ext_resource type="PackedScene" uid="uid://b6kewwu2vfsn1" path="res://Scene/king.tscn" id="7_assil"]
+[ext_resource type="PackedScene" uid="uid://bfauaecg0j45v" path="res://Scene/pawn.tscn" id="8_gwsh5"]
 
 [node name="ChessBoard" type="Sprite2D"]
 texture = ExtResource("1_7jmrq")
@@ -36,3 +37,27 @@ position = Vector2(351, 750)
 
 [node name="King" parent="." instance=ExtResource("7_assil")]
 position = Vector2(451, 750)
+
+[node name="Pawn" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(50, 650)
+
+[node name="Pawn2" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(151, 650)
+
+[node name="Pawn3" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(251, 650)
+
+[node name="Pawn4" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(351, 650)
+
+[node name="Pawn5" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(451, 650)
+
+[node name="Pawn6" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(551, 650)
+
+[node name="Pawn7" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(651, 650)
+
+[node name="Pawn8" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(751, 650)

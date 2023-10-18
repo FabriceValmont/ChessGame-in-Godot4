@@ -3,7 +3,7 @@ extends Sprite2D
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
-var newPosition = Vector2(150, 750)
+var newPosition = Vector2(350, 650)
 var moveCase = VariableGlobal.one_move_case
 var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
@@ -17,15 +17,12 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "rook_white", "knight_white", "bishop_white", "queen_white", "king_white", "bishop_white", "knight_white", "rook_white", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
-var i = 9
-var j = 3
+var i = 8
+var j = 5
 @onready var name_of_piece = get_node(".").get_name()
+var initialPosition = true
 
 func _ready():
-	if name_of_piece == "Knight2":
-		i = 9
-		j = 8
-		newPosition = Vector2(650,750)
 	print(name_of_piece, " i: ", i, " j: ", j )
 
 func _process(delta):
@@ -40,28 +37,31 @@ func _input(event):
 				dragOffset = event.position - self.position
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
-			for f in range (0,8):
-				move(1,-2)
-				move(-1,-2)
-				move(1,2)
-				move(-1,2)
-				move(2,-1)
-				move(-2,-1)
-				move(2,1)
-				move(-2,1)
+			if initialPosition == true:
+				move(0,-1)
+				move(-1,-1)
+				move(1,-1)
+				move(0,-2)
+				initialPosition = false
+			else :
+				move(0,-1)
+				move(-1,-1)
+				move(1,-1)
 			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
-		for f in range(0,12):
-			if name_of_piece == "Rook2":
-				print(chessBoard[f])
+		
+#		for f in range(0,12):
+#			if name_of_piece == "Bishop":
+#				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
 		
+		
 func move(dx, dy) :
-	for f in range (0,8):
+	for f in range (0,2):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
 		if global_position.x >= (newPosition.x - 50) + targetCaseX  and global_position.x <= (newPosition.x + 50) + targetCaseX \
@@ -71,8 +71,7 @@ func move(dx, dy) :
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)
 			j=j+(dx*f)
-			chessBoard[i][j] = "knight_white"
+			chessBoard[i][j] = "pawn_white"
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(newPosition.x, newPosition.y)
-
