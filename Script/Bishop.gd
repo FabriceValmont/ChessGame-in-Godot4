@@ -47,9 +47,9 @@ func _input(event):
 			self.position = Vector2(new_position.x, new_position.y)
 			dragging = false
 		
-		for f in range(0,12):
-			if name_of_piece == "Bishop":
-				print(chessBoard[f])
+#		for f in range(0,12):
+#			if name_of_piece == "Bishop":
+#				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:
@@ -60,9 +60,11 @@ func _input(event):
 func move(dx, dy) :
 #	En bas à droite(1,1), En haut à droite(1,-1), En bas à gauche (-1,1), en haut à gauche(-1,-1)
 	for f in range (0,8):
-		if global_position.x >= (new_position.x - 50) + dx*(f*move_case)  and global_position.x <= (new_position.x + 50) + dx*(f*move_case) \
-		and global_position.y >= (new_position.y - 50) + dy*(f*move_case) and global_position.y <= (new_position.y + 50) + dy*(f*move_case):
-			self.position = Vector2((new_position.x + dx*(f*move_case)), (new_position.y + dy*(f*move_case)))
+		var targetCaseX = dx*(f*move_case)
+		var targetCaseY = dy*(f*move_case)
+		if global_position.x >= (new_position.x - 50) + targetCaseX  and global_position.x <= (new_position.x + 50) + targetCaseX \
+		and global_position.y >= (new_position.y - 50) + targetCaseY and global_position.y <= (new_position.y + 50) + targetCaseY:
+			self.position = Vector2((new_position.x + targetCaseX), (new_position.y + targetCaseY))
 			new_position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)

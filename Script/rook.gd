@@ -41,29 +41,34 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			for f in range (0,8):
-				if global_position.x >= f*move_case and global_position.x <= (f*move_case)+move_case \
-				and global_position.y >= new_position.y - 50 and global_position.y <= new_position.y + 50:
-					self.position = Vector2((f*move_case) + 50, new_position.y)
-					new_position = Vector2(self.position.x, self.position.y)
-					chessBoard[i][j] = "0"
-					j=f+2
-					chessBoard[i][j] = "rook_white"
-					break
-				elif global_position.x >= new_position.x - 50 and global_position.x <= new_position.x + 50 \
-				and global_position.y >= f*move_case and global_position.y <= (f*move_case)+move_case:
-					self.position = Vector2(new_position.x, (f*move_case) + 50)
-					new_position = Vector2(self.position.x, self.position.y)
-					chessBoard[i][j] = "0"
-					i=f+2
-					chessBoard[i][j] = "rook_white"
-					break
+				move(1,0)
+				move(0,1)
+				move(-1,0)
+				move(0,-1)
 			self.position = Vector2(new_position.x, new_position.y)
 			dragging = false
-#		for f in range(0,12):
-#			if name_of_piece == "Rook2":
-#				print(chessBoard[f])
+		for f in range(0,12):
+			if name_of_piece == "Rook2":
+				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
+		
+func move(dx, dy) :
+#	A droite(1,0), En haut(0,1), A gauche(-1,0), En bas(0,-1)
+	for f in range (0,8):
+		var targetCaseX = dx*(f*move_case)
+		var targetCaseY = dy*(f*move_case)
+		if global_position.x >= (new_position.x - 50) + targetCaseX  and global_position.x <= (new_position.x + 50) + targetCaseX \
+		and global_position.y >= (new_position.y - 50) + targetCaseY and global_position.y <= (new_position.y + 50) + targetCaseY:
+			self.position = Vector2((new_position.x + targetCaseX), (new_position.y + targetCaseY))
+			new_position = Vector2(self.position.x, self.position.y)
+			chessBoard[i][j] = "0"
+			i=i+(dy*f)
+			j=j+(dx*f)
+			chessBoard[i][j] = "rook_white"
+			break
+		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
+			self.position = Vector2(new_position.x, new_position.y)
