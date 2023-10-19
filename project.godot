@@ -17,7 +17,7 @@ config/icon="res://Sprite/Logo_GodsChess.png"
 
 [autoload]
 
-VariableGlobal="*res://Script/variable_global.gd"
+VariableGlobal="*res://Script/Variable_global.gd"
 
 [display]
 

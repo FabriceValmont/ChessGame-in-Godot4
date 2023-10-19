@@ -1,10 +1,5 @@
 extends Sprite2D
 
-var dragging = false
-var clickRadius = 50
-var dragOffset = Vector2()
-var newPosition = Vector2(50, 750)
-var moveCase = VariableGlobal.one_move_case
 var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "rook_black", "knight_black", "bishop_black", "queen_black", "king_black", "bishop_black", "knight_black", "rook_black", "x", "x"],
@@ -17,31 +12,43 @@ var chessBoard = [["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "rook_white", "knight_white", "bishop_white", "queen_white", "king_white", "bishop_white", "knight_white", "rook_white", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],]
+var dragging = false
+var clickRadius = 50
+var dragOffset = Vector2()
+var moveCase = VariableGlobal.one_move_case
 var i = 9
 var j = 2
+var newPosition = Vector2(50, 750)
 @onready var nameOfPiece = get_name()
 var initialPosition = true
 var white = true
-var textureBlackRook = preload("res://Sprite/Piece/Black/rook_black.png")
+var textureBlack = preload("res://Sprite/Piece/Black/rook_black.png")
 
 func _ready():
 	await get_tree().process_frame
 	if self.position.y == 50 :
 		white = false
-	if white != true :
+		
+	if white == true:
+		set_name("RookWhite")
+		nameOfPiece = get_name()
+		if nameOfPiece == "RookWhite2":
+			i = 9
+			j = 9
+			newPosition = Vector2(750,750)
+	else:
 		i = 2
 		j = 2
 		newPosition = Vector2(50, 50)
-		texture = textureBlackRook
+		texture = textureBlack
 		set_name("RookBlack")
-		print(get_name())
 		nameOfPiece = get_name()
-	if nameOfPiece == "Rook2":
-		i = 9
-		j = 9
-		newPosition = Vector2(750,750)
+		if nameOfPiece == "RookBlack2":
+			i = 2
+			j = 9
+			newPosition = Vector2(750,50)
 		
-	print(nameOfPiece, " i: ", i, " j: ", j )
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", newPosition )
 
 func _process(delta):
 	pass
@@ -63,9 +70,9 @@ func _input(event):
 				initialPosition = false
 			self.position = Vector2(newPosition.x, newPosition.y)
 			dragging = false
-		for f in range(0,12):
-			if nameOfPiece == "Rook2":
-				print(chessBoard[f])
+#		for f in range(0,12):
+#			if nameOfPiece == "Rook2":
+#				print(chessBoard[f])
 		
 
 	if event is InputEventMouseMotion and dragging:
@@ -84,7 +91,7 @@ func move(dx, dy) :
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)
 			j=j+(dx*f)
-			chessBoard[i][j] = "rook_white"
+			chessBoard[i][j] = nameOfPiece
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(newPosition.x, newPosition.y)
