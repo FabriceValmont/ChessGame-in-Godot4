@@ -27,13 +27,15 @@ func initialisingChessBoard():
 	for i in range(2,3):
 		for j in range(2,10):
 			chessBoard[i][j] = piece_black[j]
-	for j in range(2, 10):
-		chessBoard[3][j] = "PawnBlack"
+	for j in range(3, 10):
+		chessBoard[3][2] = "PawnBlack"
+		chessBoard[3][j] = "PawnBlack" + str(j-1)
 	for i in range(4,8): 
 		for j in range(2,10):
 			chessBoard[i][j] = "0"
-	for j in range(2, 10):
-		chessBoard[8][j] = "PawnWhite"
+	for j in range(3, 10):
+		chessBoard[8][2] = "PawnWhite"
+		chessBoard[8][j] = "PawnWhite" + str(j-1)
 	for i in range(9,10): 
 		for j in range(2,10):
 			chessBoard[i][j] = piece_white[j]
