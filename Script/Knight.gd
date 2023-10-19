@@ -51,14 +51,24 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			for f in range (0,8):
-				move(1,-2)
-				move(-1,-2)
-				move(1,2)
-				move(-1,2)
-				move(2,-1)
-				move(-2,-1)
-				move(2,1)
-				move(-2,1)
+				if white == true and VariableGlobal.turnWhite == true:
+					move(1,-2)
+					move(-1,-2)
+					move(1,2)
+					move(-1,2)
+					move(2,-1)
+					move(-2,-1)
+					move(2,1)
+					move(-2,1)
+				elif white == false and VariableGlobal.turnWhite == false:
+					move(1,-2)
+					move(-1,-2)
+					move(1,2)
+					move(-1,2)
+					move(2,-1)
+					move(-2,-1)
+					move(2,1)
+					move(-2,1)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			for f in range(0,12):
@@ -69,7 +79,7 @@ func _input(event):
 		self.position = event.position
 		
 func move(dx, dy) :
-	for f in range (0,8):
+	for f in range (1,8):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
@@ -80,6 +90,7 @@ func move(dx, dy) :
 			i=i+(dy*f)
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
+			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)

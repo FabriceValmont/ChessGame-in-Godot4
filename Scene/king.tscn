@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6kewwu2vfsn1"]
+[gd_scene load_steps=4 format=3 uid="uid://b6kewwu2vfsn1"]
 
 [ext_resource type="Texture2D" uid="uid://wewxrmyo7nx3" path="res://Sprite/Piece/White/king_white.png" id="1_otrb6"]
 [ext_resource type="Script" path="res://Script/king.gd" id="2_p31jf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_awhie"]
+size = Vector2(90, 90)
 
 [node name="King" type="Sprite2D"]
 position = Vector2(50, 50)
 texture = ExtResource("1_otrb6")
 script = ExtResource("2_p31jf")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_awhie")

@@ -52,7 +52,7 @@ func _input(event):
 				dragOffset = event.position - self.position
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
-			if white == true:
+			if white == true and VariableGlobal.turnWhite == true:
 				if initialPosition == true:
 					if chessBoard[i-1][j] == "0":
 						move(0,-1)
@@ -70,7 +70,7 @@ func _input(event):
 						move(-1,-1)
 					if chessBoard[i-1][j+1] != "0":
 						move(1,-1)
-			else:
+			elif white == false and VariableGlobal.turnWhite == false:
 				if initialPosition == true:
 					if chessBoard[i+1][j] == "0":
 						move(0,1)
@@ -99,7 +99,7 @@ func _input(event):
 		
 		
 func move(dx, dy) :
-	for f in range (0,2):
+	for f in range (1,2):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
@@ -110,6 +110,18 @@ func move(dx, dy) :
 			i=i+(dy*f)
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
+			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
+			
+func _on_area_2d_area_entered(area):
+	var piece_name = area.get_parent().get_name()
+	if white == true and VariableGlobal.turnWhite == false:
+		if dragging == false and get_node("/root/ChessBoard/" + piece_name).white == false:
+			get_node("/root/ChessBoard/" + piece_name).queue_free()
+			print(piece_name)
+		else:
+			print(piece_name)
+	else:
+		pass

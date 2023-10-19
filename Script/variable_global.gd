@@ -1,5 +1,6 @@
 extends Node
 var one_move_case = 100
+var turnWhite = true
 
 # Created chessboard
 var chessBoard = []
@@ -11,6 +12,10 @@ func _ready():
 	initialisingChessBoard()
 
 func _process(delta):
+#	if turnWhite == true:
+#		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(0)
+#	else:
+#		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(180)
 	pass
 
 func createBoard(rowSize,columnSize):
