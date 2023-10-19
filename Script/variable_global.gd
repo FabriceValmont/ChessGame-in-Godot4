@@ -3,8 +3,8 @@ var one_move_case = 100
 
 # Created chessboard
 var chessBoard = []
-var piece_white = [null,null,"rook_white","knight_white","bishop_white","queen_white","king_white","bishop_white","knight_white","rook_white"]
-var piece_black = [null,null,"rook_black","knight_black","bishop_black","queen_black","king_black","bishop_black","knight_black","rook_black"]
+var piece_white = [null,null,"RookWhite","KnightWhite","BishopWhite","QueenWhite","KingWhite","BishopWhite2","KnightWhite2","RookWhite2"]
+var piece_black = [null,null,"RookBlack","KnightBlack","BishopBlack","QueenBlack","KingBlack","BishopBlack2","KnightBlack2","RookBlack2"]
 
 func _ready():
 	createBoard(12,12)
@@ -28,12 +28,12 @@ func initialisingChessBoard():
 		for j in range(2,10):
 			chessBoard[i][j] = piece_black[j]
 	for j in range(2, 10):
-		chessBoard[3][j] = "pawn_black"
+		chessBoard[3][j] = "PawnBlack"
 	for i in range(4,8): 
 		for j in range(2,10):
 			chessBoard[i][j] = "0"
 	for j in range(2, 10):
-		chessBoard[8][j] = "pawn_white"
+		chessBoard[8][j] = "PawnWhite"
 	for i in range(9,10): 
 		for j in range(2,10):
 			chessBoard[i][j] = piece_white[j]
@@ -42,5 +42,5 @@ func initialisingChessBoard():
 			if chessBoard[i][j] ==  null :
 				chessBoard[i][j] = "x"
 	
-#	for i in range(0,12):
-##		print(chessBoard[i])
+	for i in range(0,12):
+		print(chessBoard[i])

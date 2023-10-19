@@ -1,0 +1,110 @@
+[gd_scene load_steps=9 format=3 uid="uid://dk1owigwb56dl"]
+
+[ext_resource type="Texture2D" uid="uid://cpuc5buvv1l8y" path="res://Sprite/ChessBoard_Wood.png" id="1_7jmrq"]
+[ext_resource type="Script" path="res://Script/Chess_board.gd" id="2_3nfqx"]
+[ext_resource type="PackedScene" uid="uid://bhwoq0ccj15bk" path="res://Scene/rook.tscn" id="3_k58gi"]
+[ext_resource type="PackedScene" uid="uid://bwaatam8t06s4" path="res://Scene/bishop.tscn" id="4_1u444"]
+[ext_resource type="PackedScene" uid="uid://b0shduipojcvd" path="res://Scene/knight.tscn" id="5_74qwt"]
+[ext_resource type="PackedScene" uid="uid://bs0bubiteqv4c" path="res://Scene/queen.tscn" id="6_x1dto"]
+[ext_resource type="PackedScene" uid="uid://b6kewwu2vfsn1" path="res://Scene/king.tscn" id="7_assil"]
+[ext_resource type="PackedScene" uid="uid://bfauaecg0j45v" path="res://Scene/pawn.tscn" id="8_gwsh5"]
+
+[node name="ChessBoard" type="Sprite2D"]
+texture = ExtResource("1_7jmrq")
+centered = false
+script = ExtResource("2_3nfqx")
+
+[node name="Pawn" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(50, 650)
+
+[node name="Pawn2" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(151, 650)
+
+[node name="Pawn3" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(251, 650)
+
+[node name="Pawn4" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(351, 650)
+
+[node name="Pawn5" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(451, 650)
+
+[node name="Pawn6" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(551, 650)
+
+[node name="Pawn7" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(651, 650)
+
+[node name="Pawn8" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(751, 650)
+
+[node name="Knight" parent="." instance=ExtResource("5_74qwt")]
+position = Vector2(150, 750)
+
+[node name="Knight2" parent="." instance=ExtResource("5_74qwt")]
+position = Vector2(651, 750)
+
+[node name="Bishop" parent="." instance=ExtResource("4_1u444")]
+position = Vector2(250, 750)
+
+[node name="Bishop2" parent="." instance=ExtResource("4_1u444")]
+position = Vector2(551, 750)
+
+[node name="Rook" parent="." instance=ExtResource("3_k58gi")]
+position = Vector2(50, 750)
+
+[node name="Rook2" parent="." instance=ExtResource("3_k58gi")]
+position = Vector2(750, 750)
+
+[node name="Queen" parent="." instance=ExtResource("6_x1dto")]
+position = Vector2(351, 750)
+
+[node name="King" parent="." instance=ExtResource("7_assil")]
+position = Vector2(451, 750)
+
+[node name="Knight3" parent="." instance=ExtResource("5_74qwt")]
+position = Vector2(150, 50)
+
+[node name="Knight4" parent="." instance=ExtResource("5_74qwt")]
+position = Vector2(650, 50)
+
+[node name="Bishop3" parent="." instance=ExtResource("4_1u444")]
+position = Vector2(250, 50)
+
+[node name="Bishop4" parent="." instance=ExtResource("4_1u444")]
+position = Vector2(550, 50)
+
+[node name="Rook3" parent="." instance=ExtResource("3_k58gi")]
+
+[node name="Rook4" parent="." instance=ExtResource("3_k58gi")]
+position = Vector2(750, 50)
+
+[node name="Queen2" parent="." instance=ExtResource("6_x1dto")]
+position = Vector2(350, 50)
+
+[node name="King2" parent="." instance=ExtResource("7_assil")]
+position = Vector2(450, 50)
+
+[node name="Pawn9" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(50, 150)
+
+[node name="Pawn10" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(150, 150)
+
+[node name="Pawn11" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(250, 150)
+
+[node name="Pawn12" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(350, 150)
+
+[node name="Pawn13" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(450, 150)
+
+[node name="Pawn14" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(550, 150)
+
+[node name="Pawn15" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(650, 150)
+
+[node name="Pawn16" parent="." instance=ExtResource("8_gwsh5")]
+position = Vector2(750, 150)
