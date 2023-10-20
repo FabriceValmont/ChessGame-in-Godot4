@@ -205,6 +205,91 @@ func kingAttackWhite(i, j, chessBoard, attack_piece_white_on_the_chessboard):
 			if x >= 0 and x < 12 and y >= 0 and y < 12 and chessBoard[x][y] != "x":
 				attack_piece_white_on_the_chessboard[x][y] += 1
 
+func pawnAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard):
+	for dx in [-1, 1]:
+		var x = i + 1
+		var y = j + dx
+		if x >= 0 and y >= 0 and x < 12 and y < 12 and chessBoard[x][y] != "x":
+			attack_piece_black_on_the_chessboard[x][y] += 1
+
+func knightAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard):
+	var knight_moves = [
+		Vector2(-2, -1), Vector2(-2, 1),
+		Vector2(-1, 2), Vector2(1, 2),
+		Vector2(2, -1), Vector2(2, 1),
+		Vector2(-1, -2), Vector2(1, -2)]
+		
+	for move in knight_moves:
+		var x = i + move.x
+		var y = j + move.y
+		if x >= 0 and x < 12 and y >= 0 and y < 12 and chessBoard[x][y] != "x":
+			attack_piece_black_on_the_chessboard[x][y] += 1
+
+func bishopAttackBlack(i, j, dx, dy, attack_piece_black_on_the_chessboard):
+	for f in range(1, 9):
+		var x = i + dx * f
+		var y = j + dy * f
+		
+		if x < 0 || x >= 12 || y < 0 || y >= 12 || chessBoard[x][y] == "x":
+			break
+		elif chessBoard[x][y] != "0":
+			if chessBoard[x][y] == "KingWhite":
+				if attack_piece_black_on_the_chessboard[x + dx][y + dy] <= -1:
+					attack_piece_black_on_the_chessboard[x][y] += 1
+					break
+				else:
+					attack_piece_black_on_the_chessboard[x][y] += 1
+					attack_piece_black_on_the_chessboard[x + dx][y + dy] += 1
+					break
+			else:
+				attack_piece_black_on_the_chessboard[x][y] += 1
+				break
+		else:
+			attack_piece_black_on_the_chessboard[x][y] += 1
+
+func rookAttackBlack(i, j, dx, dy, attack_piece_black_on_the_chessboard):
+	for f in range(1, 9):
+		var x = i + dx * f
+		var y = j + dy * f
+		
+		if x < 0 || x >= 12 || y < 0 || y >= 12 || chessBoard[x][y] == "x":
+			break
+		elif chessBoard[x][y] != "0":
+			if chessBoard[x][y] == "KingWhite":
+				if attack_piece_black_on_the_chessboard[x + dx][y + dy] <= -1:
+					attack_piece_black_on_the_chessboard[x][y] += 1
+					break
+				else:
+					attack_piece_black_on_the_chessboard[x][y] += 1
+					attack_piece_black_on_the_chessboard[x + dx][y + dy] += 1
+					break
+			else:
+				attack_piece_black_on_the_chessboard[x][y] += 1
+				break
+		else:
+			attack_piece_black_on_the_chessboard[x][y] += 1
+
+func queenAttackBlack(i, j, attack_piece_black_on_the_chessboard):
+	rookAttackBlack(i, j, -1, 0, attack_piece_black_on_the_chessboard)  # Vers le haut
+	rookAttackBlack(i, j, 1, 0, attack_piece_black_on_the_chessboard)  # Vers le bas
+	rookAttackBlack(i, j, 0, 1, attack_piece_black_on_the_chessboard)  # Vers la droite
+	rookAttackBlack(i, j, 0, -1, attack_piece_black_on_the_chessboard)  # Vers la gauche
+	bishopAttackBlack(i, j, -1, 1, attack_piece_black_on_the_chessboard)  # En haut à droite
+	bishopAttackBlack(i, j, -1, -1, attack_piece_black_on_the_chessboard)  # En haut à gauche
+	bishopAttackBlack(i, j, 1, 1, attack_piece_black_on_the_chessboard)  # En bas à droite
+	bishopAttackBlack(i, j, 1, -1, attack_piece_black_on_the_chessboard)  # En bas à gauche
+
+func kingAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard):
+	for dx in [-1, 0, 1]:
+		for dy in [-1, 0, 1]:
+			if dx == 0 and dy == 0:
+				continue  # Ignore la position actuelle du roi
+			var x = i + dx
+			var y = j + dy
+				
+			if x >= 0 and x < 12 and y >= 0 and y < 12 and chessBoard[x][y] != "x":
+				attack_piece_black_on_the_chessboard[x][y] += 1
+
 func attack_pieces_white():
 	for i in range(12):
 		for j in range(12):
@@ -238,11 +323,29 @@ func attack_pieces_white():
 func attack_pieces_black():
 	for i in range(12):
 		for j in range(12):
-			if chessBoard[i][j] == "PawnBlack":
-				if chessBoard[i+1][j+1] != "x":
-					attack_piece_black_on_the_chessboard[i+1][j+1] += 1
-					
-				if chessBoard[i+1][j-1] != "x":
-					attack_piece_black_on_the_chessboard[i+1][j-1] += 1
+			var piece = chessBoard[i][j]
+			if piece.begins_with("PawnBlack"):
+				pawnAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard)
+						
+			if piece.begins_with("KnightBlack"):
+				knightAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard)
+			
+			if piece.begins_with("BishopBlack"):
+				bishopAttackBlack(i, j, -1, 1, attack_piece_black_on_the_chessboard)  # En haut à droite
+				bishopAttackBlack(i, j, -1, -1, attack_piece_black_on_the_chessboard)  # En haut à gauche
+				bishopAttackBlack(i, j, 1, 1, attack_piece_black_on_the_chessboard)  # En bas à droite
+				bishopAttackBlack(i, j, 1, -1, attack_piece_black_on_the_chessboard)  # En bas à gauche
+				
+			if piece.begins_with("RookBlack"):
+				rookAttackBlack(i, j, -1, 0, attack_piece_black_on_the_chessboard)  # Vers le haut
+				rookAttackBlack(i, j, 1, 0, attack_piece_black_on_the_chessboard)  # Vers le bas
+				rookAttackBlack(i, j, 0, 1, attack_piece_black_on_the_chessboard)  # Vers la droite
+				rookAttackBlack(i, j, 0, -1, attack_piece_black_on_the_chessboard)  # Vers la gauche
+				
+			if piece.begins_with("QueenBlack"):
+				queenAttackBlack(i, j, attack_piece_black_on_the_chessboard)
+			
+			if piece == "KingBlack":
+				kingAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard)
 					
 	printAttackBlack()
