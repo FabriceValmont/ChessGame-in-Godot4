@@ -50,6 +50,7 @@ func _input(event):
 			if not dragging and event.pressed:
 				dragging = true
 				dragOffset = event.position - self.position
+				z_index = 10
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if white == true and VariableGlobal.turnWhite == true:
@@ -62,7 +63,6 @@ func _input(event):
 						move(-1,-1)
 					if chessBoard[i-1][j+1] != "0":
 						move(1,-1)
-					initialPosition = false
 				else :
 					if chessBoard[i-1][j] == "0":
 						move(0,-1)
@@ -80,7 +80,6 @@ func _input(event):
 						move(-1,1)
 					if chessBoard[i+1][j+1] != "0":
 						move(1,1)
-					initialPosition = false
 				else :
 					if chessBoard[i+1][j] == "0":
 						move(0,1)
@@ -90,6 +89,7 @@ func _input(event):
 						move(1,1)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
+			z_index = 0
 			for f in range(0,12):
 				print(chessBoard[f])
 				
@@ -111,17 +111,16 @@ func move(dx, dy) :
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			initialPosition = false
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
 			
 func _on_area_2d_area_entered(area):
-	var piece_name = area.get_parent().get_name()
-	if white == true and VariableGlobal.turnWhite == false:
-		if dragging == false and get_node("/root/ChessBoard/" + piece_name).white == false:
-			get_node("/root/ChessBoard/" + piece_name).queue_free()
-			print(piece_name)
-		else:
-			print(piece_name)
-	else:
-		pass
+		var piece_name = area.get_parent().get_name()
+		if white == true and VariableGlobal.turnWhite == false:
+			if "Black" in piece_name and dragging == false :
+				get_node("/root/ChessBoard/" + piece_name).queue_free()
+		elif white == false and VariableGlobal.turnWhite == true:
+			if "White" in piece_name and dragging == false :
+				get_node("/root/ChessBoard/" + piece_name).queue_free()
