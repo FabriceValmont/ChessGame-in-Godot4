@@ -9,6 +9,8 @@ var attack_piece_black_on_the_chessboard = []
 var one_move_case = 100
 var turnWhite = true
 var update_of_the_parts_attack = false
+var checkWhite = false
+var checkBlack = false
 
 func _ready():
 	createBoard(12,12)
@@ -20,17 +22,19 @@ func _process(delta):
 	if turnWhite == true:
 #		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(0)
 		if update_of_the_parts_attack == false:
-			updateAttackWhiteandBlack(turnWhite)
+			updateAttackWhiteandBlack()
 			attack_pieces_black()
 			attack_pieces_white()
+			verification_check_and_checkmate()
 			update_of_the_parts_attack = true
 			
 	elif turnWhite == false:
 #		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(180)
 		if update_of_the_parts_attack == true:
-			updateAttackWhiteandBlack(turnWhite)
+			updateAttackWhiteandBlack()
 			attack_pieces_white()
 			attack_pieces_black()
+			verification_check_and_checkmate()
 			update_of_the_parts_attack = false
 
 func createBoard(rowSize,columnSize):
@@ -101,15 +105,13 @@ func initialisingAttackBoardWhiteAndBlack():
 	printAttackWhite()
 	printAttackBlack()
 
-func updateAttackWhiteandBlack(color:bool):
-	if color == true:
-		for i in range(2,10): 
-			for j in range(2,10):
-				attack_piece_white_on_the_chessboard[i][j] = 0
-	else:
-		for i in range(2,10): 
-			for j in range(2,10):
-				attack_piece_black_on_the_chessboard[i][j] = 0
+func updateAttackWhiteandBlack():
+	for i in range(2,10): 
+		for j in range(2,10):
+			attack_piece_white_on_the_chessboard[i][j] = 0
+	for i in range(2,10): 
+		for j in range(2,10):
+			attack_piece_black_on_the_chessboard[i][j] = 0
 
 func printAttackWhite():
 	print("AttackBoardWhite/AttackBoardBlack")
@@ -350,3 +352,25 @@ func attack_pieces_black():
 				kingAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard)
 					
 	printAttackBlack()
+
+func verification_check_and_checkmate():
+	var KingWhitei = get_node("/root/ChessBoard/KingWhite").i
+	var KingWhitej = get_node("/root/ChessBoard/KingWhite").j
+	
+	var KingBlacki = get_node("/root/ChessBoard/KingBlack").i
+	var KingBlackj = get_node("/root/ChessBoard/KingBlack").j
+	
+	if turnWhite == true:
+		if attack_piece_black_on_the_chessboard[KingWhitei][KingWhitej] >= 1:
+			checkWhite = true
+		if attack_piece_white_on_the_chessboard[KingBlacki][KingBlackj] == 0:
+			checkBlack = false
+		print("King White: ", checkWhite)
+		print("King Black: ",checkBlack)
+	else:
+		if attack_piece_white_on_the_chessboard[KingBlacki][KingBlackj] >= 1:
+			checkBlack = true
+		if attack_piece_black_on_the_chessboard[KingWhitei][KingWhitej] == 0:
+			checkWhite = false
+		print("King White: ", checkWhite)
+		print("King Black: ",checkBlack)
