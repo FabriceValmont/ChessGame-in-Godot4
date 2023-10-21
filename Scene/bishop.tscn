@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Script/Bishop.gd" id="2_dm1nn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ks7lv"]
-size = Vector2(90, 90)
+size = Vector2(0.001, 0.001)
 
 [node name="Bishop" type="Sprite2D"]
 position = Vector2(50, 50)
@@ -15,3 +15,5 @@ script = ExtResource("2_dm1nn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_ks7lv")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
