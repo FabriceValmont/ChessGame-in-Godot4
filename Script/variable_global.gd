@@ -22,7 +22,7 @@ func _process(delta):
 		if update_of_the_parts_attack == false:
 			updateAttackWhiteandBlack(turnWhite)
 			attack_pieces_black()
-			
+			attack_pieces_white()
 			update_of_the_parts_attack = true
 			
 	elif turnWhite == false:
@@ -30,6 +30,7 @@ func _process(delta):
 		if update_of_the_parts_attack == true:
 			updateAttackWhiteandBlack(turnWhite)
 			attack_pieces_white()
+			attack_pieces_black()
 			update_of_the_parts_attack = false
 
 func createBoard(rowSize,columnSize):
@@ -111,14 +112,14 @@ func updateAttackWhiteandBlack(color:bool):
 				attack_piece_black_on_the_chessboard[i][j] = 0
 
 func printAttackWhite():
-	print("AttackBoardWhite: ")
+	print("AttackBoardWhite/AttackBoardBlack")
 	for i in range(0,12):
-		print(attack_piece_white_on_the_chessboard[i])
+		print(attack_piece_white_on_the_chessboard[i],attack_piece_black_on_the_chessboard[i])
 
 func printAttackBlack():
-	print("AttackBoardBlack: ")
+	print("AttackBoardBlack/AttackBoardWhite")
 	for i in range(0,12):
-		print(attack_piece_black_on_the_chessboard[i])
+		print(attack_piece_black_on_the_chessboard[i],attack_piece_white_on_the_chessboard[i])
 
 func pawnAttackWhite(i, j, chessBoard, attack_piece_white_on_the_chessboard):
 	for dx in [-1, 1]:
