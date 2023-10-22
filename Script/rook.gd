@@ -88,7 +88,8 @@ func move(dx, dy, maxMove) :
 		var targetCaseY = dy*(f*moveCase)
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
 		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
-		and (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]):
+		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
+		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -96,18 +97,23 @@ func move(dx, dy, maxMove) :
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			print("TurnWhite dans move: ", VariableGlobal.turnWhite)
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
 			
 func _on_area_2d_area_entered(area):
-		var piece_name = area.get_parent().get_name()
-		if white == true and VariableGlobal.turnWhite == false:
-			if "Black" in piece_name and dragging == false :
-				get_node("/root/ChessBoard/" + piece_name).queue_free()
-		elif white == false and VariableGlobal.turnWhite == true:
-			if "White" in piece_name and dragging == false :
-				get_node("/root/ChessBoard/" + piece_name).queue_free()
+	print("Collision effectué")
+	var piece_name = area.get_parent().get_name()
+	print("white: ", white)
+	print("turnWhite: ", VariableGlobal.turnWhite)
+	if white == true and VariableGlobal.turnWhite == false:
+		if "Black" in piece_name and dragging == false :
+			get_node("/root/ChessBoard/" + piece_name).queue_free()
+	elif white == false and VariableGlobal.turnWhite == true:
+		print("Prends la piece noir")
+		if "White" in piece_name and dragging == false :
+			get_node("/root/ChessBoard/" + piece_name).queue_free()
 				
 func checkMaxMove(dx, dy):
 	for f in range (1,9):
