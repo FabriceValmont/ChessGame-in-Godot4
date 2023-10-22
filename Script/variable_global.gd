@@ -357,10 +357,97 @@ func attackPiecesBlack():
 					
 	printAttackBlack()
 
-func checkingDirectionOfAttack(KingWhite):
-	#Vérifier dans quelle direction vient l'attaque
-	#Pawn
-		#Vers le haut à droite
+func findAttackerDirectionRow(chessBoard, KingWhite):
+	var directions = ["Haut", "Bas", "Droite", "Gauche"]
+	var i
+	var j
+	
+	for direction in directions:
+		for f in range(1, 9):
+			if direction == "Haut":
+				i = KingWhite.i - f
+				j = KingWhite.j
+			elif direction == "Bas":
+				i = KingWhite.i + f
+				j = KingWhite.j
+			elif direction == "Droite":
+				i = KingWhite.i
+				j = KingWhite.j + f
+			elif direction == "Gauche":
+				i = KingWhite.i
+				j = KingWhite.j - f
+			
+			if i < 0 or i >= 12 or j < 0 or j >= 12:
+				break
+			if chessBoard[i][j] == "x":
+				break
+			if chessBoard[i][j] != "0":
+				var piece = chessBoard[i][j]
+				if piece.begins_with("RookBlack") or piece.begins_with("QueenBlack"):
+					attackerPositioni = i
+					attackerPositionj = j
+					directionOfAttack = direction
+				else:
+					break
+
+func findAttackerDirectionDiagonal(chessBoard, KingWhite):
+	var directions = ["Haut/Droite", "Haut/Gauche", "Bas/Droite", "Bas/Gauche"]
+	var i
+	var j
+	
+	for direction in directions:
+		for f in range(1, 9):
+			if direction == "Haut/Droite":
+				i = KingWhite.i - f
+				j = KingWhite.j + f
+			elif direction == "Haut/Gauche":
+				i = KingWhite.i - f
+				j = KingWhite.j - f
+			elif direction == "Bas/Droite":
+				i = KingWhite.i + f
+				j = KingWhite.j + f
+			elif direction == "Bas/Gauche":
+				i = KingWhite.i + f
+				j = KingWhite.j - f
+			
+			if i < 0 or i >= 12 or j < 0 or j >= 12:
+				break
+			if chessBoard[i][j] == "x":
+				break
+			if chessBoard[i][j] != "0":
+				var piece = chessBoard[i][j]
+				if piece.begins_with("BishopBlack") or piece.begins_with("QueenBlack"):
+					attackerPositioni = i
+					attackerPositionj = j
+					directionOfAttack = direction
+				else:
+					break
+
+func findAttackerDirectionKnight(chessBoard, KingWhite):
+	var knight_moves = [
+		Vector2(-2, -1), Vector2(-2, 1),
+		Vector2(-1, 2), Vector2(1, 2),
+		Vector2(2, -1), Vector2(2, 1),
+		Vector2(-1, -2), Vector2(1, -2)]
+
+	for move in knight_moves:
+		var dx = move[0]
+		var dy = move[1]
+		
+		var target_i = KingWhite.i + dx
+		var target_j = KingWhite.j + dy
+
+		if target_i >= 0 and target_i < 12 and target_j >= 0 and target_j < 12:
+			var target_piece = chessBoard[target_i][target_j]
+
+			if target_piece != "x" and target_piece.begins_with("KnightBlack"):
+				attackerPositioni = target_i
+				attackerPositionj = target_j
+				directionOfAttack = "Cavalier"
+				break
+
+func findAttackerDirectionPawn(chessBoard, KingWhite):
+	#Vers le haut à droite
 		if chessBoard[KingWhite.i-1][KingWhite.j+1] == "x":
 			pass
 		elif chessBoard[KingWhite.i-1][KingWhite.j+1] != "0":
@@ -379,203 +466,13 @@ func checkingDirectionOfAttack(KingWhite):
 				attackerPositioni = KingWhite.i-1
 				attackerPositionj = KingWhite.j-1
 				directionOfAttack = "Haut/Gauche"
-				
-		#Vers le haut
-		for f in range(1,9):
-			if chessBoard[KingWhite.i-f][KingWhite.j] == "x":
-				break
-			elif chessBoard[KingWhite.i-f][KingWhite.j] != "0":
-				
-				if chessBoard[KingWhite.i-f][KingWhite.j].begins_with("RookBlack")\
-				or chessBoard[KingWhite.i-f][KingWhite.j].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i-f
-					attackerPositionj = KingWhite.j
-					directionOfAttack = "Haut"
-					break
-				else:
-					break
-		#Vers le bas
-		for f in range(1,9):
-			if chessBoard[KingWhite.i+f][KingWhite.j] == "x":
-				break
-			elif chessBoard[KingWhite.i+f][KingWhite.j] != "0":
-				
-				if chessBoard[KingWhite.i+f][KingWhite.j].begins_with("RookBlack")\
-				or chessBoard[KingWhite.i+f][KingWhite.j].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i+f
-					attackerPositionj = KingWhite.j
-					directionOfAttack = "Bas"
-					break
-				else:
-					break
-		#Vers la droite
-		for f in range(1,9):
-			if chessBoard[KingWhite.i][KingWhite.j+f] == "x":
-				break
-			elif chessBoard[KingWhite.i][KingWhite.j+f] != "0":
-				
-				if chessBoard[KingWhite.i][KingWhite.j+f].begins_with("RookBlack")\
-				or chessBoard[KingWhite.i][KingWhite.j+f].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i
-					attackerPositionj = KingWhite.j+f
-					directionOfAttack = "Droite"
-					break
-				else:
-					break
-		#Vers la gauche
-		for f in range(1,9):
-			if chessBoard[KingWhite.i][KingWhite.j-f] == "x":
-				break
-			elif chessBoard[KingWhite.i][KingWhite.j-f] != "0":
-				
-				if chessBoard[KingWhite.i][KingWhite.j-f].begins_with("RookBlack")\
-				or chessBoard[KingWhite.i][KingWhite.j-f].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i
-					attackerPositionj = KingWhite.j-f
-					directionOfAttack = "Gauche"
-					break
-				else:
-					break
-		#########################################################################
-		#Vers le haut à droite
-		for f in range(1,9):
-			if chessBoard[KingWhite.i-f][KingWhite.j+f] == "x":
-				break
-			elif chessBoard[KingWhite.i-f][KingWhite.j+f] != "0":
-				
-				if chessBoard[KingWhite.i-f][KingWhite.j+f].begins_with("BishopBlack")\
-				or chessBoard[KingWhite.i-f][KingWhite.j+f].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i-f
-					attackerPositionj = KingWhite.j+f
-					directionOfAttack = "Haut/Droite"
-					break
-				else:
-					break
-		#Vers le haut à gauche
-		for f in range(1,9):
-			if chessBoard[KingWhite.i-f][KingWhite.j-f] == "x":
-				break
-			elif chessBoard[KingWhite.i-f][KingWhite.j-f] != "0":
-				
-				if chessBoard[KingWhite.i-f][KingWhite.j-f].begins_with("BishopBlack")\
-				or chessBoard[KingWhite.i-f][KingWhite.j-f].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i-f
-					attackerPositionj = KingWhite.j-f
-					directionOfAttack = "Haut/Gauche"
-					break
-				else:
-					break
-		#Vers le bas à droite
-		for f in range(1,9):
-			if chessBoard[KingWhite.i+f][KingWhite.j+f] == "x":
-				break
-			elif chessBoard[KingWhite.i+f][KingWhite.j+f] != "0":
-				
-				if chessBoard[KingWhite.i+f][KingWhite.j+f].begins_with("BishopBlack")\
-				or chessBoard[KingWhite.i+f][KingWhite.j+f].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i+f
-					attackerPositionj = KingWhite.j+f
-					directionOfAttack = "Bas/Droite"
-					break
-				else:
-					break
-		#Vers le bas à gauche
-		for f in range(1,9):
-			if chessBoard[KingWhite.i+f][KingWhite.j-f] == "x":
-				break
-			elif chessBoard[KingWhite.i+f][KingWhite.j-f] != "0":
-				
-				if chessBoard[KingWhite.i+f][KingWhite.j-f].begins_with("BishopBlack")\
-				or chessBoard[KingWhite.i+f][KingWhite.j-f].begins_with("QueenBlack"):
-					attackerPositioni = KingWhite.i+f
-					attackerPositionj = KingWhite.j-f
-					directionOfAttack = "Bas/Gauche"
-					
-					break
-				else:
-					break
-		
-		##########################################################################
-		##########################################################################
-		#Déplacement en haut à droite
-		if chessBoard[KingWhite.i-2][KingWhite.j+1] == "x":
-			pass
-		elif chessBoard[KingWhite.i-2][KingWhite.j+1] != "0":
-			
-			if chessBoard[KingWhite.i-2][KingWhite.j+1].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i-2
-				attackerPositionj = KingWhite.j+1
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement en haut à gauche
-		if chessBoard[KingWhite.i-2][KingWhite.j-1] == "x":
-			pass
-		elif chessBoard[KingWhite.i-2][KingWhite.j-1] != "0":
-			
-			if chessBoard[KingWhite.i-2][KingWhite.j-1].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i-2
-				attackerPositionj = KingWhite.j-1
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement vers la droite en haut
-		if chessBoard[KingWhite.i-1][KingWhite.j+2] == "x":
-			pass
-		elif chessBoard[KingWhite.i-1][KingWhite.j+2] != "0":
-			
-			if chessBoard[KingWhite.i-1][KingWhite.j+2].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i-1
-				attackerPositionj = KingWhite.j+2
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement vers la droite en bas
-		if chessBoard[KingWhite.i+1][KingWhite.j+2] == "x":
-			pass
-		elif chessBoard[KingWhite.i+1][KingWhite.j+2] != "0":
-			
-			if chessBoard[KingWhite.i+1][KingWhite.j+2].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i+1
-				attackerPositionj = KingWhite.j+2
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement en bas à droite
-		if chessBoard[KingWhite.i+2][KingWhite.j-1] == "x":
-			pass
-		elif chessBoard[KingWhite.i+2][KingWhite.j-1] != "0":
-			
-			if chessBoard[KingWhite.i+2][KingWhite.j-1].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i+2
-				attackerPositionj = KingWhite.j-1
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement en bas à gauche
-		if chessBoard[KingWhite.i+2][KingWhite.j+1] == "x":
-			pass
-		elif chessBoard[KingWhite.i+2][KingWhite.j+1] != "0":
-			
-			if chessBoard[KingWhite.i+2][KingWhite.j+1].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i+2
-				attackerPositionj = KingWhite.j+1
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement vers la gauche en haut
-		if chessBoard[KingWhite.i-1][KingWhite.j-2] == "x":
-			pass
-		elif chessBoard[KingWhite.i-1][KingWhite.j-2] != "0":
-			
-			if chessBoard[KingWhite.i-1][KingWhite.j-2].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i-1
-				attackerPositionj = KingWhite.j-2
-				directionOfAttack = "Cavalier"
-				
-		#Déplacement vers la gauche en bas
-		if chessBoard[KingWhite.i+1][KingWhite.j-2] == "x":
-			pass
-		elif chessBoard[KingWhite.i+1][KingWhite.j-2] != "0":
-			
-			if chessBoard[KingWhite.i+1][KingWhite.j-2].begins_with("KnightBlack"):
-				attackerPositioni = KingWhite.i+1
-				attackerPositionj = KingWhite.j-2
-				directionOfAttack = "Cavalier"
+
+func checkingDirectionOfAttack(chessBoard, KingWhite):
+	#Vérifier dans quelle direction vient l'attaque (référenciel du Roi)
+	findAttackerDirectionPawn(chessBoard, KingWhite)
+	findAttackerDirectionRow(chessBoard, KingWhite)
+	findAttackerDirectionDiagonal(chessBoard, KingWhite)
+	findAttackerDirectionKnight(chessBoard, KingWhite)
 
 func attackComingUp():
 	pass
@@ -614,7 +511,7 @@ func verificationCheckAndCheckmate():
 		if attack_piece_black_on_the_chessboard[KingWhite.i][KingWhite.j] >= 1:
 			checkWhite = true
 			
-			checkingDirectionOfAttack(KingWhite)
+			checkingDirectionOfAttack(chessBoard, KingWhite)
 			print("directionOfAttack: ",directionOfAttack)
 			
 			if directionOfAttack == "Haut":
