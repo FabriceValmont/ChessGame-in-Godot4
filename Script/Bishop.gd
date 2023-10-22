@@ -11,6 +11,10 @@ var Position = Vector2(250, 750)
 @onready var nameOfPiece = get_name()
 var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/bishop_black.png")
+var maxMoveDownRight = 1
+var maxMoveDownLeft = 1
+var maxMoveUpLeft = 1
+var maxMoveUpRight = 1
 
 func _ready():
 	await get_tree().process_frame
@@ -49,18 +53,22 @@ func _input(event):
 				dragging = true
 				dragOffset = event.position - self.position
 				z_index = 10
+				maxMoveDownRight = checkMaxMove(1,1)
+				maxMoveDownLeft = checkMaxMove(-1,1)
+				maxMoveUpLeft = checkMaxMove(-1,-1)
+				maxMoveUpRight = checkMaxMove(1,-1)
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if white == true and VariableGlobal.turnWhite == true:
-				move(1,1)
-				move(1,-1)
-				move(-1,1)
-				move(-1,-1)
+				move(1,1, maxMoveDownRight)
+				move(1,-1, maxMoveUpRight)
+				move(-1,1, maxMoveDownLeft)
+				move(-1,-1, maxMoveUpLeft)
 			elif white == false and VariableGlobal.turnWhite == false:
-				move(1,1)
-				move(1,-1)
-				move(-1,1)
-				move(-1,-1)
+				move(1,1, maxMoveDownRight)
+				move(1,-1, maxMoveUpRight)
+				move(-1,1, maxMoveDownLeft)
+				move(-1,-1, maxMoveUpLeft)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -72,13 +80,15 @@ func _input(event):
 		self.position = event.position
 		
 		
-func move(dx, dy) :
+func move(dx, dy, maxMove) :
 #	En bas à droite(1,1), En haut à droite(1,-1), En bas à gauche (-1,1), en haut à gauche(-1,-1)
-	for f in range (1,8):
+	for f in range (1,maxMove):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
-		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY:
+		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
+		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
+		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -98,4 +108,12 @@ func _on_area_2d_area_entered(area):
 		elif white == false and VariableGlobal.turnWhite == true:
 			if "White" in piece_name and dragging == false :
 				get_node("/root/ChessBoard/" + piece_name).queue_free()
+				
+func checkMaxMove(dx, dy):
+	for f in range (1,9):
+		if chessBoard[i+(f*dy)][j+(f*dx)] != "0":
+			if chessBoard[i+(f*dy)][j+(f*dx)] == "x":
+				return f
+			else:
+				return f + 1
 
