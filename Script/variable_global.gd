@@ -14,6 +14,7 @@ var attackerPositioni
 var attackerPositionj
 var checkWhite = false
 var checkBlack = false
+var pieceProtectTheKing = false
 
 func _ready():
 	createBoard(12,12)
@@ -473,6 +474,324 @@ func checkingDirectionOfAttack(chessBoard, KingWhite):
 	findAttackerDirectionRow(chessBoard, KingWhite)
 	findAttackerDirectionDiagonal(chessBoard, KingWhite)
 	findAttackerDirectionKnight(chessBoard, KingWhite)
+
+func attackComingAll():
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du haut, on descend chaque case jusqu'au roi
+	#Pawns
+		#Vers le bas à droite
+		print("ffpbd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
+		if chessBoard[attackerPositioni+1][attackerPositionj+1] == "x":
+			pass
+		elif chessBoard[attackerPositioni+1][attackerPositionj+1] != "0":
+			print("ffpbd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
+			if chessBoard[attackerPositioni+1][attackerPositionj+1] == "PawnWhite":
+				var attackerPositionShiftI = attackerPositioni
+				var attackerPositionShiftJ = attackerPositionj
+				
+				var defenseurPositionI = attackerPositioni+1
+				var defenseurPositionJ = attackerPositionj+1
+				pieceProtectTheKing = true
+				emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+				,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+		#Vers le bas à gauche
+		print("ffpbg: ",chessBoard[attackerPositioni+1][attackerPositionj-1])
+		if chessBoard[attackerPositioni+1][attackerPositionj-1] == "x":
+			pass
+		elif chessBoard[attackerPositioni+1][attackerPositionj-1] != "0":
+			print("ffpbg: ",chessBoard[attackerPositioni+1][attackerPositionj-1])
+			if chessBoard[attackerPositioni+1][attackerPositionj-1] == "PawnWhite":
+				var attackerPositionShiftI = attackerPositioni
+				var attackerPositionShiftJ = attackerPositionj
+				
+				var defenseurPositionI = attackerPositioni+1
+				var defenseurPositionJ = attackerPositionj-1
+				pieceProtectTheKing = true
+				emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+				,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	#Lignes
+		for f in range(9):
+			print("f: ", chessBoard[attackerPositioni+f][attackerPositionj])
+			if chessBoard[attackerPositioni+f][attackerPositionj] != "KingWhite":
+				#vers le haut
+				if attackerPositioni+f == attackerPositioni:
+					for ff in range(1,9):
+						print("ffh: ",chessBoard[attackerPositioni-ff+f][attackerPositionj])
+						if chessBoard[attackerPositioni-ff+f][attackerPositionj] == "x":
+							break
+						elif chessBoard[attackerPositioni-ff+f][attackerPositionj] != "0":
+							print("ffh: ",chessBoard[attackerPositioni-ff+f][attackerPositionj])
+							if chessBoard[attackerPositioni-ff+f][attackerPositionj] == "RookWhite"\
+							or chessBoard[attackerPositioni-ff+f][attackerPositionj] == "QueenWhite":
+								var attackerPositionShiftI = attackerPositioni+f
+								var attackerPositionShiftJ = attackerPositionj
+								
+								var defenseurPositionI = attackerPositioni-ff+f
+								var defenseurPositionJ = attackerPositionj
+								pieceProtectTheKing = true
+								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+								break
+							else:
+								break
+				#vers le bas
+				if attackerPositioni-f == attackerPositioni:
+					for ff in range(1,9):
+						print("ffh: ",chessBoard[attackerPositioni-ff-f][attackerPositionj])
+						if chessBoard[attackerPositioni-ff-f][attackerPositionj] == "x":
+							break
+						elif chessBoard[attackerPositioni-ff-f][attackerPositionj] != "0":
+							print("ffh: ",chessBoard[attackerPositioni-ff-f][attackerPositionj])
+							if chessBoard[attackerPositioni-ff-f][attackerPositionj] == "RookWhite"\
+							or chessBoard[attackerPositioni-ff-f][attackerPositionj] == "QueenWhite":
+								var attackerPositionShiftI = attackerPositioni-f
+								var attackerPositionShiftJ = attackerPositionj
+								
+								var defenseurPositionI = attackerPositioni-ff-f
+								var defenseurPositionJ = attackerPositionj
+								pieceProtectTheKing = true
+								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+								break
+							else:
+								break
+								
+				#vers la droite
+				for ff in range(1,9):
+					print("ffd: ",chessBoard[attackerPositioni+f][attackerPositionj+ff])
+					if chessBoard[attackerPositioni+f][attackerPositionj+ff] == "x":
+						break
+					elif chessBoard[attackerPositioni+f][attackerPositionj+ff] != "0":
+						print("fffd: ",chessBoard[attackerPositioni+f][attackerPositionj+ff])
+						if chessBoard[attackerPositioni+f][attackerPositionj+ff] == "RookWhite"\
+						or chessBoard[attackerPositioni+f][attackerPositionj+ff] == "QueenWhite":
+							var attackerPositionShiftI = attackerPositioni+f
+							var attackerPositionShiftJ = attackerPositionj
+							
+							var defenseurPositionI = attackerPositioni+f
+							var defenseurPositionJ = attackerPositionj+ff
+							pieceProtectTheKing = true
+							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+							,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+							break
+						else:
+							break
+				#vers la gauche
+				for ff in range(1,9):
+					print("ffg: ", chessBoard[attackerPositioni+f][attackerPositionj-ff])
+					if chessBoard[attackerPositioni+f][attackerPositionj-ff] == "x":
+						break
+					elif chessBoard[attackerPositioni+f][attackerPositionj-ff] != "0":
+						print("fffg: ", chessBoard[attackerPositioni+f][attackerPositionj-ff])
+						if chessBoard[attackerPositioni+f][attackerPositionj-ff] == "RookWhite"\
+						or chessBoard[attackerPositioni+f][attackerPositionj-ff] == "QueenWhite":
+							var attackerPositionShiftI = attackerPositioni+f
+							var attackerPositionShiftJ = attackerPositionj
+							
+							var defenseurPositionI = attackerPositioni+f
+							var defenseurPositionJ = attackerPositionj-ff
+							pieceProtectTheKing = true
+							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ,\
+							defenseurPositionI,defenseurPositionJ,directionOfAttack)
+							break
+						else:
+							break
+				#Diagonales
+				#vers le haut à droite
+				for ff in range(1,9):
+					print("ffhd: ",chessBoard[attackerPositioni-ff+f][attackerPositionj+ff])
+					if chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] == "x":
+						break
+					elif chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] != "0":
+						print("ffhd: ",chessBoard[attackerPositioni-ff+f][attackerPositionj+ff])
+						if chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] == "BishopWhite"\
+						or chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] == "QueenWhite":
+							var attackerPositionShiftI = attackerPositioni+f
+							var attackerPositionShiftJ = attackerPositionj
+							
+							var defenseurPositionI = attackerPositioni-ff+f
+							var defenseurPositionJ = attackerPositionj+ff
+							pieceProtectTheKing = true
+							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+							,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+							break
+						else:
+							break
+				#vers le haut à gauche
+				for ff in range(1,9):
+					print("ffhg: ",chessBoard[attackerPositioni-ff+f][attackerPositionj-ff])
+					if chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] == "x":
+						break
+					elif chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] != "0":
+						print("ffhg: ",chessBoard[attackerPositioni-ff+f][attackerPositionj-ff])
+						if chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] == "BishopWhite"\
+						or chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] == "QueenWhite":
+							var attackerPositionShiftI = attackerPositioni+f
+							var attackerPositionShiftJ = attackerPositionj
+							
+							var defenseurPositionI = attackerPositioni-ff+f
+							var defenseurPositionJ = attackerPositionj-ff
+							pieceProtectTheKing = true
+							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+							,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+							break
+						else:
+							break
+				#vers le bas à droite
+				for ff in range(1,9):
+						print("ffbd: ",chessBoard[attackerPositioni+ff+f][attackerPositionj+ff])
+						if chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] == "x":
+							break
+						elif chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] != "0":
+							print("ffbd: ",chessBoard[attackerPositioni+ff+f][attackerPositionj+ff])
+							if chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] == "BishopWhite"\
+							or chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] == "QueenWhite":
+								var attackerPositionShiftI = attackerPositioni+f
+								var attackerPositionShiftJ = attackerPositionj
+								
+								var defenseurPositionI = attackerPositioni+ff+f
+								var defenseurPositionJ = attackerPositionj+ff
+								pieceProtectTheKing = true
+								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+								break
+							else:
+								break
+				#vers le bas à gauche
+				for ff in range(1,9):
+						print("ffbg: ",chessBoard[attackerPositioni+ff+f][attackerPositionj-ff])
+						if chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] == "x":
+							break
+						elif chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] != "0":
+							print("ffbg: ",chessBoard[attackerPositioni+ff+f][attackerPositionj-ff])
+							if chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] == "BishopWhite"\
+							or chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] == "QueenWhite":
+								var attackerPositionShiftI = attackerPositioni+f
+								var attackerPositionShiftJ = attackerPositionj
+								
+								var defenseurPositionI = attackerPositioni+ff+f
+								var defenseurPositionJ = attackerPositionj-ff
+								pieceProtectTheKing = true
+								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+								break
+							else:
+								break
+			#Mouvement Cavalier
+				#En haut à droite
+				if chessBoard[attackerPositioni+f-2][attackerPositionj+1] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f-2][attackerPositionj+1] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f-2][attackerPositionj+1])
+					if chessBoard[attackerPositioni+f-2][attackerPositionj+1] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f-2
+						var defenseurPositionJ = attackerPositionj+1
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#En haut à gauche
+				if chessBoard[attackerPositioni+f-2][attackerPositionj-1] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f-2][attackerPositionj-1] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f-2][attackerPositionj-1])
+					if chessBoard[attackerPositioni+f-2][attackerPositionj-1] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f-2
+						var defenseurPositionJ = attackerPositionj-1
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#A droite en haut
+				if chessBoard[attackerPositioni+f-1][attackerPositionj+2] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f-1][attackerPositionj+2] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f-1][attackerPositionj+2])
+					if chessBoard[attackerPositioni+f-1][attackerPositionj+2] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f-1
+						var defenseurPositionJ = attackerPositionj+2
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#A droite en bas
+				if chessBoard[attackerPositioni+f+1][attackerPositionj+2] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f+1][attackerPositionj+2] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f+1][attackerPositionj+2])
+					if chessBoard[attackerPositioni+f+1][attackerPositionj+2] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f+1
+						var defenseurPositionJ = attackerPositionj+2
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#En bas à droite
+				if chessBoard[attackerPositioni+f+2][attackerPositionj+1] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f+2][attackerPositionj+1] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f+2][attackerPositionj+1])
+					if chessBoard[attackerPositioni+f+2][attackerPositionj+1] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f+2
+						var defenseurPositionJ = attackerPositionj+1
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#En bas à gauche
+				if chessBoard[attackerPositioni+f+2][attackerPositionj-1] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f+2][attackerPositionj-1] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f+2][attackerPositionj-1])
+					if chessBoard[attackerPositioni+f+2][attackerPositionj-1] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f+2
+						var defenseurPositionJ = attackerPositionj-1
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#A gauche en haut
+				if chessBoard[attackerPositioni+f-1][attackerPositionj-2] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f-1][attackerPositionj-2] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f-1][attackerPositionj-2])
+					if chessBoard[attackerPositioni+f-1][attackerPositionj-2] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f-1
+						var defenseurPositionJ = attackerPositionj-2
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				#A gauche en bas
+				if chessBoard[attackerPositioni+f+1][attackerPositionj-2] == "x":
+					pass
+				elif chessBoard[attackerPositioni+f+1][attackerPositionj-2] != "0":
+					print("ffc: ",chessBoard[attackerPositioni+f+1][attackerPositionj-2])
+					if chessBoard[attackerPositioni+f+1][attackerPositionj-2] == "KnightWhite":
+						var attackerPositionShiftI = attackerPositioni+f
+						var attackerPositionShiftJ = attackerPositionj
+						
+						var defenseurPositionI = attackerPositioni+f+1
+						var defenseurPositionJ = attackerPositionj-2
+						pieceProtectTheKing = true
+						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+			else:
+				break
 
 func attackComingUp():
 	pass
