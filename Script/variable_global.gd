@@ -599,8 +599,82 @@ func searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,piece):
 				print("pieceProtectTheKing: ", pieceProtectTheKing)
 				#emit_signal("check_to_the_king", attackerPositionShiftI, attackerPositionShiftJ, defenseurPositionI, defenseurPositionJ, directionOfAttack)
 
-func searchDefenderPawnWhite(attack1, attack2):
-	print("Enter in searchDefenderPawnWhite")
+func searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop):
+	print("Enter in searchDefenderPawnWhiteRow")
+	#vers le bas de 1
+	print("ffpwb: ",chessBoard[attackerPositionILoop+1][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop+1][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop+1][attackerPositionJLoop] != "0":
+		print("ffpwb: ",chessBoard[attackerPositionILoop+1][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop+1][attackerPositionJLoop].begins_with("PawnWhite"):
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop+1
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	#vers le bas de 2 si initialPosition == true
+	print("ffpwb: ",chessBoard[attackerPositionILoop+2][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop+2][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop+2][attackerPositionJLoop] != "0":
+		var pawnName = chessBoard[attackerPositionILoop+2][attackerPositionJLoop]
+		print("ffpwb: ",chessBoard[attackerPositionILoop+2][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop+2][attackerPositionJLoop].begins_with("PawnWhite")\
+		and get_node("/root/ChessBoard/" + pawnName).initialPosition == true:
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop+2
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+
+func searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop):
+	print("Enter in searchDefenderPawnBlackRow")
+	#vers le haut de 1
+	print("ffpbb: ",chessBoard[attackerPositionILoop-1][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop-1][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop-1][attackerPositionJLoop] != "0":
+		print("ffpbb: ",chessBoard[attackerPositionILoop-1][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop-1][attackerPositionJLoop].begins_with("PawnBlack"):
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop-1
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	#vers le haut de 2 si initialPosition == true
+	print("ffpbb: ",chessBoard[attackerPositionILoop-2][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop-2][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop-2][attackerPositionJLoop] != "0":
+		var pawnName = chessBoard[attackerPositionILoop-2][attackerPositionJLoop]
+		print("ffpbb: ",chessBoard[attackerPositionILoop-2][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop-2][attackerPositionJLoop].begins_with("PawnBlack")\
+		and get_node("/root/ChessBoard/" + pawnName).initialPosition == true:
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop-2
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+
+func searchDefenderPawnWhiteDiagonal(attack1, attack2):
+	print("Enter in searchDefenderPawnWhiteDiagonal")
 	if attack1 == true:
 	#Vers le bas à droite
 		print("ffpwd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
@@ -636,7 +710,7 @@ func searchDefenderPawnWhite(attack1, attack2):
 				#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
 				#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
 
-func searchDefenderPawnBlack(attack1, attack2):
+func searchDefenderPawnBlackDiagonal(attack1, attack2):
 	print("Enter in searchDefenderPawnBlack")
 	if attack1 == true:
 	#Vers le haut à droite
@@ -678,9 +752,9 @@ func attackComingUp(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant du haut, on descend chaque case jusqu'au roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni + f
@@ -700,9 +774,9 @@ func attackComingDown(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant du bas, on monte chaque case jusqu'au roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni - f
@@ -722,9 +796,9 @@ func attackComingRight(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant de la droite, on va vers la gauche pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni
@@ -733,6 +807,10 @@ func attackComingRight(knightColor,bishopColor,rookColor,queenColor,kingColor):
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
 		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
 		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
 			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
 			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
 			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
@@ -744,9 +822,9 @@ func attackComingLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant de la gauche, on va vers la droite pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni
@@ -755,6 +833,10 @@ func attackComingLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
 		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
 		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
 			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
 			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
 			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
@@ -766,9 +848,9 @@ func attackComingUpRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
 	#Pour une attaque venant du haut à droite, on va vers bas à gauche pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,false)
+		searchDefenderPawnWhiteDiagonal(true,false)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(false,true)
+		searchDefenderPawnBlackDiagonal(false,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni + f
@@ -777,6 +859,10 @@ func attackComingUpRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
 		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
 		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
 			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
 			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
 			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
@@ -788,9 +874,9 @@ func attackComingUpLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant du haut à gauche, on va vers bas à droite pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(false,true)
+		searchDefenderPawnWhiteDiagonal(false,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,false)
+		searchDefenderPawnBlackDiagonal(true,false)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni + f
@@ -799,6 +885,10 @@ func attackComingUpLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
 		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
 		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
 			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
 			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
 			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
@@ -810,9 +900,9 @@ func attackComingDownRight(knightColor,bishopColor,rookColor,queenColor,kingColo
 	#Pour une attaque venant du bas à droite, on va vers haut à gauche pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni - f
@@ -821,6 +911,10 @@ func attackComingDownRight(knightColor,bishopColor,rookColor,queenColor,kingColo
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
 		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
 		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
 			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
 			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
 			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
@@ -832,9 +926,9 @@ func attackComingDownLeft(knightColor,bishopColor,rookColor,queenColor,kingColor
 	#Pour une attaque venant du bas à gauche, on va vers haut à droite pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni - f
@@ -843,6 +937,10 @@ func attackComingDownLeft(knightColor,bishopColor,rookColor,queenColor,kingColor
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
 		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
 		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
 			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
 			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
 			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
@@ -854,9 +952,9 @@ func attackComingKnight(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant du cavalier, on cherche qui peut le prendre
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,true)
+		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlack(true,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	var attackerPositionILoop = attackerPositioni
 	var attackerPositionJLoop = attackerPositionj
