@@ -26,30 +26,19 @@ func _process(delta):
 	if turnWhite == true:
 #		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(0)
 		if update_of_the_parts_attack == false:
-<<<<<<< HEAD
-			updateAttackWhiteandBlack(turnWhite)
-			attack_pieces_black()
-			
-=======
 			updateAttackWhiteandBlack()
 			attackPiecesWhite()
 			attackPiecesBlack()
 			verificationCheckAndCheckmate()
->>>>>>> 5ba181d16024d6d9fa94022426c294eead6d2bda
 			update_of_the_parts_attack = true
 			
 	elif turnWhite == false:
 #		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(180)
 		if update_of_the_parts_attack == true:
-<<<<<<< HEAD
-			updateAttackWhiteandBlack(turnWhite)
-			attack_pieces_white()
-=======
 			updateAttackWhiteandBlack()
 			attackPiecesWhite()
 			attackPiecesBlack()
 			verificationCheckAndCheckmate()
->>>>>>> 5ba181d16024d6d9fa94022426c294eead6d2bda
 			update_of_the_parts_attack = false
 
 func createBoard(rowSize,columnSize):
