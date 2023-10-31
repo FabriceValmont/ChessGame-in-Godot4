@@ -12,6 +12,7 @@ var Position = Vector2(450, 750)
 var initialPosition = true
 var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/king_black.png")
+var checkMate = false
 
 func _ready():
 	await get_tree().process_frame
