@@ -766,12 +766,12 @@ func attackComingUpRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
 	#Pour une attaque venant du haut à droite, on va vers bas à gauche pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(false,true)
+		searchDefenderPawnWhite(true,false)
 	elif kingColor == "KingBlack":
 		searchDefenderPawnBlack(false,true)
 	#Lignes et cavaliers
 	for f in range(9):
-		var attackerPositionILoop = attackerPositioni - f
+		var attackerPositionILoop = attackerPositioni + f
 		var attackerPositionJLoop = attackerPositionj - f
 		print("attackerPositionILoop: ",attackerPositionILoop)
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
@@ -788,12 +788,12 @@ func attackComingUpLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Pour une attaque venant du haut à gauche, on va vers bas à droite pour trouver le roi
 	#Pawns
 	if kingColor == "KingWhite":
-		searchDefenderPawnWhite(true,false)
+		searchDefenderPawnWhite(false,true)
 	elif kingColor == "KingBlack":
 		searchDefenderPawnBlack(true,false)
 	#Lignes et cavaliers
 	for f in range(9):
-		var attackerPositionILoop = attackerPositioni - f
+		var attackerPositionILoop = attackerPositioni + f
 		var attackerPositionJLoop = attackerPositionj + f
 		print("attackerPositionILoop: ",attackerPositionILoop)
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
@@ -815,7 +815,7 @@ func attackComingDownRight(knightColor,bishopColor,rookColor,queenColor,kingColo
 		searchDefenderPawnBlack(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
-		var attackerPositionILoop = attackerPositioni + f
+		var attackerPositionILoop = attackerPositioni - f
 		var attackerPositionJLoop = attackerPositionj - f
 		print("attackerPositionILoop: ",attackerPositionILoop)
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
@@ -837,7 +837,7 @@ func attackComingDownLeft(knightColor,bishopColor,rookColor,queenColor,kingColor
 		searchDefenderPawnBlack(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
-		var attackerPositionILoop = attackerPositioni + f
+		var attackerPositionILoop = attackerPositioni - f
 		var attackerPositionJLoop = attackerPositionj + f
 		print("attackerPositionILoop: ",attackerPositionILoop)
 		print("attackerPositionJLoop: ",attackerPositionJLoop)
