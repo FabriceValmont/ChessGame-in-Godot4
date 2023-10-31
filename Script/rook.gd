@@ -122,3 +122,43 @@ func checkMaxMove(dx, dy):
 				return f
 			else:
 				return f + 1
+
+
+func _on_king_king_size_casteling_signal():
+	self.position = Vector2(550,750)
+	Position = Vector2(self.position.x, self.position.y)
+	chessBoard[i][j] = "0"
+	i=9
+	j=7
+	chessBoard[i][j] = nameOfPiece.replace("@", "")
+	initialPosition = false
+
+
+func _on_king_2_king_size_casteling_signal():
+	self.position = Vector2(550,50)
+	Position = Vector2(self.position.x, self.position.y)
+	chessBoard[i][j] = "0"
+	i=2
+	j=7
+	chessBoard[i][j] = nameOfPiece.replace("@", "")
+	initialPosition = false
+
+
+func _on_king_queen_size_casteling_signal():
+	self.position = Vector2(350,750)
+	Position = Vector2(self.position.x, self.position.y)
+	chessBoard[i][j] = "0"
+	i=9
+	j=5
+	chessBoard[i][j] = nameOfPiece.replace("@", "")
+	initialPosition = false
+
+
+func _on_king_2_queen_size_casteling_signal():
+	self.position = Vector2(350,50)
+	Position = Vector2(self.position.x, self.position.y)
+	chessBoard[i][j] = "0"
+	i=2
+	j=5
+	chessBoard[i][j] = nameOfPiece.replace("@", "")
+	initialPosition = false

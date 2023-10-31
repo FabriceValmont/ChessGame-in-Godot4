@@ -112,3 +112,8 @@ position = Vector2(650, 150)
 
 [node name="Pawn16" parent="." instance=ExtResource("8_gwsh5")]
 position = Vector2(750, 150)
+
+[connection signal="kingSizeCastelingSignal" from="King" to="Rook2" method="_on_king_king_size_casteling_signal"]
+[connection signal="queenSizeCastelingSignal" from="King" to="Rook" method="_on_king_queen_size_casteling_signal"]
+[connection signal="kingSizeCastelingSignal" from="King2" to="Rook4" method="_on_king_2_king_size_casteling_signal"]
+[connection signal="queenSizeCastelingSignal" from="King2" to="Rook3" method="_on_king_2_queen_size_casteling_signal"]

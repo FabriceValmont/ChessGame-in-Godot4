@@ -1,5 +1,8 @@
 extends Sprite2D
 
+signal kingSizeCastelingSignal
+signal queenSizeCastelingSignal
+
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
@@ -127,6 +130,7 @@ func kingSizeCasteling(dx, dy, rookColor, attackColor):
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			emit_signal("kingSizeCastelingSignal")
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
 			
@@ -146,5 +150,6 @@ func queenSizeCasteling(dx, dy, rookColor, attackColor):
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			emit_signal("queenSizeCastelingSignal")
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
