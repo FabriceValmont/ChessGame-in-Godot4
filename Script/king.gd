@@ -125,7 +125,7 @@ func kingSizeCasteling(dx, dy, rookColor, attackColor):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
-			i=i+(dy*2)
+			i=i
 			j=j+(dx*2)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
@@ -145,7 +145,7 @@ func queenSizeCasteling(dx, dy, rookColor, attackColor):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
-			i=i+(dy*2)
+			i=i
 			j=j+(dx*2)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
