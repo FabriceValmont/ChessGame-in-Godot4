@@ -16,6 +16,8 @@ var maxMoveUp = 1
 var maxMoveDown = 1
 var maxMoveLeft = 1
 var maxMoveRight = 1
+var piece_protects_against_an_attack = false
+var direction_attack_protect_king = ""
 
 func _ready():
 	await get_tree().process_frame
@@ -58,6 +60,7 @@ func _input(event):
 				maxMoveLeft = checkMaxMove(-1,0)
 				maxMoveDown = checkMaxMove(0,1)
 				maxMoveUp = checkMaxMove(0,-1)
+				theKingIsBehind()
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if white == true and VariableGlobal.turnWhite == true:
@@ -89,7 +92,8 @@ func move(dx, dy, maxMove) :
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
 		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
-		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false):
+		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false)\
+		and piece_protects_against_an_attack == false:
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -162,3 +166,215 @@ func _on_king_2_queen_size_casteling_signal():
 	j=5
 	chessBoard[i][j] = nameOfPiece.replace("@", "")
 	initialPosition = false
+
+func directionOfAttack(bishopColor, rookColor, queenColor):
+	#On regarde d'où vient l'attaque
+	#Lignes
+	#Vers le haut
+	direction_attack_protect_king = ""
+	for f in range(1,9):
+		if chessBoard[i-f][j] == "x":
+			break
+		elif chessBoard[i-f][j] != "0":
+			
+			if chessBoard[i-f][j].begins_with(rookColor)\
+			or chessBoard[i-f][j].begins_with(queenColor):
+				direction_attack_protect_king = "Haut"
+				break
+			else:
+				break
+	#Vers le bas
+	for f in range(1,9):
+		if chessBoard[i+f][j] == "x":
+			break
+		elif chessBoard[i+f][j] != "0":
+			
+			if chessBoard[i+f][j].begins_with(rookColor)\
+			or chessBoard[i+f][j].begins_with(queenColor):
+				direction_attack_protect_king = "Bas"
+				break
+			else:
+				break
+	#Vers la droite
+	for f in range(1,9):
+		if chessBoard[i][j+f] == "x":
+			break
+		elif chessBoard[i][j+f] != "0":
+			
+			if chessBoard[i][j+f].begins_with(rookColor)\
+			or chessBoard[i][j+f].begins_with(queenColor):
+				direction_attack_protect_king = "Droite"
+				break
+			else:
+				break
+	#Vers la gauche
+	for f in range(1,9):
+		if chessBoard[i][j-f] == "x":
+			break
+		elif chessBoard[i][j-f] != "0":
+			
+			if chessBoard[i][j-f].begins_with(rookColor)\
+			or chessBoard[i][j-f].begins_with(queenColor):
+				direction_attack_protect_king = "Gauche"
+				break
+			else:
+				break
+	#Diagonales
+	#Vers le haut à droite
+	for f in range(1,9):
+		if chessBoard[i-f][j+f] == "x":
+			break
+		elif chessBoard[i-f][j+f] != "0":
+			
+			if chessBoard[i-f][j+f].begins_with(bishopColor)\
+			or chessBoard[i-f][j+f].begins_with(queenColor):
+				direction_attack_protect_king = "Haut/Droite"
+				break
+			else:
+				break
+	#Vers le haut à gauche
+	for f in range(1,9):
+		if chessBoard[i-f][j-f] == "x":
+			break
+		elif chessBoard[i-f][j-f] != "0":
+			
+			if chessBoard[i-f][j-f].begins_with(bishopColor)\
+			or chessBoard[i-f][j-f].begins_with(queenColor):
+				direction_attack_protect_king = "Haut/Gauche"
+				break
+			else:
+				break
+	#Vers le bas à droite
+	for f in range(1,9):
+		if chessBoard[i+f][j+f] == "x":
+			break
+		elif chessBoard[i+f][j+f] != "0":
+			
+			if chessBoard[i+f][j+f].begins_with(bishopColor)\
+			or chessBoard[i+f][j+f].begins_with(queenColor):
+				direction_attack_protect_king = "Bas/Droite"
+				break
+			else:
+				break
+	#Vers le bas à gauche
+	for f in range(1,9):
+		if chessBoard[i+f][j-f] == "x":
+			break
+		elif chessBoard[i+f][j-f] != "0":
+			
+			if chessBoard[i+f][j-f].begins_with(bishopColor)\
+			or chessBoard[i+f][j-f].begins_with(queenColor):
+				direction_attack_protect_king = "Bas/Gauche"
+				break
+			else:
+				break
+				
+func theKingIsBehind():
+	#Ensuite, on regarde si le roi est derrière la pièce
+	#qui le protège de l'attaque qui vient dans cette direction
+	var kingColor = ""
+	if VariableGlobal.turnWhite == true :
+		directionOfAttack("BishopBlack", "RookBlack", "QueenBlack")
+		kingColor = "KingWhite"
+	elif VariableGlobal.turnWhite == false :
+		directionOfAttack("BishopWhite", "RookWhite", "QueenWhite")
+		kingColor = "KingBlack"
+		
+	piece_protects_against_an_attack = false
+	if direction_attack_protect_king == "Haut":
+		#On cherche vers le bas
+		for f in range(1,9):
+			if chessBoard[i+f][j] == "x":
+				break
+			elif chessBoard[i+f][j] != "0":
+				
+				if chessBoard[i+f][j].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Bas":
+		#On cherche vers le haut
+		for f in range(1,9):
+			if chessBoard[i-f][j] == "x":
+				break
+			elif chessBoard[i-f][j] != "0":
+				
+				if chessBoard[i-f][j].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Droite":
+		#On cherche vers la gauche
+		for f in range(1,9):
+			if chessBoard[i][j-f] == "x":
+				break
+			elif chessBoard[i][j-f] != "0":
+				
+				if chessBoard[i][j-f].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Gauche":
+		#On cherche vers la droite
+		for f in range(1,9):
+			if chessBoard[i][j+f] == "x":
+				break
+			elif chessBoard[i][j+f] != "0":
+				
+				if chessBoard[i][j+f].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Haut/Droite":
+		#On cherche vers le Bas/Gauche
+		for f in range(1,9):
+			if chessBoard[i+f][j-f] == "x":
+				break
+			elif chessBoard[i+f][j-f] != "0":
+				
+				if chessBoard[i+f][j-f].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Haut/Gauche":
+		#On cherche vers le Bas/Droite
+		for f in range(1,9):
+			if chessBoard[i+f][j+f] == "x":
+				break
+			elif chessBoard[i+f][j+f] != "0":
+				
+				if chessBoard[i+f][j+f].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Bas/Droite":
+		#On cherche vers le Haut/Gauche
+		for f in range(1,9):
+			if chessBoard[i-f][j-f] == "x":
+				break
+			elif chessBoard[i-f][j-f] != "0":
+				
+				if chessBoard[i-f][j-f].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+	elif direction_attack_protect_king == "Bas/Gauche":
+		#On cherche vers le Haut/Droite
+		for f in range(1,9):
+			if chessBoard[i-f][j+f] == "x":
+				break
+			elif chessBoard[i-f][j+f] != "0":
+				
+				if chessBoard[i-f][j+f].begins_with(kingColor):
+					piece_protects_against_an_attack = true
+					break
+				else:
+					break
+
