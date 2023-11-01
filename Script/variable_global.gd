@@ -15,6 +15,8 @@ var attackerPositionj
 var checkWhite = false
 var checkBlack = false
 var pieceProtectTheKing = false
+var threatened = false
+var checkmate = false
 
 func _ready():
 	createBoard(12,12)
@@ -994,6 +996,21 @@ func verificationDefenderAllAttack(knightColor,bishopColor,rookColor,queenColor,
 		print("Enter AttackCommingKnight")
 		attackComingKnight(knightColor,bishopColor,rookColor,queenColor,kingColor)
 
+func checkmateKing(pawnColor,knightColor,bishopColor,rookColor,queenColor,kingNode,attackColor):
+	#On verifie l'échec et mat si aucune pièce ne peut protèger le roi
+	if not pieceProtectTheKing:
+		
+		for i in range(kingNode.i - 1, kingNode.i + 2):
+			for j in range(kingNode.j - 1, kingNode.j + 2):
+				if i != kingNode.i or j != kingNode.j:
+					if (i >= 0 and i < 12 and j >= 0 and j < 12
+						and (attackColor[i][j] >= 1 or attackColor[i][j] <= -1
+						or chessBoard[i][j].begins_with(pawnColor) or chessBoard[i][j].begins_with(knightColor)
+						or chessBoard[i][j].begins_with(bishopColor) or chessBoard[i][j].begins_with(rookColor)
+						or chessBoard[i][j].begins_with(queenColor))):
+						threatened = true
+						break
+
 func verificationCheckAndCheckmate():
 	var KingWhite = get_node("/root/ChessBoard/KingWhite")
 	var KingBlack = get_node("/root/ChessBoard/KingBlack")
@@ -1010,6 +1027,13 @@ func verificationCheckAndCheckmate():
 			
 			verificationDefenderAllAttack("KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
 			
+			checkmateKing("PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",KingWhite,attack_piece_black_on_the_chessboard)
+			
+			if threatened == true:
+				print("Echec et mat pour le roi blanc")
+				checkmate = true
+				#emit_signal("checkmate_to_the_king",checkmate)
+			
 		print("King White check: ", checkWhite)
 		print("King Black check: ", checkBlack)
 		
@@ -1024,6 +1048,13 @@ func verificationCheckAndCheckmate():
 			print("directionOfAttack: ",directionOfAttack)
 			
 			verificationDefenderAllAttack("KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
+			
+			checkmateKing("PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",KingBlack,attack_piece_white_on_the_chessboard)
+			
+			if threatened == true:
+				print("Echec et mat pour le roi noir")
+				checkmate = true
+				#emit_signal("checkmate_to_the_king",checkmate)
 			
 		print("King White check: ", checkWhite)
 		print("King Black check: ", checkBlack)
