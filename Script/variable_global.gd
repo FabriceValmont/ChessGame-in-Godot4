@@ -15,6 +15,8 @@ var attackerPositionj
 var checkWhite = false
 var checkBlack = false
 var pieceProtectTheKing = false
+var threatened = false
+var checkmate = false
 
 func _ready():
 	createBoard(12,12)
@@ -119,14 +121,14 @@ func updateAttackWhiteandBlack():
 			attack_piece_black_on_the_chessboard[i][j] = 0
 
 func printAttackWhite():
-	print("AttackBoardWhite: ")
+	print("AttackBoardWhite: /AttackBoardBlack: ")
 	for i in range(0,12):
-		print(attack_piece_white_on_the_chessboard[i])
+		print(attack_piece_white_on_the_chessboard[i],attack_piece_black_on_the_chessboard[i])
 
 func printAttackBlack():
-	print("AttackBoardBlack: ")
+	print("AttackBoardBlack: /AttackBoardWhite: ")
 	for i in range(0,12):
-		print(attack_piece_black_on_the_chessboard[i])
+		print(attack_piece_black_on_the_chessboard[i],attack_piece_white_on_the_chessboard[i])
 
 func pawnAttackWhite(i, j, chessBoard, attack_piece_white_on_the_chessboard):
 	for dx in [-1, 1]:
@@ -358,7 +360,7 @@ func attackPiecesBlack():
 					
 	printAttackBlack()
 
-func findAttackerDirectionRow(chessBoard, KingWhite):
+func findAttackerDirectionRow(chessBoard,kingNode,piece1,piece2):
 	var directions = ["Haut", "Bas", "Droite", "Gauche"]
 	var i
 	var j
@@ -366,17 +368,17 @@ func findAttackerDirectionRow(chessBoard, KingWhite):
 	for direction in directions:
 		for f in range(1, 9):
 			if direction == "Haut":
-				i = KingWhite.i - f
-				j = KingWhite.j
+				i = kingNode.i - f
+				j = kingNode.j
 			elif direction == "Bas":
-				i = KingWhite.i + f
-				j = KingWhite.j
+				i = kingNode.i + f
+				j = kingNode.j
 			elif direction == "Droite":
-				i = KingWhite.i
-				j = KingWhite.j + f
+				i = kingNode.i
+				j = kingNode.j + f
 			elif direction == "Gauche":
-				i = KingWhite.i
-				j = KingWhite.j - f
+				i = kingNode.i
+				j = kingNode.j - f
 			
 			if i < 0 or i >= 12 or j < 0 or j >= 12:
 				break
@@ -384,14 +386,14 @@ func findAttackerDirectionRow(chessBoard, KingWhite):
 				break
 			if chessBoard[i][j] != "0":
 				var piece = chessBoard[i][j]
-				if piece.begins_with("RookBlack") or piece.begins_with("QueenBlack"):
+				if piece.begins_with(piece1) or piece.begins_with(piece2):
 					attackerPositioni = i
 					attackerPositionj = j
 					directionOfAttack = direction
 				else:
 					break
 
-func findAttackerDirectionDiagonal(chessBoard, KingWhite):
+func findAttackerDirectionDiagonal(chessBoard,kingNode,piece1,piece2):
 	var directions = ["Haut/Droite", "Haut/Gauche", "Bas/Droite", "Bas/Gauche"]
 	var i
 	var j
@@ -399,17 +401,17 @@ func findAttackerDirectionDiagonal(chessBoard, KingWhite):
 	for direction in directions:
 		for f in range(1, 9):
 			if direction == "Haut/Droite":
-				i = KingWhite.i - f
-				j = KingWhite.j + f
+				i = kingNode.i - f
+				j = kingNode.j + f
 			elif direction == "Haut/Gauche":
-				i = KingWhite.i - f
-				j = KingWhite.j - f
+				i = kingNode.i - f
+				j = kingNode.j - f
 			elif direction == "Bas/Droite":
-				i = KingWhite.i + f
-				j = KingWhite.j + f
+				i = kingNode.i + f
+				j = kingNode.j + f
 			elif direction == "Bas/Gauche":
-				i = KingWhite.i + f
-				j = KingWhite.j - f
+				i = kingNode.i + f
+				j = kingNode.j - f
 			
 			if i < 0 or i >= 12 or j < 0 or j >= 12:
 				break
@@ -417,14 +419,14 @@ func findAttackerDirectionDiagonal(chessBoard, KingWhite):
 				break
 			if chessBoard[i][j] != "0":
 				var piece = chessBoard[i][j]
-				if piece.begins_with("BishopBlack") or piece.begins_with("QueenBlack"):
+				if piece.begins_with(piece1) or piece.begins_with(piece2):
 					attackerPositioni = i
 					attackerPositionj = j
 					directionOfAttack = direction
 				else:
 					break
 
-func findAttackerDirectionKnight(chessBoard, KingWhite):
+func findAttackerDirectionKnight(chessBoard,kingNode,piece):
 	var knight_moves = [
 		Vector2(-2, -1), Vector2(-2, 1),
 		Vector2(-1, 2), Vector2(1, 2),
@@ -435,390 +437,579 @@ func findAttackerDirectionKnight(chessBoard, KingWhite):
 		var dx = move[0]
 		var dy = move[1]
 		
-		var target_i = KingWhite.i + dx
-		var target_j = KingWhite.j + dy
+		var target_i = kingNode.i + dx
+		var target_j = kingNode.j + dy
 
 		if target_i >= 0 and target_i < 12 and target_j >= 0 and target_j < 12:
 			var target_piece = chessBoard[target_i][target_j]
 
-			if target_piece != "x" and target_piece.begins_with("KnightBlack"):
+			if target_piece != "x" and target_piece.begins_with(piece):
 				attackerPositioni = target_i
 				attackerPositionj = target_j
 				directionOfAttack = "Cavalier"
 				break
 
-func findAttackerDirectionPawn(chessBoard, KingWhite):
-	#Vers le haut à droite
-		if chessBoard[KingWhite.i-1][KingWhite.j+1] == "x":
+func findAttackerDirectionPawnWhite(chessBoard,kingNode):
+	#Vers le bas à droite
+		if chessBoard[kingNode.i+1][kingNode.j+1] == "x":
 			pass
-		elif chessBoard[KingWhite.i-1][KingWhite.j+1] != "0":
+		elif chessBoard[kingNode.i+1][kingNode.j+1] != "0":
 			
-			if chessBoard[KingWhite.i-1][KingWhite.j+1].begins_with("PawnBlack"):
-				attackerPositioni = KingWhite.i-1
-				attackerPositionj = KingWhite.j+1
+			if chessBoard[kingNode.i+1][kingNode.j+1].begins_with("PawnWhite"):
+				attackerPositioni = kingNode.i+1
+				attackerPositionj = kingNode.j+1
+				directionOfAttack = "Bas/Droite"
+				
+		#Vers le bas à gauche
+		if chessBoard[kingNode.i+1][kingNode.j-1] == "x":
+			pass
+		elif chessBoard[kingNode.i+1][kingNode.j-1] != "0":
+			
+			if chessBoard[kingNode.i+1][kingNode.j-1].begins_with("PawnWhite"):
+				attackerPositioni = kingNode.i+1
+				attackerPositionj = kingNode.j-1
+				directionOfAttack = "Bas/Gauche"
+
+func findAttackerDirectionPawnBlack(chessBoard,kingNode):
+	#Vers le haut à droite
+		if chessBoard[kingNode.i-1][kingNode.j+1] == "x":
+			pass
+		elif chessBoard[kingNode.i-1][kingNode.j+1] != "0":
+			
+			if chessBoard[kingNode.i-1][kingNode.j+1].begins_with("PawnBlack"):
+				attackerPositioni = kingNode.i-1
+				attackerPositionj = kingNode.j+1
 				directionOfAttack = "Haut/Droite"
 				
 		#Vers le haut à gauche
-		if chessBoard[KingWhite.i-1][KingWhite.j-1] == "x":
+		if chessBoard[kingNode.i-1][kingNode.j-1] == "x":
 			pass
-		elif chessBoard[KingWhite.i-1][KingWhite.j-1] != "0":
+		elif chessBoard[kingNode.i-1][kingNode.j-1] != "0":
 			
-			if chessBoard[KingWhite.i-1][KingWhite.j-1].begins_with("PawnBlack"):
-				attackerPositioni = KingWhite.i-1
-				attackerPositionj = KingWhite.j-1
+			if chessBoard[kingNode.i-1][kingNode.j-1].begins_with("PawnBlack"):
+				attackerPositioni = kingNode.i-1
+				attackerPositionj = kingNode.j-1
 				directionOfAttack = "Haut/Gauche"
 
-func checkingDirectionOfAttack(chessBoard, KingWhite):
+func checkingDirectionOfAttack(chessBoard,kingNode,knightColor,bishopColor,rookColor,queenColor,kingColor):
 	#Vérifier dans quelle direction vient l'attaque (référenciel du Roi)
-	findAttackerDirectionPawn(chessBoard, KingWhite)
-	findAttackerDirectionRow(chessBoard, KingWhite)
-	findAttackerDirectionDiagonal(chessBoard, KingWhite)
-	findAttackerDirectionKnight(chessBoard, KingWhite)
+	if kingColor == "KingBlack":
+		findAttackerDirectionPawnBlack(chessBoard,kingNode)
+	elif kingColor == "KingWhite":
+		findAttackerDirectionPawnWhite(chessBoard,kingNode)
+	findAttackerDirectionRow(chessBoard,kingNode,rookColor,queenColor)
+	findAttackerDirectionDiagonal(chessBoard,kingNode,bishopColor,queenColor)
+	findAttackerDirectionKnight(chessBoard,kingNode,knightColor)
 
-func attackComingAll():
-	#Vérifier quelle pièce peut protéger le roi
-	#Pour une attaque venant du haut, on descend chaque case jusqu'au roi
-	#Pawns
-		#Vers le bas à droite
-		print("ffpbd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
+func searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,piece1,piece2):
+	print("Enter in searchDefenderRow")
+	var directions = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0)]
+	
+	for direction in directions:
+		var dx = direction[0]
+		var dy = direction[1]
+		
+		for ff in range(1,9):
+			var target_i = attackerPositionILoop + ff * dx
+			var target_j = attackerPositionJLoop + ff * dy
+			
+			if target_i < 0 or target_i >= 12 or target_j < 0 or target_j >= 12:
+				break
+				
+			var target_piece = chessBoard[target_i][target_j]
+			
+			if target_piece == "x":
+				break
+			elif target_piece != "0":
+				print("target_piece: ", target_piece)
+				if target_piece.begins_with(piece1) or target_piece.begins_with(piece2):
+					var attackerPositionShiftI = attackerPositionILoop
+					var attackerPositionShiftJ = attackerPositionJLoop
+					var defenseurPositionI = target_i
+					var defenseurPositionJ = target_j
+					pieceProtectTheKing = true
+					print("pieceProtectTheKing: ", pieceProtectTheKing)
+#					emit_signal("check_to_the_king", attackerPositionShiftI, attackerPositionShiftJ, defenseurPositionI, defenseurPositionJ, directionOfAttack)
+					break
+				else:
+					break
+
+func searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,piece1,piece2):
+	print("Enter in searchDefenderDiagonal")
+	var directions = [Vector2(1, 1), Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1)]
+	
+	for direction in directions:
+		var dx = direction[0]
+		var dy = direction[1]
+		
+		for ff in range(1,9):
+			var target_i = attackerPositionILoop + ff * dx
+			var target_j = attackerPositionJLoop + ff * dy
+			
+			if target_i < 0 or target_i >= 12 or target_j < 0 or target_j >= 12:
+				break
+				
+			var target_piece = chessBoard[target_i][target_j]
+			
+			if target_piece == "x":
+				break
+			elif target_piece != "0":
+				print("target_piece: ", target_piece)
+				if target_piece.begins_with(piece1) or target_piece.begins_with(piece2):
+					var attackerPositionShiftI = attackerPositionILoop
+					var attackerPositionShiftJ = attackerPositionJLoop
+					var defenseurPositionI = target_i
+					var defenseurPositionJ = target_j
+					pieceProtectTheKing = true
+					print("pieceProtectTheKing: ", pieceProtectTheKing)
+#					emit_signal("check_to_the_king", attackerPositionShiftI, attackerPositionShiftJ, defenseurPositionI, defenseurPositionJ, directionOfAttack)
+					break
+				else:
+					break
+
+func searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,piece):
+	print("Enter in searchDefenderKnight")
+	var directions = [
+		Vector2(-2, -1), Vector2(-2, 1),
+		Vector2(-1, 2), Vector2(1, 2),
+		Vector2(2, -1), Vector2(2, 1),
+		Vector2(-1, -2), Vector2(1, -2)]
+	
+	for direction in directions:
+		var dx = direction[0]
+		var dy = direction[1]
+		
+		var target_i = attackerPositionILoop + dx
+		var target_j = attackerPositionJLoop + dy
+		
+#		if target_i >= 0 and target_i < 12 and target_j >= 0 and target_j < 12:
+#			break
+			
+		var target_piece = chessBoard[target_i][target_j]
+		
+		if target_piece == "x":
+			continue
+		elif target_piece != "0":
+			print("target_piece: ", target_piece)
+			if target_piece.begins_with(piece):
+				var attackerPositionShiftI = attackerPositionILoop
+				var attackerPositionShiftJ = attackerPositionJLoop
+				
+				var defenseurPositionI = target_i
+				var defenseurPositionJ = target_j
+				pieceProtectTheKing = true
+				print("pieceProtectTheKing: ", pieceProtectTheKing)
+				#emit_signal("check_to_the_king", attackerPositionShiftI, attackerPositionShiftJ, defenseurPositionI, defenseurPositionJ, directionOfAttack)
+
+func searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop):
+	print("Enter in searchDefenderPawnWhiteRow")
+	#vers le bas de 1
+	print("ffpwb: ",chessBoard[attackerPositionILoop+1][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop+1][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop+1][attackerPositionJLoop] != "0":
+		print("ffpwb: ",chessBoard[attackerPositionILoop+1][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop+1][attackerPositionJLoop].begins_with("PawnWhite"):
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop+1
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	#vers le bas de 2 si initialPosition == true
+	print("ffpwb: ",chessBoard[attackerPositionILoop+2][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop+2][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop+2][attackerPositionJLoop] != "0":
+		var pawnName = chessBoard[attackerPositionILoop+2][attackerPositionJLoop]
+		print("ffpwb: ",chessBoard[attackerPositionILoop+2][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop+2][attackerPositionJLoop].begins_with("PawnWhite")\
+		and get_node("/root/ChessBoard/" + pawnName).initialPosition == true:
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop+2
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+
+func searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop):
+	print("Enter in searchDefenderPawnBlackRow")
+	#vers le haut de 1
+	print("ffpbb: ",chessBoard[attackerPositionILoop-1][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop-1][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop-1][attackerPositionJLoop] != "0":
+		print("ffpbb: ",chessBoard[attackerPositionILoop-1][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop-1][attackerPositionJLoop].begins_with("PawnBlack"):
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop-1
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	#vers le haut de 2 si initialPosition == true
+	print("ffpbb: ",chessBoard[attackerPositionILoop-2][attackerPositionJLoop])
+	if chessBoard[attackerPositionILoop-2][attackerPositionJLoop] == "x":
+		pass
+	elif chessBoard[attackerPositionILoop-2][attackerPositionJLoop] != "0":
+		var pawnName = chessBoard[attackerPositionILoop-2][attackerPositionJLoop]
+		print("ffpbb: ",chessBoard[attackerPositionILoop-2][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop-2][attackerPositionJLoop].begins_with("PawnBlack")\
+		and get_node("/root/ChessBoard/" + pawnName).initialPosition == true:
+			var attackerPositionShiftI = attackerPositionILoop
+			var attackerPositionShiftJ = attackerPositionJLoop
+			
+			var defenseurPositionI = attackerPositionILoop-2
+			var defenseurPositionJ = attackerPositionJLoop
+			pieceProtectTheKing = true
+			print("pieceProtectTheKing: ", pieceProtectTheKing)
+			#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+			#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+
+func searchDefenderPawnWhiteDiagonal(attack1, attack2):
+	print("Enter in searchDefenderPawnWhiteDiagonal")
+	if attack1 == true:
+	#Vers le bas à droite
+		print("ffpwd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
 		if chessBoard[attackerPositioni+1][attackerPositionj+1] == "x":
 			pass
 		elif chessBoard[attackerPositioni+1][attackerPositionj+1] != "0":
-			print("ffpbd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
-			if chessBoard[attackerPositioni+1][attackerPositionj+1] == "PawnWhite":
+			print("ffpwd: ",chessBoard[attackerPositioni+1][attackerPositionj+1])
+			if chessBoard[attackerPositioni+1][attackerPositionj+1].begins_with("PawnWhite"):
 				var attackerPositionShiftI = attackerPositioni
 				var attackerPositionShiftJ = attackerPositionj
 				
 				var defenseurPositionI = attackerPositioni+1
 				var defenseurPositionJ = attackerPositionj+1
 				pieceProtectTheKing = true
-				emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-				,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+				print("pieceProtectTheKing: ", pieceProtectTheKing)
+#				emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+#				,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	if attack2 == true:
 		#Vers le bas à gauche
-		print("ffpbg: ",chessBoard[attackerPositioni+1][attackerPositionj-1])
+		print("ffpwg: ",chessBoard[attackerPositioni+1][attackerPositionj-1])
 		if chessBoard[attackerPositioni+1][attackerPositionj-1] == "x":
 			pass
 		elif chessBoard[attackerPositioni+1][attackerPositionj-1] != "0":
-			print("ffpbg: ",chessBoard[attackerPositioni+1][attackerPositionj-1])
-			if chessBoard[attackerPositioni+1][attackerPositionj-1] == "PawnWhite":
+			print("ffpwg: ",chessBoard[attackerPositioni+1][attackerPositionj-1])
+			if chessBoard[attackerPositioni+1][attackerPositionj-1].begins_with("PawnWhite"):
 				var attackerPositionShiftI = attackerPositioni
 				var attackerPositionShiftJ = attackerPositionj
 				
 				var defenseurPositionI = attackerPositioni+1
 				var defenseurPositionJ = attackerPositionj-1
 				pieceProtectTheKing = true
-				emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-				,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-	#Lignes
-		for f in range(9):
-			print("f: ", chessBoard[attackerPositioni+f][attackerPositionj])
-			if chessBoard[attackerPositioni+f][attackerPositionj] != "KingWhite":
-				#vers le haut
-				if attackerPositioni+f == attackerPositioni:
-					for ff in range(1,9):
-						print("ffh: ",chessBoard[attackerPositioni-ff+f][attackerPositionj])
-						if chessBoard[attackerPositioni-ff+f][attackerPositionj] == "x":
-							break
-						elif chessBoard[attackerPositioni-ff+f][attackerPositionj] != "0":
-							print("ffh: ",chessBoard[attackerPositioni-ff+f][attackerPositionj])
-							if chessBoard[attackerPositioni-ff+f][attackerPositionj] == "RookWhite"\
-							or chessBoard[attackerPositioni-ff+f][attackerPositionj] == "QueenWhite":
-								var attackerPositionShiftI = attackerPositioni+f
-								var attackerPositionShiftJ = attackerPositionj
-								
-								var defenseurPositionI = attackerPositioni-ff+f
-								var defenseurPositionJ = attackerPositionj
-								pieceProtectTheKing = true
-								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-								break
-							else:
-								break
-				#vers le bas
-				if attackerPositioni-f == attackerPositioni:
-					for ff in range(1,9):
-						print("ffh: ",chessBoard[attackerPositioni-ff-f][attackerPositionj])
-						if chessBoard[attackerPositioni-ff-f][attackerPositionj] == "x":
-							break
-						elif chessBoard[attackerPositioni-ff-f][attackerPositionj] != "0":
-							print("ffh: ",chessBoard[attackerPositioni-ff-f][attackerPositionj])
-							if chessBoard[attackerPositioni-ff-f][attackerPositionj] == "RookWhite"\
-							or chessBoard[attackerPositioni-ff-f][attackerPositionj] == "QueenWhite":
-								var attackerPositionShiftI = attackerPositioni-f
-								var attackerPositionShiftJ = attackerPositionj
-								
-								var defenseurPositionI = attackerPositioni-ff-f
-								var defenseurPositionJ = attackerPositionj
-								pieceProtectTheKing = true
-								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-								break
-							else:
-								break
-								
-				#vers la droite
-				for ff in range(1,9):
-					print("ffd: ",chessBoard[attackerPositioni+f][attackerPositionj+ff])
-					if chessBoard[attackerPositioni+f][attackerPositionj+ff] == "x":
+				print("pieceProtectTheKing: ", pieceProtectTheKing)
+				#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+				#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+
+func searchDefenderPawnBlackDiagonal(attack1, attack2):
+	print("Enter in searchDefenderPawnBlack")
+	if attack1 == true:
+	#Vers le haut à droite
+		print("ffpbd: ",chessBoard[attackerPositioni-1][attackerPositionj+1])
+		if chessBoard[attackerPositioni-1][attackerPositionj+1] == "x":
+			pass
+		elif chessBoard[attackerPositioni-1][attackerPositionj+1] != "0":
+			print("ffpbd: ",chessBoard[attackerPositioni-1][attackerPositionj+1])
+			if chessBoard[attackerPositioni-1][attackerPositionj+1].begins_with("PawnBlack"):
+				var attackerPositionShiftI = attackerPositioni
+				var attackerPositionShiftJ = attackerPositionj
+				
+				var defenseurPositionI = attackerPositioni-1
+				var defenseurPositionJ = attackerPositionj+1
+				pieceProtectTheKing = true
+				print("pieceProtectTheKing: ", pieceProtectTheKing)
+#				emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+#				,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+	if attack2 == true:
+		#Vers le haut à gauche
+		print("ffpbg: ",chessBoard[attackerPositioni-1][attackerPositionj-1])
+		if chessBoard[attackerPositioni-1][attackerPositionj-1] == "x":
+			pass
+		elif chessBoard[attackerPositioni-1][attackerPositionj-1] != "0":
+			print("ffpbg: ",chessBoard[attackerPositioni-1][attackerPositionj-1])
+			if chessBoard[attackerPositioni-1][attackerPositionj-1].begins_with("PawnBlack"):
+				var attackerPositionShiftI = attackerPositioni
+				var attackerPositionShiftJ = attackerPositionj
+				
+				var defenseurPositionI = attackerPositioni-1
+				var defenseurPositionJ = attackerPositionj-1
+				pieceProtectTheKing = true
+				print("pieceProtectTheKing: ", pieceProtectTheKing)
+				#emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
+				#,defenseurPositionI,defenseurPositionJ,directionOfAttack)
+
+func attackComingUp(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du haut, on descend chaque case jusqu'au roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni + f
+		var attackerPositionJLoop = attackerPositionj
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingDown(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du bas, on monte chaque case jusqu'au roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni - f
+		var attackerPositionJLoop = attackerPositionj
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingRight(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant de la droite, on va vers la gauche pour trouver le roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni
+		var attackerPositionJLoop = attackerPositionj - f
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant de la gauche, on va vers la droite pour trouver le roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni
+		var attackerPositionJLoop = attackerPositionj + f
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingUpRight(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du haut à droite, on va vers bas à gauche pour trouver le roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,false)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni + f
+		var attackerPositionJLoop = attackerPositionj - f
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingUpLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du haut à gauche, on va vers bas à droite pour trouver le roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(false,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni + f
+		var attackerPositionJLoop = attackerPositionj + f
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingDownRight(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du bas à droite, on va vers haut à gauche pour trouver le roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,false)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni - f
+		var attackerPositionJLoop = attackerPositionj - f
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingDownLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du bas à gauche, on va vers haut à droite pour trouver le roi
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(false,true)
+	#Lignes et cavaliers
+	for f in range(9):
+		var attackerPositionILoop = attackerPositioni - f
+		var attackerPositionJLoop = attackerPositionj + f
+		print("attackerPositionILoop: ",attackerPositionILoop)
+		print("attackerPositionJLoop: ",attackerPositionJLoop)
+		print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+		if chessBoard[attackerPositionILoop][attackerPositionJLoop] != kingColor:
+			if kingColor == "KingWhite" and f != 0:
+				searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop)
+			elif kingColor == "KingBlack" and f != 0:
+				searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop)
+			searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+			searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+			searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+		else:
+			break
+
+func attackComingKnight(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	#Vérifier quelle pièce peut protéger le roi
+	#Pour une attaque venant du cavalier, on cherche qui peut le prendre
+	#Pawns
+	if kingColor == "KingWhite":
+		searchDefenderPawnWhiteDiagonal(true,true)
+	elif kingColor == "KingBlack":
+		searchDefenderPawnBlackDiagonal(true,true)
+	#Lignes et cavaliers
+	var attackerPositionILoop = attackerPositioni
+	var attackerPositionJLoop = attackerPositionj
+	print("attackerPositionILoop: ",attackerPositionILoop)
+	print("attackerPositionJLoop: ",attackerPositionJLoop)
+	print("piece name: ", chessBoard[attackerPositionILoop][attackerPositionJLoop])
+	searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,rookColor,queenColor)
+	searchDefenderDiagonal(attackerPositionILoop,attackerPositionJLoop,bishopColor,queenColor)
+	searchDefenderKnight(attackerPositionILoop,attackerPositionJLoop,knightColor)
+
+func verificationDefenderAllAttack(knightColor,bishopColor,rookColor,queenColor,kingColor):
+	if directionOfAttack == "Haut":
+		print("Enter AttackCommingUp")
+		attackComingUp(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Bas":
+		print("Enter AttackCommingDown")
+		attackComingDown(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Droite":
+		print("Enter AttackCommingRight")
+		attackComingRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Gauche":
+		print("Enter AttackCommingLeft")
+		attackComingLeft(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Haut/Droite":
+		print("Enter AttackCommingUpRight")
+		attackComingUpRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Haut/Gauche":
+		print("Enter AttackCommingUpLeft")
+		attackComingUpLeft(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Bas/Droite":
+		print("Enter AttackCommingDownRight")
+		attackComingDownRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Bas/Gauche":
+		print("Enter AttackCommingDownLeft")
+		attackComingDownLeft(knightColor,bishopColor,rookColor,queenColor,kingColor)
+	elif directionOfAttack == "Cavalier":
+		print("Enter AttackCommingKnight")
+		attackComingKnight(knightColor,bishopColor,rookColor,queenColor,kingColor)
+
+func checkmateKing(pawnColor,knightColor,bishopColor,rookColor,queenColor,kingNode,attackColor):
+	#On verifie l'échec et mat si aucune pièce ne peut protèger le roi
+	if not pieceProtectTheKing:
+		
+		for i in range(kingNode.i - 1, kingNode.i + 2):
+			for j in range(kingNode.j - 1, kingNode.j + 2):
+				if i != kingNode.i or j != kingNode.j:
+					if (i >= 0 and i < 12 and j >= 0 and j < 12
+						and (attackColor[i][j] >= 1 or attackColor[i][j] <= -1
+						or chessBoard[i][j].begins_with(pawnColor) or chessBoard[i][j].begins_with(knightColor)
+						or chessBoard[i][j].begins_with(bishopColor) or chessBoard[i][j].begins_with(rookColor)
+						or chessBoard[i][j].begins_with(queenColor))):
+						threatened = true
 						break
-					elif chessBoard[attackerPositioni+f][attackerPositionj+ff] != "0":
-						print("fffd: ",chessBoard[attackerPositioni+f][attackerPositionj+ff])
-						if chessBoard[attackerPositioni+f][attackerPositionj+ff] == "RookWhite"\
-						or chessBoard[attackerPositioni+f][attackerPositionj+ff] == "QueenWhite":
-							var attackerPositionShiftI = attackerPositioni+f
-							var attackerPositionShiftJ = attackerPositionj
-							
-							var defenseurPositionI = attackerPositioni+f
-							var defenseurPositionJ = attackerPositionj+ff
-							pieceProtectTheKing = true
-							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-							,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-							break
-						else:
-							break
-				#vers la gauche
-				for ff in range(1,9):
-					print("ffg: ", chessBoard[attackerPositioni+f][attackerPositionj-ff])
-					if chessBoard[attackerPositioni+f][attackerPositionj-ff] == "x":
-						break
-					elif chessBoard[attackerPositioni+f][attackerPositionj-ff] != "0":
-						print("fffg: ", chessBoard[attackerPositioni+f][attackerPositionj-ff])
-						if chessBoard[attackerPositioni+f][attackerPositionj-ff] == "RookWhite"\
-						or chessBoard[attackerPositioni+f][attackerPositionj-ff] == "QueenWhite":
-							var attackerPositionShiftI = attackerPositioni+f
-							var attackerPositionShiftJ = attackerPositionj
-							
-							var defenseurPositionI = attackerPositioni+f
-							var defenseurPositionJ = attackerPositionj-ff
-							pieceProtectTheKing = true
-							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ,\
-							defenseurPositionI,defenseurPositionJ,directionOfAttack)
-							break
-						else:
-							break
-				#Diagonales
-				#vers le haut à droite
-				for ff in range(1,9):
-					print("ffhd: ",chessBoard[attackerPositioni-ff+f][attackerPositionj+ff])
-					if chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] == "x":
-						break
-					elif chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] != "0":
-						print("ffhd: ",chessBoard[attackerPositioni-ff+f][attackerPositionj+ff])
-						if chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] == "BishopWhite"\
-						or chessBoard[attackerPositioni-ff+f][attackerPositionj+ff] == "QueenWhite":
-							var attackerPositionShiftI = attackerPositioni+f
-							var attackerPositionShiftJ = attackerPositionj
-							
-							var defenseurPositionI = attackerPositioni-ff+f
-							var defenseurPositionJ = attackerPositionj+ff
-							pieceProtectTheKing = true
-							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-							,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-							break
-						else:
-							break
-				#vers le haut à gauche
-				for ff in range(1,9):
-					print("ffhg: ",chessBoard[attackerPositioni-ff+f][attackerPositionj-ff])
-					if chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] == "x":
-						break
-					elif chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] != "0":
-						print("ffhg: ",chessBoard[attackerPositioni-ff+f][attackerPositionj-ff])
-						if chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] == "BishopWhite"\
-						or chessBoard[attackerPositioni-ff+f][attackerPositionj-ff] == "QueenWhite":
-							var attackerPositionShiftI = attackerPositioni+f
-							var attackerPositionShiftJ = attackerPositionj
-							
-							var defenseurPositionI = attackerPositioni-ff+f
-							var defenseurPositionJ = attackerPositionj-ff
-							pieceProtectTheKing = true
-							emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-							,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-							break
-						else:
-							break
-				#vers le bas à droite
-				for ff in range(1,9):
-						print("ffbd: ",chessBoard[attackerPositioni+ff+f][attackerPositionj+ff])
-						if chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] == "x":
-							break
-						elif chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] != "0":
-							print("ffbd: ",chessBoard[attackerPositioni+ff+f][attackerPositionj+ff])
-							if chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] == "BishopWhite"\
-							or chessBoard[attackerPositioni+ff+f][attackerPositionj+ff] == "QueenWhite":
-								var attackerPositionShiftI = attackerPositioni+f
-								var attackerPositionShiftJ = attackerPositionj
-								
-								var defenseurPositionI = attackerPositioni+ff+f
-								var defenseurPositionJ = attackerPositionj+ff
-								pieceProtectTheKing = true
-								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-								break
-							else:
-								break
-				#vers le bas à gauche
-				for ff in range(1,9):
-						print("ffbg: ",chessBoard[attackerPositioni+ff+f][attackerPositionj-ff])
-						if chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] == "x":
-							break
-						elif chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] != "0":
-							print("ffbg: ",chessBoard[attackerPositioni+ff+f][attackerPositionj-ff])
-							if chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] == "BishopWhite"\
-							or chessBoard[attackerPositioni+ff+f][attackerPositionj-ff] == "QueenWhite":
-								var attackerPositionShiftI = attackerPositioni+f
-								var attackerPositionShiftJ = attackerPositionj
-								
-								var defenseurPositionI = attackerPositioni+ff+f
-								var defenseurPositionJ = attackerPositionj-ff
-								pieceProtectTheKing = true
-								emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-								,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-								break
-							else:
-								break
-			#Mouvement Cavalier
-				#En haut à droite
-				if chessBoard[attackerPositioni+f-2][attackerPositionj+1] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f-2][attackerPositionj+1] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f-2][attackerPositionj+1])
-					if chessBoard[attackerPositioni+f-2][attackerPositionj+1] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f-2
-						var defenseurPositionJ = attackerPositionj+1
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#En haut à gauche
-				if chessBoard[attackerPositioni+f-2][attackerPositionj-1] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f-2][attackerPositionj-1] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f-2][attackerPositionj-1])
-					if chessBoard[attackerPositioni+f-2][attackerPositionj-1] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f-2
-						var defenseurPositionJ = attackerPositionj-1
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#A droite en haut
-				if chessBoard[attackerPositioni+f-1][attackerPositionj+2] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f-1][attackerPositionj+2] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f-1][attackerPositionj+2])
-					if chessBoard[attackerPositioni+f-1][attackerPositionj+2] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f-1
-						var defenseurPositionJ = attackerPositionj+2
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#A droite en bas
-				if chessBoard[attackerPositioni+f+1][attackerPositionj+2] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f+1][attackerPositionj+2] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f+1][attackerPositionj+2])
-					if chessBoard[attackerPositioni+f+1][attackerPositionj+2] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f+1
-						var defenseurPositionJ = attackerPositionj+2
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#En bas à droite
-				if chessBoard[attackerPositioni+f+2][attackerPositionj+1] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f+2][attackerPositionj+1] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f+2][attackerPositionj+1])
-					if chessBoard[attackerPositioni+f+2][attackerPositionj+1] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f+2
-						var defenseurPositionJ = attackerPositionj+1
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#En bas à gauche
-				if chessBoard[attackerPositioni+f+2][attackerPositionj-1] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f+2][attackerPositionj-1] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f+2][attackerPositionj-1])
-					if chessBoard[attackerPositioni+f+2][attackerPositionj-1] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f+2
-						var defenseurPositionJ = attackerPositionj-1
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#A gauche en haut
-				if chessBoard[attackerPositioni+f-1][attackerPositionj-2] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f-1][attackerPositionj-2] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f-1][attackerPositionj-2])
-					if chessBoard[attackerPositioni+f-1][attackerPositionj-2] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f-1
-						var defenseurPositionJ = attackerPositionj-2
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-				#A gauche en bas
-				if chessBoard[attackerPositioni+f+1][attackerPositionj-2] == "x":
-					pass
-				elif chessBoard[attackerPositioni+f+1][attackerPositionj-2] != "0":
-					print("ffc: ",chessBoard[attackerPositioni+f+1][attackerPositionj-2])
-					if chessBoard[attackerPositioni+f+1][attackerPositionj-2] == "KnightWhite":
-						var attackerPositionShiftI = attackerPositioni+f
-						var attackerPositionShiftJ = attackerPositionj
-						
-						var defenseurPositionI = attackerPositioni+f+1
-						var defenseurPositionJ = attackerPositionj-2
-						pieceProtectTheKing = true
-						emit_signal("check_to_the_king",attackerPositionShiftI,attackerPositionShiftJ\
-						,defenseurPositionI,defenseurPositionJ,directionOfAttack)
-			else:
-				break
-
-func attackComingUp():
-	pass
-
-func attackComingDown():
-	pass
-
-func attackComingRight():
-	pass
-
-func attackComingLeft():
-	pass
-
-func attackComingUpRight():
-	pass
-
-func attackComingUpLeft():
-	pass
-
-func attackComingDownRight():
-	pass
-
-func attackComingDownLeft():
-	pass
-
-func attackComingKnight():
-	pass
 
 func verificationCheckAndCheckmate():
 	var KingWhite = get_node("/root/ChessBoard/KingWhite")
@@ -827,47 +1018,43 @@ func verificationCheckAndCheckmate():
 	if turnWhite == true:
 		if attack_piece_white_on_the_chessboard[KingBlack.i][KingBlack.j] == 0:
 			checkBlack = false
+			pieceProtectTheKing = false
 		if attack_piece_black_on_the_chessboard[KingWhite.i][KingWhite.j] >= 1:
 			checkWhite = true
 			
-			checkingDirectionOfAttack(chessBoard, KingWhite)
+			checkingDirectionOfAttack(chessBoard,KingWhite,"KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
 			print("directionOfAttack: ",directionOfAttack)
 			
-			if directionOfAttack == "Haut":
-				print("Enter AttackCommingUp")
-				attackComingUp()
-			elif directionOfAttack == "Bas":
-				print("Enter AttackCommingDown")
-				attackComingDown()
-			elif directionOfAttack == "Droite":
-				print("Enter AttackCommingRight")
-				attackComingRight()
-			elif directionOfAttack == "Gauche":
-				print("Enter AttackCommingLeft")
-				attackComingLeft()
-			elif directionOfAttack == "Haut/Droite":
-				print("Enter AttackCommingUpRight")
-				attackComingUpRight()
-			elif directionOfAttack == "Haut/Gauche":
-				print("Enter AttackCommingUpLeft")
-				attackComingUpLeft()
-			elif directionOfAttack == "Bas/Droite":
-				print("Enter AttackCommingDownRight")
-				attackComingDownRight()
-			elif directionOfAttack == "Bas/Gauche":
-				print("Enter AttackCommingDownLeft")
-				attackComingDownLeft()
-			elif directionOfAttack == "Cavalier":
-				print("Enter AttackCommingKnight")
-				attackComingKnight()
-		
+			verificationDefenderAllAttack("KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
+			
+			checkmateKing("PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",KingWhite,attack_piece_black_on_the_chessboard)
+			
+			if threatened == true:
+				print("Echec et mat pour le roi blanc")
+				checkmate = true
+				#emit_signal("checkmate_to_the_king",checkmate)
+			
 		print("King White check: ", checkWhite)
 		print("King Black check: ", checkBlack)
 		
 	else:
 		if attack_piece_black_on_the_chessboard[KingWhite.i][KingWhite.j] == 0:
 			checkWhite = false
+			pieceProtectTheKing = false
 		if attack_piece_white_on_the_chessboard[KingBlack.i][KingBlack.j] >= 1:
 			checkBlack = true
+			
+			checkingDirectionOfAttack(chessBoard,KingBlack,"KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
+			print("directionOfAttack: ",directionOfAttack)
+			
+			verificationDefenderAllAttack("KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
+			
+			checkmateKing("PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",KingBlack,attack_piece_white_on_the_chessboard)
+			
+			if threatened == true:
+				print("Echec et mat pour le roi noir")
+				checkmate = true
+				#emit_signal("checkmate_to_the_king",checkmate)
+			
 		print("King White check: ", checkWhite)
 		print("King Black check: ", checkBlack)
