@@ -6,8 +6,6 @@ var piece_black = [null,null,"RookBlack","KnightBlack","BishopBlack","QueenBlack
 var attack_piece_white_on_the_chessboard = []
 var attack_piece_black_on_the_chessboard = []
 
-@onready var KingWhite = get_node("/root/ChessBoard/KingWhite")
-@onready var KingBlack = get_node("/root/ChessBoard/KingBlack")
 var one_move_case = 100
 var turnWhite = true
 var update_of_the_parts_attack = false
@@ -36,7 +34,7 @@ func _process(delta):
 			attackPiecesWhite()
 			attackPiecesBlack()
 			verificationCheckAndCheckmate()
-			verificationStalemate("Black", "PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",KingWhite)
+			verificationStalemate("Black", "PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",attack_piece_black_on_the_chessboard)
 			update_of_the_parts_attack = true
 			
 	elif turnWhite == false:
@@ -46,7 +44,7 @@ func _process(delta):
 			attackPiecesWhite()
 			attackPiecesBlack()
 			verificationCheckAndCheckmate()
-			verificationStalemate("White", "PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",KingBlack)
+			verificationStalemate("White", "PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",attack_piece_white_on_the_chessboard)
 			update_of_the_parts_attack = false
 
 func createBoard(rowSize,columnSize):
@@ -1016,55 +1014,109 @@ func checkmateKing(pawnColor,knightColor,bishopColor,rookColor,queenColor,kingNo
 						threatened = true
 						break
 
-func verificationStalemate(color,pawnColor,knightColor,bishopColor,rookColor,queenColor,kingNode):
+func stalemateOnlyKing():
+	var pieceFinded = false
+	for i in range(2,10): 
+		for j in range(2,10):
+			if chessBoard[i][j].begins_with("PawnWhite") or chessBoard[i][j].begins_with("KnightWhite")\
+			or chessBoard[i][j].begins_with("BishopWhite") or chessBoard[i][j].begins_with("RookWhite")\
+			or chessBoard[i][j].begins_with("QueenWhite") or chessBoard[i][j].begins_with("PawnBlack")\
+			or chessBoard[i][j].begins_with("KnightBlack") or chessBoard[i][j].begins_with("BishopBlack")\
+			or chessBoard[i][j].begins_with("RookBlack") or chessBoard[i][j].begins_with("QueenBlack"):
+				stalemate = false
+				pieceFinded = true
+				break
+			else:
+				stalemate = true
+		if pieceFinded == true:
+			break
+	print("stalemateOnlyKing: ", stalemate)
+
+func verificationStalemate(color,pawnColor,knightColor,bishopColor,rookColor,queenColor,attackColor):
 	var KingWhite = get_node("/root/ChessBoard/KingWhite")
 	var KingBlack = get_node("/root/ChessBoard/KingBlack")
+	var pieceFinded1 = false
+	var pieceFinded2 = false
 	var onlyPawnAndKing = false
-	var pawnNotMove = false
+	var pawnMove = true
 	print("Enter in verificationStalemate")
+	
+	stalemateOnlyKing()
 	
 	for i in range(2,10): 
 		for j in range(2,10):
 			if chessBoard[i][j].begins_with(knightColor) or chessBoard[i][j].begins_with(bishopColor)\
 			or chessBoard[i][j].begins_with(rookColor) or chessBoard[i][j].begins_with(queenColor):
 				onlyPawnAndKing = false
-				print("onlyPawnAndKing: ", onlyPawnAndKing, " piece name: ", chessBoard[i][j])
+				pieceFinded1 = true
+				print("onlyPawnAndKing: ", onlyPawnAndKing," piece name: ", chessBoard[i][j])
 				break
 			else:
 				onlyPawnAndKing = true
-				#print("onlyPawnAndKing: ", onlyPawnAndKing, " piece name: ", chessBoard[i][j])
-				
+		if pieceFinded1 == true:
+			break
+	print("onlyPawnAndKing: ", onlyPawnAndKing)
+
 	if onlyPawnAndKing == true:
 		for i in range(2,10): 
 			for j in range(2,10):
 				if chessBoard[i][j].begins_with(pawnColor):
-					if chessBoard[i-1][j] == "0" or color in chessBoard[i-1][j+1] or color in chessBoard[i-1][j-1]:
-						pawnNotMove = false
-						print("pawnNotMove: ", pawnNotMove, " piece name: ", chessBoard[i][j])
-						break
-					else:
-						pawnNotMove = true
+					if "White" in chessBoard[i][j]:
+						if chessBoard[i-1][j] == "0" or color in chessBoard[i-1][j+1]\
+						or color in chessBoard[i-1][j-1]:
+							pawnMove = true
+							pieceFinded2 = true
+							break
+						else:
+							pawnMove = false
+							
+					elif "Black" in chessBoard[i][j]:
+						if chessBoard[i+1][j] == "0" or color in chessBoard[i+1][j+1]\
+						or color in chessBoard[i+1][j-1]:
+							pawnMove = true
+							pieceFinded2 = true
+							break
+						else:
+							pawnMove = false
+			if pieceFinded2 == true:
+				break
+		print("pawnMove: ", pawnMove)
 	
-	if pawnNotMove == true:
-		if attack_piece_black_on_the_chessboard[kingNode.i][kingNode.j] == 0:
-			if attack_piece_black_on_the_chessboard[kingNode.i-1][kingNode.j] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i-1][kingNode.j+1] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i][kingNode.j+1] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i+1][kingNode.j+1] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i+1][kingNode.j] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i+1][kingNode.j-1] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i][kingNode.j-1] <= 1\
-			and attack_piece_black_on_the_chessboard[kingNode.i-1][kingNode.j-1] <= 1:
-				stalemate = true
-				print("stalemate: ", stalemate)
-		else:
-			stalemate = false
-			print("stalemate: ", stalemate)
+	if pawnMove == false:
+		if color == "Black":
+			if attackColor[KingWhite.i][KingWhite.j] == 0:
+				if attackColor[KingWhite.i-1][KingWhite.j] <= 1\
+				and attackColor[KingWhite.i-1][KingWhite.j+1] <= 1\
+				and attackColor[KingWhite.i][KingWhite.j+1] <= 1\
+				and attackColor[KingWhite.i+1][KingWhite.j+1] <= 1\
+				and attackColor[KingWhite.i+1][KingWhite.j] <= 1\
+				and attackColor[KingWhite.i+1][KingWhite.j-1] <= 1\
+				and attackColor[KingWhite.i][KingWhite.j-1] <= 1\
+				and attackColor[KingWhite.i-1][KingWhite.j-1] <= 1:
+					stalemate = true
+			else:
+				stalemate = false
+				
+		if color == "White":
+			if attackColor[KingBlack.i][KingBlack.j] == 0:
+				if attackColor[KingBlack.i-1][KingBlack.j] <= 1\
+				and attackColor[KingBlack.i-1][KingBlack.j+1] <= 1\
+				and attackColor[KingBlack.i][KingBlack.j+1] <= 1\
+				and attackColor[KingBlack.i+1][KingBlack.j+1] <= 1\
+				and attackColor[KingBlack.i+1][KingBlack.j] <= 1\
+				and attackColor[KingBlack.i+1][KingBlack.j-1] <= 1\
+				and attackColor[KingBlack.i][KingBlack.j-1] <= 1\
+				and attackColor[KingBlack.i-1][KingBlack.j-1] <= 1:
+					stalemate = true
+			else:
+				stalemate = false
+		print("stalemate: ", stalemate)
 
 func verificationCheckAndCheckmate():
 	var KingWhite = get_node("/root/ChessBoard/KingWhite")
 	var KingBlack = get_node("/root/ChessBoard/KingBlack")
 	
+	print("Enter in verificationCheckAndCheckmate")
 	if turnWhite == true:
 		if attack_piece_white_on_the_chessboard[KingBlack.i][KingBlack.j] == 0:
 			checkBlack = false
