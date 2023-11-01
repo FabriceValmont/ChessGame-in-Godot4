@@ -850,7 +850,7 @@ func attackComingUpRight(knightColor,bishopColor,rookColor,queenColor,kingColor)
 	if kingColor == "KingWhite":
 		searchDefenderPawnWhiteDiagonal(true,false)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlackDiagonal(false,true)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni + f
@@ -876,7 +876,7 @@ func attackComingUpLeft(knightColor,bishopColor,rookColor,queenColor,kingColor):
 	if kingColor == "KingWhite":
 		searchDefenderPawnWhiteDiagonal(false,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlackDiagonal(true,false)
+		searchDefenderPawnBlackDiagonal(true,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni + f
@@ -902,7 +902,7 @@ func attackComingDownRight(knightColor,bishopColor,rookColor,queenColor,kingColo
 	if kingColor == "KingWhite":
 		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlackDiagonal(true,true)
+		searchDefenderPawnBlackDiagonal(true,false)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni - f
@@ -928,7 +928,7 @@ func attackComingDownLeft(knightColor,bishopColor,rookColor,queenColor,kingColor
 	if kingColor == "KingWhite":
 		searchDefenderPawnWhiteDiagonal(true,true)
 	elif kingColor == "KingBlack":
-		searchDefenderPawnBlackDiagonal(true,true)
+		searchDefenderPawnBlackDiagonal(false,true)
 	#Lignes et cavaliers
 	for f in range(9):
 		var attackerPositionILoop = attackerPositioni - f
