@@ -1049,7 +1049,6 @@ func verificationStalemate(color,pawnColor,knightColor,bishopColor,rookColor,que
 			or chessBoard[i][j].begins_with(rookColor) or chessBoard[i][j].begins_with(queenColor):
 				onlyPawnAndKing = false
 				pieceFinded1 = true
-				print("onlyPawnAndKing: ", onlyPawnAndKing," piece name: ", chessBoard[i][j])
 				break
 			else:
 				onlyPawnAndKing = true
