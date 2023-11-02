@@ -1,5 +1,7 @@
 extends Sprite2D
 
+signal promotionTurn
+
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
@@ -56,24 +58,32 @@ func _input(event):
 				namingPromotion("KnightWhite")
 				deletePiecesSelectionPromotion()
 				promoteInProgress == false
+				emit_signal("promotionTurn", promoteInProgress)
+				set_script(load("res://Script/Knight.gd"))
 			if mouse_pos.x >= 200 - position.x  and mouse_pos.x <= 400 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/bishop_white.png")
 				namingPromotion("BishopWhite")
 				deletePiecesSelectionPromotion()
 				promoteInProgress == false
+				emit_signal("promotionTurn", promoteInProgress)
+				set_script(load("res://Script/Bishop.gd"))
 			if mouse_pos.x >= 400 - position.x  and mouse_pos.x <= 600 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/rook_white.png")
 				namingPromotion("RookWhite")
 				deletePiecesSelectionPromotion()
 				promoteInProgress == false
+				emit_signal("promotionTurn", promoteInProgress)
+				set_script(load("res://Script/rook.gd"))
 			if mouse_pos.x >= 600 - position.x  and mouse_pos.x <= 800 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/queen_white.png")
 				namingPromotion("QueenWhite")
 				deletePiecesSelectionPromotion()
 				promoteInProgress == false
+				emit_signal("promotionTurn", promoteInProgress)
+				set_script(load("res://Script/queen.gd"))
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if (event.position - self.position).length() < clickRadius:
@@ -391,7 +401,8 @@ func promotion():
 			promotion_sprite.scale.y = 2
 			get_parent().add_child(promotion_sprite)
 			
-			promoteInProgress = true
+		promoteInProgress = true
+		emit_signal("promotionTurn", promoteInProgress)
 		
 func namingPromotion(piece):
 	var numberMax = 0
@@ -405,6 +416,7 @@ func namingPromotion(piece):
 						if fff > numberMax:
 							numberMax = fff
 							print("numberMax: ",numberMax)
+							
 			if piece + str(numberMax) == piece + "0":
 				chessBoard[i][j] = piece
 				set_name(piece)

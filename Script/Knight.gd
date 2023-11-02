@@ -13,6 +13,7 @@ var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/knight_black.png")
 var piece_protects_against_an_attack = false
 var direction_attack_protect_king = ""
+var promoteInProgress = false
 
 func _ready():
 	await get_tree().process_frame
@@ -44,7 +45,8 @@ func _process(delta):
 	pass
 
 func _input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
+	and promoteInProgress == false:
 		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
