@@ -116,6 +116,7 @@ func move(dx, dy) :
 			i=i+(dy*f)
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
+			promotion()
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
 			break
@@ -341,3 +342,26 @@ func theKingIsBehind():
 					break
 				else:
 					break
+
+func promotion():
+	print("Enter in promotion")
+	var knight_promotion_sprite
+	var bishop_promotion_sprite
+	var rook_promotion_sprite
+	var queen_promotion_sprite
+	
+	if chessBoard[i][j].begins_with("PawnWhite") and i == 2:
+		print("Arrivé au bout du plateau")
+		# Les noms des pièces de promotion et leurs positions x correspondantes
+		var promotion_pieces = ["knight_white", "bishop_white", "rook_white", "queen_white"]
+		var x_positions = [0, 200, 400, 600]
+		
+		for i in range(len(promotion_pieces)):
+			var promotion_sprite = Sprite2D.new()
+			promotion_sprite.texture = load("res://Sprite/Piece/White/" + promotion_pieces[i] + ".png")
+			promotion_sprite.centered = false
+			promotion_sprite.position.x = x_positions[i]
+			promotion_sprite.position.y = 300
+			promotion_sprite.scale.x = 2
+			promotion_sprite.scale.y = 2
+			get_parent().add_child(promotion_sprite)
