@@ -14,6 +14,7 @@ var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/pawn_black.png")
 var piece_protects_against_an_attack = false
 var direction_attack_protect_king = ""
+var promoteInProgress = false
 
 func _ready():  
 	await get_tree().process_frame
@@ -46,6 +47,43 @@ func _process(delta):
 	pass
 
 func _input(event):
+	var mouse_pos = get_local_mouse_position()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+		if promoteInProgress == true:
+			var num_children = get_parent().get_child_count()
+			if mouse_pos.x >= 0 - position.x  and mouse_pos.x <= 200 - position.x \
+			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
+				texture = load("res://Sprite/Piece/White/knight_white.png")
+				chessBoard[i][j] = "KnightWhite"
+				for i in range(num_children - 4, num_children):
+					var child = get_parent().get_child(i)
+					child.queue_free()
+				promoteInProgress == false
+			if mouse_pos.x >= 200 - position.x  and mouse_pos.x <= 400 - position.x \
+			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
+				texture = load("res://Sprite/Piece/White/bishop_white.png")
+				chessBoard[i][j] = "BishopWhite"
+				for i in range(num_children - 4, num_children):
+					var child = get_parent().get_child(i)
+					child.queue_free()
+				promoteInProgress == false
+			if mouse_pos.x >= 400 - position.x  and mouse_pos.x <= 600 - position.x \
+			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
+				texture = load("res://Sprite/Piece/White/rook_white.png")
+				chessBoard[i][j] = "RookWhite"
+				for i in range(num_children - 4, num_children):
+					var child = get_parent().get_child(i)
+					child.queue_free()
+				promoteInProgress == false
+			if mouse_pos.x >= 600 - position.x  and mouse_pos.x <= 800 - position.x \
+			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
+				texture = load("res://Sprite/Piece/White/queen_white.png")
+				chessBoard[i][j] = "QueenWhite"
+				for i in range(num_children - 4, num_children):
+					var child = get_parent().get_child(i)
+					child.queue_free()
+				promoteInProgress == false
+			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
@@ -345,10 +383,6 @@ func theKingIsBehind():
 
 func promotion():
 	print("Enter in promotion")
-	var knight_promotion_sprite
-	var bishop_promotion_sprite
-	var rook_promotion_sprite
-	var queen_promotion_sprite
 	
 	if chessBoard[i][j].begins_with("PawnWhite") and i == 2:
 		print("Arrivé au bout du plateau")
@@ -365,3 +399,6 @@ func promotion():
 			promotion_sprite.scale.x = 2
 			promotion_sprite.scale.y = 2
 			get_parent().add_child(promotion_sprite)
+			
+			promoteInProgress = true
+		
