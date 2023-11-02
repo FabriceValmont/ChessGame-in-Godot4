@@ -50,38 +50,29 @@ func _input(event):
 	var mouse_pos = get_local_mouse_position()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		if promoteInProgress == true:
-			var num_children = get_parent().get_child_count()
 			if mouse_pos.x >= 0 - position.x  and mouse_pos.x <= 200 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/knight_white.png")
-				chessBoard[i][j] = "KnightWhite"
-				for i in range(num_children - 4, num_children):
-					var child = get_parent().get_child(i)
-					child.queue_free()
+				namingPromotion("KnightWhite")
+				deletePiecesSelectionPromotion()
 				promoteInProgress == false
 			if mouse_pos.x >= 200 - position.x  and mouse_pos.x <= 400 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/bishop_white.png")
-				chessBoard[i][j] = "BishopWhite"
-				for i in range(num_children - 4, num_children):
-					var child = get_parent().get_child(i)
-					child.queue_free()
+				namingPromotion("BishopWhite")
+				deletePiecesSelectionPromotion()
 				promoteInProgress == false
 			if mouse_pos.x >= 400 - position.x  and mouse_pos.x <= 600 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/rook_white.png")
-				chessBoard[i][j] = "RookWhite"
-				for i in range(num_children - 4, num_children):
-					var child = get_parent().get_child(i)
-					child.queue_free()
+				namingPromotion("RookWhite")
+				deletePiecesSelectionPromotion()
 				promoteInProgress == false
 			if mouse_pos.x >= 600 - position.x  and mouse_pos.x <= 800 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/queen_white.png")
-				chessBoard[i][j] = "QueenWhite"
-				for i in range(num_children - 4, num_children):
-					var child = get_parent().get_child(i)
-					child.queue_free()
+				namingPromotion("QueenWhite")
+				deletePiecesSelectionPromotion()
 				promoteInProgress == false
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -402,3 +393,27 @@ func promotion():
 			
 			promoteInProgress = true
 		
+func namingPromotion(piece):
+	var numberMax = 0
+	for f in range(2,10): 
+		for ff in range(2,10):
+			if chessBoard[f][ff].begins_with(piece):
+				for fff in range(2,11):
+					if chessBoard[f][ff] == piece + str(fff):
+						print(piece + str(fff))
+						print("fff: ",fff)
+						if fff > numberMax:
+							numberMax = fff
+							print("numberMax: ",numberMax)
+			if piece + str(numberMax) == piece + "0":
+				chessBoard[i][j] = piece
+				set_name(piece)
+			else:
+				chessBoard[i][j] = piece + str(numberMax+1)
+				set_name(piece + str(numberMax+1))
+
+func deletePiecesSelectionPromotion():
+	var num_children = get_parent().get_child_count()
+	for f in range(num_children - 4, num_children):
+		var child = get_parent().get_child(f)
+		child.queue_free()
