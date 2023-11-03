@@ -425,10 +425,6 @@ func promotionSelectionWhite():
 		var scriptPath = promotionOptions[f][3]
 		var texturePath = promotionOptions[f][4]
 		
-		print("(x,y): ", mouse_pos)
-		print("minX - position.x: ", minX - position.x)
-		print("maxX - position.x: ", maxX - position.x)
-		
 		if mouse_pos.x >= minX - position.x and mouse_pos.x <= maxX - position.x \
 		and mouse_pos.y >= 250 and mouse_pos.y <= 450:
 			print("Enter in promotionSelection selection piece")
@@ -438,6 +434,7 @@ func promotionSelectionWhite():
 			promoteInProgress = false
 			emit_signal("promotionTurn", promoteInProgress)
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			get_parent().promotionID = get_instance_id()
 			set_script(load("res://Script/" + scriptPath))
 			break  # Sortir de la boucle après avoir trouvé une correspondance
 

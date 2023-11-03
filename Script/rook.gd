@@ -101,9 +101,11 @@ func move(dx, dy, maxMove) :
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)
 			j=j+(dx*f)
+			print("i: ",i, " j: ",j," chessBoard[i][j]: ",chessBoard[i][j]," nameOfPiece: ", nameOfPiece)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			print("TurnWhite dans move: ", VariableGlobal.turnWhite)
+			initialPosition = false
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)

@@ -9,6 +9,7 @@ var i = 9
 var j = 5
 var Position = Vector2(350, 750)
 @onready var nameOfPiece = get_name()
+var initialPosition = true
 var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/queen_black.png")
 var maxMoveUp = 1
@@ -109,6 +110,7 @@ func move(dx, dy, maxMove) :
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			initialPosition = false
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
