@@ -379,9 +379,11 @@ func promotion(color,knightColor,bishopColor,rookColor,queenColor):
 		
 func namingPromotion(piece):
 	var numberMax = 0
+	var pieceFind = false
 	for f in range(2,10): 
 		for ff in range(2,10):
 			if chessBoard[f][ff].begins_with(piece):
+				pieceFind = true
 				for fff in range(2,11):
 					if chessBoard[f][ff] == piece + str(fff):
 						#print(piece + str(fff))
@@ -390,8 +392,11 @@ func namingPromotion(piece):
 							numberMax = fff
 							#print("numberMax: ",numberMax)
 							
-			if piece + str(numberMax) == piece + "0":
+			if piece + str(numberMax) == piece + "0" and pieceFind == false:
 				chessBoard[i][j] = piece
+				set_name(piece)
+			elif piece + str(numberMax) == piece + "0" and pieceFind == true:
+				chessBoard[i][j] = piece + "2"
 				set_name(piece)
 			else:
 				chessBoard[i][j] = piece + str(numberMax+1)
