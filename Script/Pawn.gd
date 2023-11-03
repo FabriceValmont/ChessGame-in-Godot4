@@ -51,41 +51,46 @@ func _process(delta):
 func _input(event):
 	var mouse_pos = get_local_mouse_position()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		if promoteInProgress == true:
+		if promoteInProgress == true and VariableGlobal.turnWhite == true:
 			if mouse_pos.x >= 0 - position.x  and mouse_pos.x <= 200 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/knight_white.png")
 				namingPromotion("KnightWhite")
 				deletePiecesSelectionPromotion()
-				promoteInProgress == false
+				promoteInProgress = false
 				emit_signal("promotionTurn", promoteInProgress)
+				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 				set_script(load("res://Script/Knight.gd"))
 			if mouse_pos.x >= 200 - position.x  and mouse_pos.x <= 400 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/bishop_white.png")
 				namingPromotion("BishopWhite")
 				deletePiecesSelectionPromotion()
-				promoteInProgress == false
+				promoteInProgress = false
 				emit_signal("promotionTurn", promoteInProgress)
+				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 				set_script(load("res://Script/Bishop.gd"))
 			if mouse_pos.x >= 400 - position.x  and mouse_pos.x <= 600 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/rook_white.png")
 				namingPromotion("RookWhite")
 				deletePiecesSelectionPromotion()
-				promoteInProgress == false
+				promoteInProgress = false
 				emit_signal("promotionTurn", promoteInProgress)
+				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 				set_script(load("res://Script/rook.gd"))
 			if mouse_pos.x >= 600 - position.x  and mouse_pos.x <= 800 - position.x \
 			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
 				texture = load("res://Sprite/Piece/White/queen_white.png")
 				namingPromotion("QueenWhite")
 				deletePiecesSelectionPromotion()
-				promoteInProgress == false
+				promoteInProgress = false
 				emit_signal("promotionTurn", promoteInProgress)
+				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 				set_script(load("res://Script/queen.gd"))
 			
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
+	and promoteInProgress == false:
 		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
@@ -156,7 +161,8 @@ func move(dx, dy) :
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			promotion()
-			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			if promoteInProgress == false:
+				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
@@ -429,3 +435,6 @@ func deletePiecesSelectionPromotion():
 	for f in range(num_children - 4, num_children):
 		var child = get_parent().get_child(f)
 		child.queue_free()
+
+func get_promoteInProgress():
+	return promoteInProgress

@@ -380,3 +380,5 @@ func theKingIsBehind():
 				else:
 					break
 
+func get_promoteInProgress():
+	return promoteInProgress

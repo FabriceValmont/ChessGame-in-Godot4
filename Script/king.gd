@@ -17,6 +17,7 @@ var Position = Vector2(450, 750)
 var initialPosition = true
 var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/king_black.png")
+var promoteInProgress = false
 var checkMate = false
 
 func _ready():
@@ -41,7 +42,8 @@ func _process(delta):
 	pass
 
 func _input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
+	and promoteInProgress == false:
 		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
@@ -153,3 +155,6 @@ func queenSizeCasteling(dx, dy, rookColor, attackColor):
 			emit_signal("queenSizeCastelingSignal")
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
+
+func get_promoteInProgress():
+	return promoteInProgress

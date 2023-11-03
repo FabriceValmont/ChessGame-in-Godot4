@@ -14,10 +14,6 @@ texture = ExtResource("1_7jmrq")
 centered = false
 script = ExtResource("2_3nfqx")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(450, 450)
-ignore_rotation = false
-
 [node name="Pawn" parent="." instance=ExtResource("8_gwsh5")]
 position = Vector2(50, 650)
 
@@ -113,7 +109,14 @@ position = Vector2(350, 50)
 [node name="King2" parent="." instance=ExtResource("7_assil")]
 position = Vector2(450, 50)
 
+[connection signal="promotionTurn" from="Pawn" to="." method="_on_pawn_promotion_turn"]
+[connection signal="promotionTurn" from="Pawn2" to="." method="_on_pawn_2_promotion_turn"]
 [connection signal="promotionTurn" from="Pawn3" to="." method="_on_pawn_3_promotion_turn"]
+[connection signal="promotionTurn" from="Pawn4" to="." method="_on_pawn_4_promotion_turn"]
+[connection signal="promotionTurn" from="Pawn5" to="." method="_on_pawn_5_promotion_turn"]
+[connection signal="promotionTurn" from="Pawn6" to="." method="_on_pawn_6_promotion_turn"]
+[connection signal="promotionTurn" from="Pawn7" to="." method="_on_pawn_7_promotion_turn"]
+[connection signal="promotionTurn" from="Pawn8" to="." method="_on_pawn_8_promotion_turn"]
 [connection signal="kingSizeCastelingSignal" from="King" to="Rook2" method="_on_king_king_size_casteling_signal"]
 [connection signal="queenSizeCastelingSignal" from="King" to="Rook" method="_on_king_queen_size_casteling_signal"]
 [connection signal="kingSizeCastelingSignal" from="King2" to="Rook4" method="_on_king_2_king_size_casteling_signal"]
