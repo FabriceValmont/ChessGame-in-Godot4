@@ -51,43 +51,10 @@ func _process(delta):
 func _input(event):
 	var mouse_pos = get_local_mouse_position()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		if promoteInProgress == true and VariableGlobal.turnWhite == true:
-			if mouse_pos.x >= 0 - position.x  and mouse_pos.x <= 200 - position.x \
-			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
-				texture = load("res://Sprite/Piece/White/knight_white.png")
-				namingPromotion("KnightWhite")
-				deletePiecesSelectionPromotion()
-				promoteInProgress = false
-				emit_signal("promotionTurn", promoteInProgress)
-				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
-				set_script(load("res://Script/Knight.gd"))
-			if mouse_pos.x >= 200 - position.x  and mouse_pos.x <= 400 - position.x \
-			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
-				texture = load("res://Sprite/Piece/White/bishop_white.png")
-				namingPromotion("BishopWhite")
-				deletePiecesSelectionPromotion()
-				promoteInProgress = false
-				emit_signal("promotionTurn", promoteInProgress)
-				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
-				set_script(load("res://Script/Bishop.gd"))
-			if mouse_pos.x >= 400 - position.x  and mouse_pos.x <= 600 - position.x \
-			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
-				texture = load("res://Sprite/Piece/White/rook_white.png")
-				namingPromotion("RookWhite")
-				deletePiecesSelectionPromotion()
-				promoteInProgress = false
-				emit_signal("promotionTurn", promoteInProgress)
-				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
-				set_script(load("res://Script/rook.gd"))
-			if mouse_pos.x >= 600 - position.x  and mouse_pos.x <= 800 - position.x \
-			and mouse_pos.y >= 300 and mouse_pos.y <= 500:
-				texture = load("res://Sprite/Piece/White/queen_white.png")
-				namingPromotion("QueenWhite")
-				deletePiecesSelectionPromotion()
-				promoteInProgress = false
-				emit_signal("promotionTurn", promoteInProgress)
-				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
-				set_script(load("res://Script/queen.gd"))
+		if promoteInProgress == true and VariableGlobal.turnWhite == true and i == 2:
+			promotionSelectionWhite()
+		elif promoteInProgress == true and VariableGlobal.turnWhite == false and i == 9:
+			promotionSelectionBlack()
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
 	and promoteInProgress == false:
@@ -160,7 +127,10 @@ func move(dx, dy) :
 			i=i+(dy*f)
 			j=j+(dx*f)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
-			promotion()
+			if chessBoard[i][j].begins_with("PawnWhite") and i == 2:
+				promotion("White","knight_white", "bishop_white", "rook_white", "queen_white")
+			elif chessBoard[i][j].begins_with("PawnBlack") and i == 9:
+				promotion("Black","knight_black", "bishop_black", "rook_black", "queen_black")
 			if promoteInProgress == false:
 				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
@@ -388,27 +358,24 @@ func theKingIsBehind():
 				else:
 					break
 
-func promotion():
+func promotion(color,knightColor,bishopColor,rookColor,queenColor):
 	print("Enter in promotion")
+	# Les noms des pièces de promotion et leurs positions x correspondantes
+	var promotion_pieces = [knightColor,bishopColor,rookColor,queenColor]
+	var x_positions = [0, 200, 400, 600]
 	
-	if chessBoard[i][j].begins_with("PawnWhite") and i == 2:
-		print("Arrivé au bout du plateau")
-		# Les noms des pièces de promotion et leurs positions x correspondantes
-		var promotion_pieces = ["knight_white", "bishop_white", "rook_white", "queen_white"]
-		var x_positions = [0, 200, 400, 600]
+	for i in range(len(promotion_pieces)):
+		var promotion_sprite = Sprite2D.new()
+		promotion_sprite.texture = load("res://Sprite/Piece/"+ color + "/" + promotion_pieces[i] + ".png")
+		promotion_sprite.centered = false
+		promotion_sprite.position.x = x_positions[i]
+		promotion_sprite.position.y = 300
+		promotion_sprite.scale.x = 2
+		promotion_sprite.scale.y = 2
+		get_parent().add_child(promotion_sprite)
 		
-		for i in range(len(promotion_pieces)):
-			var promotion_sprite = Sprite2D.new()
-			promotion_sprite.texture = load("res://Sprite/Piece/White/" + promotion_pieces[i] + ".png")
-			promotion_sprite.centered = false
-			promotion_sprite.position.x = x_positions[i]
-			promotion_sprite.position.y = 300
-			promotion_sprite.scale.x = 2
-			promotion_sprite.scale.y = 2
-			get_parent().add_child(promotion_sprite)
-			
-		promoteInProgress = true
-		emit_signal("promotionTurn", promoteInProgress)
+	promoteInProgress = true
+	emit_signal("promotionTurn", promoteInProgress)
 		
 func namingPromotion(piece):
 	var numberMax = 0
@@ -417,11 +384,11 @@ func namingPromotion(piece):
 			if chessBoard[f][ff].begins_with(piece):
 				for fff in range(2,11):
 					if chessBoard[f][ff] == piece + str(fff):
-						print(piece + str(fff))
-						print("fff: ",fff)
+						#print(piece + str(fff))
+						#print("fff: ",fff)
 						if fff > numberMax:
 							numberMax = fff
-							print("numberMax: ",numberMax)
+							#print("numberMax: ",numberMax)
 							
 			if piece + str(numberMax) == piece + "0":
 				chessBoard[i][j] = piece
@@ -435,6 +402,72 @@ func deletePiecesSelectionPromotion():
 	for f in range(num_children - 4, num_children):
 		var child = get_parent().get_child(f)
 		child.queue_free()
+
+func promotionSelectionWhite():
+	print("Enter in promotionSelection: ", self.nameOfPiece)
+	var mouse_pos = get_local_mouse_position()
+	var promotionOptions = [
+	[0, 200, "KnightWhite", "Knight.gd", "res://Sprite/Piece/White/knight_white.png"],
+	[200, 400, "BishopWhite", "Bishop.gd", "res://Sprite/Piece/White/bishop_white.png"],
+	[400, 600, "RookWhite", "Rook.gd", "res://Sprite/Piece/White/rook_white.png"],
+	[600, 800, "QueenWhite", "Queen.gd", "res://Sprite/Piece/White/queen_white.png"]]
+
+	for f in range(4):
+		print("Enter in promotionSelection boucle for")
+		var minX = promotionOptions[f][0]
+		var maxX = promotionOptions[f][1]
+		var promotionName = promotionOptions[f][2]
+		var scriptPath = promotionOptions[f][3]
+		var texturePath = promotionOptions[f][4]
+		
+		print("(x,y): ", mouse_pos)
+		print("minX - position.x: ", minX - position.x)
+		print("maxX - position.x: ", maxX - position.x)
+		
+		if mouse_pos.x >= minX - position.x and mouse_pos.x <= maxX - position.x \
+		and mouse_pos.y >= 250 and mouse_pos.y <= 450:
+			print("Enter in promotionSelection selection piece")
+			texture = load(texturePath)
+			namingPromotion(promotionName)
+			deletePiecesSelectionPromotion()
+			promoteInProgress = false
+			emit_signal("promotionTurn", promoteInProgress)
+			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			set_script(load("res://Script/" + scriptPath))
+			break  # Sortir de la boucle après avoir trouvé une correspondance
+
+func promotionSelectionBlack():
+	print("Enter in promotionSelection: ", self.nameOfPiece)
+	var mouse_pos = get_local_mouse_position()
+	var promotionOptions = [
+	[0, 200, "KnightBlack", "Knight.gd", "res://Sprite/Piece/Black/knight_black.png"],
+	[200, 400, "BishopBlack", "Bishop.gd", "res://Sprite/Piece/Black/bishop_black.png"],
+	[400, 600, "RookBlack", "Rook.gd", "res://Sprite/Piece/Black/rook_black.png"],
+	[600, 800, "QueenBlack", "Queen.gd", "res://Sprite/Piece/Black/queen_black.png"]]
+
+	for f in range(4):
+		print("Enter in promotionSelection boucle for")
+		var minX = promotionOptions[f][0]
+		var maxX = promotionOptions[f][1]
+		var promotionName = promotionOptions[f][2]
+		var scriptPath = promotionOptions[f][3]
+		var texturePath = promotionOptions[f][4]
+		
+		print("(x,y): ",mouse_pos)
+		print("minX - position.x: ", minX - position.x)
+		print("maxX - position.x: ", maxX - position.x)
+		
+		if mouse_pos.x >= minX - position.x and mouse_pos.x <= maxX - position.x \
+		and mouse_pos.y >= -450 and mouse_pos.y <= -250:
+			print("Enter in promotionSelection selection piece")
+			texture = load(texturePath)
+			namingPromotion(promotionName)
+			deletePiecesSelectionPromotion()
+			promoteInProgress = false
+			emit_signal("promotionTurn", promoteInProgress)
+			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			set_script(load("res://Script/" + scriptPath))
+			break  # Sortir de la boucle après avoir trouvé une correspondance
 
 func get_promoteInProgress():
 	return promoteInProgress
