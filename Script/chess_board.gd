@@ -12,32 +12,43 @@ func blockMoveDuringPromotion(promoteInProgress):
 	var numberOfChildren = get_child_count()
 	
 	for f in range(numberOfChildren):
-		var pieceName = get_child(f)
-		if pieceName.has_method("get_promoteInProgress"):
+		var piece = get_child(f)
+		if piece.has_method("get_promoteInProgress"):
 			# Le nœud a une méthode pour récupérer promoteInProgress
-			var promoteInProgressValue = pieceName.get_promoteInProgress()
+			var promoteInProgressValue = piece.get_promoteInProgress()
 			if promoteInProgressValue != null:
-				#print("Variable existe dans: ", pieceName.get_name())
-				pieceName.promoteInProgress = promoteInProgress
-				#print("pieceName.promoteInProgress: ", pieceName.promoteInProgress)
+				#print("Variable existe dans: ", piece.get_name())
+				piece.promoteInProgress = promoteInProgress
+				#print("piece.promoteInProgress: ", piece.promoteInProgress)
 			else:
 				pass
-				#print("Variable est nulle dans: ", pieceName.get_name())
+				#print("Variable est nulle dans: ", piece.get_name())
 		else:
 			pass
-			#print("La méthode get_promoteInProgress n'existe pas dans: ", pieceName.get_name())
+			#print("La méthode get_promoteInProgress n'existe pas dans: ", piece.get_name())
 
 func updateVariablePiecePromoted():
+	print("Enter in updateVariablePiecePromoted")
 	var numberOfChildren = get_child_count()
 	
 	for f in range(numberOfChildren):
-		var pieceName = get_child(f)
-		if pieceName.get_instance_id() == promotionID:
-			pieceName.i = 2
-			pieceName.j = 3
-			pieceName.Position = Vector2(150, 50)
-			pieceName.nameOfPiece = VariableGlobal.chessBoard[pieceName.i][pieceName.j]
-			pieceName.initialPosition = false
+		var piece = get_child(f)
+		var pieceName = piece.get_name()
+		if piece.get_instance_id() == promotionID:
+			if "White" in pieceName:
+				piece.i = 2
+			elif "Black" in pieceName:
+				piece.i = 9
+			for ff in range(2,10):
+				if VariableGlobal.chessBoard[piece.i][ff] == pieceName:
+					piece.j = ff
+			if piece.i == 2:
+				piece.Position = Vector2(((piece.j - 2) * 100) + 50, 50)
+			elif piece.i == 9:
+				piece.Position = Vector2(((piece.j - 2) * 100) + 50, 750)
+			piece.nameOfPiece = pieceName
+			piece.initialPosition = false
+			break
 
 func _on_pawn_promotion_turn(promoteInProgress):
 	print("Enter _on_pawn_promotion_turn")
