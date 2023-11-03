@@ -37,8 +37,10 @@ func updateVariablePiecePromoted():
 		if piece.get_instance_id() == promotionID:
 			if "White" in pieceName:
 				piece.i = 2
+				piece.white = true
 			elif "Black" in pieceName:
 				piece.i = 9
+				piece.white = false
 			for ff in range(2,10):
 				if VariableGlobal.chessBoard[piece.i][ff] == pieceName:
 					piece.j = ff

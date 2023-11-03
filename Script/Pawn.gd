@@ -391,16 +391,15 @@ func namingPromotion(piece):
 						if fff > numberMax:
 							numberMax = fff
 							#print("numberMax: ",numberMax)
-							
-			if piece + str(numberMax) == piece + "0" and pieceFind == false:
-				chessBoard[i][j] = piece
-				set_name(piece)
-			elif piece + str(numberMax) == piece + "0" and pieceFind == true:
-				chessBoard[i][j] = piece + "2"
-				set_name(piece)
-			else:
-				chessBoard[i][j] = piece + str(numberMax+1)
-				set_name(piece + str(numberMax+1))
+	if piece + str(numberMax) == piece + "0" and pieceFind == false:
+		chessBoard[i][j] = piece
+		set_name(piece)
+	elif piece + str(numberMax) == piece + "0" and pieceFind == true:
+		chessBoard[i][j] = piece + "2"
+		set_name(piece)
+	elif numberMax != 0:
+		chessBoard[i][j] = piece + str(numberMax+1)
+		set_name(piece + str(numberMax+1))
 
 func deletePiecesSelectionPromotion():
 	var num_children = get_parent().get_child_count()
