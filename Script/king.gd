@@ -53,27 +53,9 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if white == true and VariableGlobal.turnWhite == true:
-				move(1,0)
-				move(0,1)
-				move(-1,0)
-				move(0,-1)
-				move(1,1)
-				move(1,-1)
-				move(-1,1)
-				move(-1,-1)
-				kingSizeCasteling(1,1,"RookWhite2",attackBlack)
-				queenSizeCasteling(-1,1,"RookWhite",attackBlack)
+				allMove("RookWhite","RookWhite2",attackBlack)
 			elif white == false and VariableGlobal.turnWhite == false:
-				move(1,0)
-				move(0,1)
-				move(-1,0)
-				move(0,-1)
-				move(1,1)
-				move(1,-1)
-				move(-1,1)
-				move(-1,-1)
-				kingSizeCasteling(1,1,"RookBlack2", attackWhite)
-				queenSizeCasteling(-1,1,"RookBlack", attackWhite)
+				allMove("RookBlack","RookBlack2",attackWhite)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -107,6 +89,18 @@ func move(dx, dy) :
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
 			
+func allMove(rookColor,rookColor2,attackColor):
+	move(1,0)
+	move(0,1)
+	move(-1,0)
+	move(0,-1)
+	move(1,1)
+	move(1,-1)
+	move(-1,1)
+	move(-1,-1)
+	kingSizeCasteling(1,1,rookColor2,attackColor)
+	queenSizeCasteling(-1,1,rookColor,attackColor)
+	
 func _on_area_2d_area_entered(area):
 		var piece_name = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
