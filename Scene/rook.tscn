@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Script/rook.gd" id="2_jh56t"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s0j87"]
-size = Vector2(0.001, 0.001)
+size = Vector2(50, 50)
 
 [node name="Rook" type="Sprite2D"]
 position = Vector2(50, 50)

@@ -65,6 +65,7 @@ func _input(event):
 				theKingIsBehind()
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
+			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
 				moveWithPin()
 			elif white == false and VariableGlobal.turnWhite == false:
@@ -79,6 +80,7 @@ func _input(event):
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
+		get_node("Area2D/CollisionShape2D").disabled = true
 		
 func move(dx, dy, maxMove) :
 #	A droite(1,0), En bas(0,1), A gauche(-1,0), En haut(0,-1)
@@ -94,10 +96,8 @@ func move(dx, dy, maxMove) :
 			chessBoard[i][j] = "0"
 			i=i+(dy*f)
 			j=j+(dx*f)
-			print("i: ",i, " j: ",j," chessBoard[i][j]: ",chessBoard[i][j]," nameOfPiece: ", nameOfPiece)
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
-			print("TurnWhite dans move: ", VariableGlobal.turnWhite)
 			initialPosition = false
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
@@ -118,15 +118,11 @@ func moveWithPin():
 			move(-1,0, maxMoveLeft)
 
 func _on_area_2d_area_entered(area):
-	print("Collision effectué")
 	var piece_name = area.get_parent().get_name()
-	print("white: ", white)
-	print("turnWhite: ", VariableGlobal.turnWhite)
 	if white == true and VariableGlobal.turnWhite == false:
 		if "Black" in piece_name and dragging == false :
 			get_node("/root/ChessBoard/" + piece_name).queue_free()
 	elif white == false and VariableGlobal.turnWhite == true:
-		print("Prends la piece noir")
 		if "White" in piece_name and dragging == false :
 			get_node("/root/ChessBoard/" + piece_name).queue_free()
 				

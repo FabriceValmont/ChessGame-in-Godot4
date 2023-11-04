@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Script/queen.gd" id="2_73kd2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mg3kx"]
-size = Vector2(0.001, 0.001)
+size = Vector2(50, 50)
 
 [node name="Queen" type="Sprite2D"]
 position = Vector2(50, 50)

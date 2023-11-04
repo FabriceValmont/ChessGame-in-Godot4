@@ -57,6 +57,7 @@ func _input(event):
 				theKingIsBehind()
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
+			get_node("Area2D/CollisionShape2D").disabled = false
 			for f in range (0,8):
 				if white == true and VariableGlobal.turnWhite == true:
 					moveWithPin()
@@ -71,6 +72,7 @@ func _input(event):
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
+		get_node("Area2D/CollisionShape2D").disabled = true
 		
 func move(dx, dy) :
 	for f in range (1,8):
