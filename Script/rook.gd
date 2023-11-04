@@ -70,8 +70,8 @@ func _input(event):
 				theKingIsBehind()
 				print("attacker_position_shift_i: ", attacker_position_shift_i)
 				print("attacker_position_shift_j: ", attacker_position_shift_j)
-				print("attacker_position_shift_i: ", attacker_position_shift2_i)
-				print("attacker_position_shift_j: ", attacker_position_shift2_j)
+				print("attacker_position_shift2_i: ", attacker_position_shift2_i)
+				print("attacker_position_shift2_j: ", attacker_position_shift2_j)
 				print("pieceProtectTheKing: ", pieceProtectTheKing)
 				print("VariableGlobal.checkWhite: ", VariableGlobal.checkWhite)
 		# Stop dragging if the button is released.

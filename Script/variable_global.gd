@@ -504,6 +504,21 @@ func checkingDirectionOfAttack(chessBoard,kingNode,knightColor,bishopColor,rookC
 	findAttackerDirectionDiagonal(chessBoard,kingNode,bishopColor,queenColor)
 	findAttackerDirectionKnight(chessBoard,kingNode,knightColor)
 
+func sendDefenceCoordinates(pathPiece,attackI,attackJ):
+	if pathPiece.attacker_position_shift_i == 0\
+	and pathPiece.attacker_position_shift_j == 0:
+		pathPiece.attacker_position_shift_i = attackI
+		pathPiece.attacker_position_shift_j = attackJ
+	elif pathPiece.attacker_position_shift2_i == 0\
+	and pathPiece.attacker_position_shift2_j == 0:
+		pathPiece.attacker_position_shift2_i = attackI
+		pathPiece.attacker_position_shift2_j = attackJ
+	elif pathPiece.attacker_position_shift3_i == 0\
+	and pathPiece.attacker_position_shift3_j == 0:
+		pathPiece.attacker_position_shift3_i = attackI
+		pathPiece.attacker_position_shift3_j = attackJ
+	pathPiece.pieceProtectTheKing = true
+
 func searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,piece1,piece2):
 	print("Enter in searchDefenderRow")
 	var directions = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0)]
@@ -520,6 +535,7 @@ func searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,piece1,piece2
 				break
 				
 			var target_piece = chessBoard[target_i][target_j]
+			var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 			
 			if target_piece == "x":
 				break
@@ -527,11 +543,7 @@ func searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,piece1,piece2
 				print("target_piece: ", target_piece)
 				if target_piece.begins_with(piece1) or target_piece.begins_with(piece2):
 					pieceProtectTheKing = true
-					print(target_piece)
-					get_node("/root/ChessBoard/" + target_piece).attacker_position_shift_i = attackerPositionILoop
-					get_node("/root/ChessBoard/" + target_piece).attacker_position_shift_j = attackerPositionJLoop
-					get_node("/root/ChessBoard/" + target_piece).pieceProtectTheKing = true
-							
+					sendDefenceCoordinates(pathPiece,attackerPositionILoop,attackerPositionJLoop)
 					print("pieceProtectTheKing: ", pieceProtectTheKing)
 					break
 				else:
