@@ -66,23 +66,9 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if white == true and VariableGlobal.turnWhite == true:
-				move(1,0, maxMoveRight)
-				move(0,1, maxMoveDown)
-				move(-1,0, maxMoveLeft)
-				move(0,-1, maxMoveUp)
-				move(1,1, maxMoveDownRight)
-				move(1,-1, maxMoveUpRight)
-				move(-1,1, maxMoveDownLeft)
-				move(-1,-1, maxMoveUpLeft)
+				moveWithPin()
 			elif white == false and VariableGlobal.turnWhite == false:
-				move(1,0, maxMoveRight)
-				move(0,1, maxMoveDown)
-				move(-1,0, maxMoveLeft)
-				move(0,-1, maxMoveUp)
-				move(1,1, maxMoveDownRight)
-				move(1,-1, maxMoveUpRight)
-				move(-1,1, maxMoveDownLeft)
-				move(-1,-1, maxMoveUpLeft)
+				moveWithPin()
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -101,8 +87,7 @@ func move(dx, dy, maxMove) :
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
 		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
-		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false)\
-		and piece_protects_against_an_attack == false:
+		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -114,6 +99,30 @@ func move(dx, dy, maxMove) :
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
+			
+func moveWithPin():
+	if piece_protects_against_an_attack == false:
+		move(1,0, maxMoveRight)
+		move(0,1, maxMoveDown)
+		move(-1,0, maxMoveLeft)
+		move(0,-1, maxMoveUp)
+		move(1,1, maxMoveDownRight)
+		move(1,-1, maxMoveUpRight)
+		move(-1,1, maxMoveDownLeft)
+		move(-1,-1, maxMoveUpLeft)
+	elif piece_protects_against_an_attack == true:
+		if direction_attack_protect_king == "Haut" or direction_attack_protect_king == "Bas":
+			move(0,-1, maxMoveUp)
+			move(0,1, maxMoveDown)
+		elif direction_attack_protect_king == "Droite" or direction_attack_protect_king == "Gauche":
+			move(1,0, maxMoveRight)
+			move(-1,0, maxMoveLeft)
+		elif direction_attack_protect_king == "Haut/Droite" or direction_attack_protect_king == "Bas/Gauche":
+			move(1,-1, maxMoveUpRight)
+			move(-1,1, maxMoveDownLeft)
+		elif direction_attack_protect_king == "Haut/Gauche" or direction_attack_protect_king == "Bas/Droite":
+			move(-1,-1, maxMoveUpLeft)
+			move(1,1, maxMoveDownRight)
 			
 func _on_area_2d_area_entered(area):
 		var piece_name = area.get_parent().get_name()
@@ -131,6 +140,7 @@ func checkMaxMove(dx, dy):
 				return f
 			else:
 				return f + 1
+				
 func directionOfAttack(bishopColor, rookColor, queenColor):
 	#On regarde d'où vient l'attaque
 	#Lignes
