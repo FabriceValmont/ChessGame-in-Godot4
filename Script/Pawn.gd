@@ -68,39 +68,9 @@ func _input(event):
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			if white == true and VariableGlobal.turnWhite == true:
-				if initialPosition == true:
-					if chessBoard[i-1][j] == "0":
-						move(0,-1)
-					if chessBoard[i-2][j] == "0":
-						move(0,-2)
-					if chessBoard[i-1][j-1] != "0":
-						move(-1,-1)
-					if chessBoard[i-1][j+1] != "0":
-						move(1,-1)
-				else :
-					if chessBoard[i-1][j] == "0":
-						move(0,-1)
-					if chessBoard[i-1][j-1] != "0":
-						move(-1,-1)
-					if chessBoard[i-1][j+1] != "0":
-						move(1,-1)
+				moveWithPinWhite()
 			elif white == false and VariableGlobal.turnWhite == false:
-				if initialPosition == true:
-					if chessBoard[i+1][j] == "0":
-						move(0,1)
-					if chessBoard[i+2][j] == "0":
-						move(0,2)
-					if chessBoard[i+1][j-1] != "0":
-						move(-1,1)
-					if chessBoard[i+1][j+1] != "0":
-						move(1,1)
-				else :
-					if chessBoard[i+1][j] == "0":
-						move(0,1)
-					if chessBoard[i+1][j-1] != "0":
-						move(-1,1)
-					if chessBoard[i+1][j+1] != "0":
-						move(1,1)
+				moveWithPinBlack()
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -111,7 +81,6 @@ func _input(event):
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
 		
-		
 func move(dx, dy) :
 	for f in range (1,2):
 		var targetCaseX = dx*(f*moveCase)
@@ -119,8 +88,7 @@ func move(dx, dy) :
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
 		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true and chessBoard[i+(dy*f)][j] == "0"\
-		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false and chessBoard[i+(dy*f)][j] == "0")\
-		and piece_protects_against_an_attack == false:
+		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false and chessBoard[i+(dy*f)][j] == "0"):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -138,6 +106,90 @@ func move(dx, dy) :
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
 			
+func moveWithPinWhite():
+	if piece_protects_against_an_attack == false:
+		if initialPosition == true:
+			if chessBoard[i-1][j] == "0":
+				move(0,-1)
+			if chessBoard[i-2][j] == "0":
+				move(0,-2)
+			if chessBoard[i-1][j-1] != "0":
+				move(-1,-1)
+			if chessBoard[i-1][j+1] != "0":
+				move(1,-1)
+		else :
+			if chessBoard[i-1][j] == "0":
+				move(0,-1)
+			if chessBoard[i-1][j-1] != "0":
+				move(-1,-1)
+			if chessBoard[i-1][j+1] != "0":
+				move(1,-1)
+	elif piece_protects_against_an_attack == true:
+		if initialPosition == true:
+			if direction_attack_protect_king == "Haut":
+				if chessBoard[i-1][j] == "0":
+					move(0,-1)
+				if chessBoard[i-2][j] == "0":
+					move(0,-2)
+			elif direction_attack_protect_king == "Haut/Gauche":
+				if chessBoard[i-1][j-1] != "0":
+					move(-1,-1)
+			elif direction_attack_protect_king == "Haut/Droite":
+				if chessBoard[i-1][j+1] != "0":
+					move(1,-1)
+		else :
+			if direction_attack_protect_king == "Haut":
+				if chessBoard[i-1][j] == "0":
+					move(0,-1)
+			elif direction_attack_protect_king == "Haut/Gauche":
+				if chessBoard[i-1][j-1] != "0":
+					move(-1,-1)
+			elif direction_attack_protect_king == "Haut/Droite":
+				if chessBoard[i-1][j+1] != "0":
+					move(1,-1)
+
+func moveWithPinBlack():
+	if piece_protects_against_an_attack == false:
+		if initialPosition == true:
+			if chessBoard[i+1][j] == "0":
+				move(0,1)
+			if chessBoard[i+2][j] == "0":
+				move(0,2)
+			if chessBoard[i+1][j-1] != "0":
+				move(-1,1)
+			if chessBoard[i+1][j+1] != "0":
+				move(1,1)
+		else :
+			if chessBoard[i+1][j] == "0":
+				move(0,1)
+			if chessBoard[i+1][j-1] != "0":
+				move(-1,1)
+			if chessBoard[i+1][j+1] != "0":
+				move(1,1)
+	elif piece_protects_against_an_attack == true:
+		if initialPosition == true:
+			if direction_attack_protect_king == "Bas":
+				if chessBoard[i+1][j] == "0":
+					move(0,1)
+				if chessBoard[i+2][j] == "0":
+					move(0,2)
+			elif direction_attack_protect_king == "Bas/Gauche":
+				if chessBoard[i+1][j-1] != "0":
+					move(-1,1)
+			elif direction_attack_protect_king == "Bas/Droite":
+				if chessBoard[i+1][j+1] != "0":
+					move(1,1)
+		else :
+			if direction_attack_protect_king == "Bas":
+				if chessBoard[i+1][j] == "0":
+					move(0,1)
+			elif direction_attack_protect_king == "Bas/Gauche":
+				if chessBoard[i+1][j-1] != "0":
+					move(-1,1)
+			elif direction_attack_protect_king == "Bas/Droite":
+				if chessBoard[i+1][j+1] != "0":
+					move(1,1)
+
 func _on_area_2d_area_entered(area):
 		var piece_name = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
