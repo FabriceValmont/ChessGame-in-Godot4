@@ -526,13 +526,13 @@ func searchDefenderRow(attackerPositionILoop,attackerPositionJLoop,piece1,piece2
 			elif target_piece != "0":
 				print("target_piece: ", target_piece)
 				if target_piece.begins_with(piece1) or target_piece.begins_with(piece2):
-					var attackerPositionShiftI = attackerPositionILoop
-					var attackerPositionShiftJ = attackerPositionJLoop
-					var defenseurPositionI = target_i
-					var defenseurPositionJ = target_j
 					pieceProtectTheKing = true
+					print(target_piece)
+					get_node("/root/ChessBoard/" + target_piece).attacker_position_shift_i = attackerPositionILoop
+					get_node("/root/ChessBoard/" + target_piece).attacker_position_shift_j = attackerPositionJLoop
+					get_node("/root/ChessBoard/" + target_piece).pieceProtectTheKing = true
+							
 					print("pieceProtectTheKing: ", pieceProtectTheKing)
-#					emit_signal("check_to_the_king", attackerPositionShiftI, attackerPositionShiftJ, defenseurPositionI, defenseurPositionJ, directionOfAttack)
 					break
 				else:
 					break
