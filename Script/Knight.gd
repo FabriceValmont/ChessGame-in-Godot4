@@ -59,23 +59,9 @@ func _input(event):
 		if dragging and not event.pressed:
 			for f in range (0,8):
 				if white == true and VariableGlobal.turnWhite == true:
-					move(1,-2)
-					move(-1,-2)
-					move(1,2)
-					move(-1,2)
-					move(2,-1)
-					move(-2,-1)
-					move(2,1)
-					move(-2,1)
+					moveWithPin()
 				elif white == false and VariableGlobal.turnWhite == false:
-					move(1,-2)
-					move(-1,-2)
-					move(1,2)
-					move(-1,2)
-					move(2,-1)
-					move(-2,-1)
-					move(2,1)
-					move(-2,1)
+					moveWithPin()
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -93,8 +79,7 @@ func move(dx, dy) :
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
 		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
-		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false)\
-		and piece_protects_against_an_attack == false:
+		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -106,6 +91,17 @@ func move(dx, dy) :
 			break
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
+			
+func moveWithPin():
+	if piece_protects_against_an_attack == false:
+		move(1,-2)
+		move(-1,-2)
+		move(1,2)
+		move(-1,2)
+		move(2,-1)
+		move(-2,-1)
+		move(2,1)
+		move(-2,1)
 			
 func _on_area_2d_area_entered(area):
 		var piece_name = area.get_parent().get_name()
