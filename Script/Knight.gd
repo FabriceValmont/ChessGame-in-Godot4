@@ -3,7 +3,7 @@ extends Sprite2D
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
-var moveCase = VariableGlobal.one_move_case
+var moveCase = VariableGlobal.oneMoveCase
 var chessBoard = VariableGlobal.chessBoard
 var i = 9
 var j = 3
@@ -12,14 +12,14 @@ var Position = Vector2(150, 750)
 var initialPosition = true
 var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/knight_black.png")
-var piece_protects_against_an_attack = false
-var direction_attack_protect_king = ""
+var pieceProtectsAgainstAnAttack = false
+var directionAttackProtectKing = ""
 var promoteInProgress = false
 var pieceProtectTheKing = false
-var attacker_position_shift_i = 0
-var attacker_position_shift_j = 0
-var attacker_position_shift2_i = 0
-var attacker_position_shift2_j = 0
+var attackerPositionshiftI = 0
+var attackerPositionshiftJ = 0
+var attackerPositionshift2I = 0
+var attackerPositionshift2J = 0
 
 func _ready():
 	await get_tree().process_frame
@@ -68,16 +68,16 @@ func _input(event):
 					if VariableGlobal.checkWhite == false:
 						moveWithPin()
 					elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
-						if piece_protects_against_an_attack == false:
-							defenceMove(attacker_position_shift_i,attacker_position_shift_j)
-							defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
+						if pieceProtectsAgainstAnAttack == false:
+							defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+							defenceMove(attackerPositionshift2I,attackerPositionshift2J)
 				elif white == false and VariableGlobal.turnWhite == false:
 					if VariableGlobal.checkBlack == false:
 						moveWithPin()
 					elif VariableGlobal.checkBlack == true and pieceProtectTheKing == true:
-						if piece_protects_against_an_attack == false:
-							defenceMove(attacker_position_shift_i,attacker_position_shift_j)
-							defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
+						if pieceProtectsAgainstAnAttack == false:
+							defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+							defenceMove(attackerPositionshift2I,attackerPositionshift2J)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -125,16 +125,16 @@ func defenceMove(attacki,attackj):
 		chessBoard[i][j] = nameOfPiece.replace("@", "")
 		VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 		initialPosition = false
-		attacker_position_shift_i = 0
-		attacker_position_shift_j = 0
-		attacker_position_shift2_i = 0
-		attacker_position_shift2_j = 0
+		attackerPositionshiftI = 0
+		attackerPositionshiftJ = 0
+		attackerPositionshift2I = 0
+		attackerPositionshift2J = 0
 		pieceProtectTheKing = false
 	elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 		self.position = Vector2(Position.x, Position.y)
 		
 func moveWithPin():
-	if piece_protects_against_an_attack == false:
+	if pieceProtectsAgainstAnAttack == false:
 		move(1,-2)
 		move(-1,-2)
 		move(1,2)
@@ -145,19 +145,19 @@ func moveWithPin():
 		move(-2,1)
 			
 func _on_area_2d_area_entered(area):
-		var piece_name = area.get_parent().get_name()
+		var pieceName = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
-			if "Black" in piece_name and dragging == false :
-				get_node("/root/ChessBoard/" + piece_name).queue_free()
+			if "Black" in pieceName and dragging == false :
+				get_node("/root/ChessBoard/" + pieceName).queue_free()
 		elif white == false and VariableGlobal.turnWhite == true:
-			if "White" in piece_name and dragging == false :
-				get_node("/root/ChessBoard/" + piece_name).queue_free()
+			if "White" in pieceName and dragging == false :
+				get_node("/root/ChessBoard/" + pieceName).queue_free()
 				
 func directionOfAttack(bishopColor, rookColor, queenColor):
 	#On regarde d'où vient l'attaque
 	#Lignes
 	#Vers le haut
-	direction_attack_protect_king = ""
+	directionAttackProtectKing = ""
 	for f in range(1,9):
 		if chessBoard[i-f][j] == "x":
 			break
@@ -165,7 +165,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i-f][j].begins_with(rookColor)\
 			or chessBoard[i-f][j].begins_with(queenColor):
-				direction_attack_protect_king = "Haut"
+				directionAttackProtectKing = "Haut"
 				break
 			else:
 				break
@@ -177,7 +177,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i+f][j].begins_with(rookColor)\
 			or chessBoard[i+f][j].begins_with(queenColor):
-				direction_attack_protect_king = "Bas"
+				directionAttackProtectKing = "Bas"
 				break
 			else:
 				break
@@ -189,7 +189,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i][j+f].begins_with(rookColor)\
 			or chessBoard[i][j+f].begins_with(queenColor):
-				direction_attack_protect_king = "Droite"
+				directionAttackProtectKing = "Droite"
 				break
 			else:
 				break
@@ -201,7 +201,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i][j-f].begins_with(rookColor)\
 			or chessBoard[i][j-f].begins_with(queenColor):
-				direction_attack_protect_king = "Gauche"
+				directionAttackProtectKing = "Gauche"
 				break
 			else:
 				break
@@ -214,7 +214,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i-f][j+f].begins_with(bishopColor)\
 			or chessBoard[i-f][j+f].begins_with(queenColor):
-				direction_attack_protect_king = "Haut/Droite"
+				directionAttackProtectKing = "Haut/Droite"
 				break
 			else:
 				break
@@ -226,7 +226,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i-f][j-f].begins_with(bishopColor)\
 			or chessBoard[i-f][j-f].begins_with(queenColor):
-				direction_attack_protect_king = "Haut/Gauche"
+				directionAttackProtectKing = "Haut/Gauche"
 				break
 			else:
 				break
@@ -238,7 +238,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i+f][j+f].begins_with(bishopColor)\
 			or chessBoard[i+f][j+f].begins_with(queenColor):
-				direction_attack_protect_king = "Bas/Droite"
+				directionAttackProtectKing = "Bas/Droite"
 				break
 			else:
 				break
@@ -250,7 +250,7 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 			
 			if chessBoard[i+f][j-f].begins_with(bishopColor)\
 			or chessBoard[i+f][j-f].begins_with(queenColor):
-				direction_attack_protect_king = "Bas/Gauche"
+				directionAttackProtectKing = "Bas/Gauche"
 				break
 			else:
 				break
@@ -266,8 +266,8 @@ func theKingIsBehind():
 		directionOfAttack("BishopWhite", "RookWhite", "QueenWhite")
 		kingColor = "KingBlack"
 		
-	piece_protects_against_an_attack = false
-	if direction_attack_protect_king == "Haut":
+	pieceProtectsAgainstAnAttack = false
+	if directionAttackProtectKing == "Haut":
 		#On cherche vers le bas
 		for f in range(1,9):
 			if chessBoard[i+f][j] == "x":
@@ -275,11 +275,11 @@ func theKingIsBehind():
 			elif chessBoard[i+f][j] != "0":
 				
 				if chessBoard[i+f][j].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Bas":
+	elif directionAttackProtectKing == "Bas":
 		#On cherche vers le haut
 		for f in range(1,9):
 			if chessBoard[i-f][j] == "x":
@@ -287,11 +287,11 @@ func theKingIsBehind():
 			elif chessBoard[i-f][j] != "0":
 				
 				if chessBoard[i-f][j].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Droite":
+	elif directionAttackProtectKing == "Droite":
 		#On cherche vers la gauche
 		for f in range(1,9):
 			if chessBoard[i][j-f] == "x":
@@ -299,11 +299,11 @@ func theKingIsBehind():
 			elif chessBoard[i][j-f] != "0":
 				
 				if chessBoard[i][j-f].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Gauche":
+	elif directionAttackProtectKing == "Gauche":
 		#On cherche vers la droite
 		for f in range(1,9):
 			if chessBoard[i][j+f] == "x":
@@ -311,11 +311,11 @@ func theKingIsBehind():
 			elif chessBoard[i][j+f] != "0":
 				
 				if chessBoard[i][j+f].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Haut/Droite":
+	elif directionAttackProtectKing == "Haut/Droite":
 		#On cherche vers le Bas/Gauche
 		for f in range(1,9):
 			if chessBoard[i+f][j-f] == "x":
@@ -323,11 +323,11 @@ func theKingIsBehind():
 			elif chessBoard[i+f][j-f] != "0":
 				
 				if chessBoard[i+f][j-f].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Haut/Gauche":
+	elif directionAttackProtectKing == "Haut/Gauche":
 		#On cherche vers le Bas/Droite
 		for f in range(1,9):
 			if chessBoard[i+f][j+f] == "x":
@@ -335,11 +335,11 @@ func theKingIsBehind():
 			elif chessBoard[i+f][j+f] != "0":
 				
 				if chessBoard[i+f][j+f].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Bas/Droite":
+	elif directionAttackProtectKing == "Bas/Droite":
 		#On cherche vers le Haut/Gauche
 		for f in range(1,9):
 			if chessBoard[i-f][j-f] == "x":
@@ -347,11 +347,11 @@ func theKingIsBehind():
 			elif chessBoard[i-f][j-f] != "0":
 				
 				if chessBoard[i-f][j-f].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break
-	elif direction_attack_protect_king == "Bas/Gauche":
+	elif directionAttackProtectKing == "Bas/Gauche":
 		#On cherche vers le Haut/Droite
 		for f in range(1,9):
 			if chessBoard[i-f][j+f] == "x":
@@ -359,7 +359,7 @@ func theKingIsBehind():
 			elif chessBoard[i-f][j+f] != "0":
 				
 				if chessBoard[i-f][j+f].begins_with(kingColor):
-					piece_protects_against_an_attack = true
+					pieceProtectsAgainstAnAttack = true
 					break
 				else:
 					break

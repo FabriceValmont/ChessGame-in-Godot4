@@ -6,10 +6,10 @@ signal queenSizeCastelingSignal
 var dragging = false
 var clickRadius = 50
 var dragOffset = Vector2()
-var moveCase = VariableGlobal.one_move_case
+var moveCase = VariableGlobal.oneMoveCase
 var chessBoard = VariableGlobal.chessBoard
-var attackWhite = VariableGlobal.attack_piece_white_on_the_chessboard
-var attackBlack = VariableGlobal.attack_piece_black_on_the_chessboard
+var attackWhite = VariableGlobal.attackPieceWhiteOnTheChessboard
+var attackBlack = VariableGlobal.attackPieceBlackOnTheChessboard
 var i = 9
 var j = 6
 var Position = Vector2(450, 750)
@@ -18,7 +18,6 @@ var initialPosition = true
 var white = true
 var textureBlack = preload("res://Sprite/Piece/Black/king_black.png")
 var promoteInProgress = false
-var checkMate = false
 
 func _ready():
 	await get_tree().process_frame
@@ -68,7 +67,6 @@ func _input(event):
 		self.position = event.position
 		get_node("Area2D/CollisionShape2D").disabled = true
 		
-		
 func move(dx, dy) :
 	for f in range (1,2):
 		var targetCaseX = dx*(f*moveCase)
@@ -76,9 +74,9 @@ func move(dx, dy) :
 		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
 		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
-		 and VariableGlobal.attack_piece_black_on_the_chessboard[i+(dy*f)][j+(dx*f)] == 0\
+		and VariableGlobal.attackPieceBlackOnTheChessboard[i+(dy*f)][j+(dx*f)] == 0\
 		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false\
-		 and VariableGlobal.attack_piece_white_on_the_chessboard[i+(dy*f)][j+(dx*f)] == 0):
+		and VariableGlobal.attack_piece_white_on_the_chessboard[i+(dy*f)][j+(dx*f)] == 0):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
 			Position = Vector2(self.position.x, self.position.y)
 			chessBoard[i][j] = "0"
@@ -104,13 +102,13 @@ func allMove(rookColor,rookColor2,attackColor):
 	queenSizeCasteling(-1,1,rookColor,attackColor)
 	
 func _on_area_2d_area_entered(area):
-		var piece_name = area.get_parent().get_name()
+		var pieceName = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
-			if "Black" in piece_name and dragging == false :
-				get_node("/root/ChessBoard/" + piece_name).queue_free()
+			if "Black" in pieceName and dragging == false :
+				get_node("/root/ChessBoard/" + pieceName).queue_free()
 		elif white == false and VariableGlobal.turnWhite == true:
-			if "White" in piece_name and dragging == false :
-				get_node("/root/ChessBoard/" + piece_name).queue_free()
+			if "White" in pieceName and dragging == false :
+				get_node("/root/ChessBoard/" + pieceName).queue_free()
 				
 func kingSizeCasteling(dx, dy, rookColor, attackColor):
 		var targetCaseX = dx*(2*moveCase)
