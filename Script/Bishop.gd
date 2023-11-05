@@ -63,28 +63,15 @@ func _input(event):
 				dragging = true
 				dragOffset = event.position - self.position
 				z_index = 10
-				maxMoveDownRight = checkMaxMove(1,1)
-				maxMoveDownLeft = checkMaxMove(-1,1)
-				maxMoveUpLeft = checkMaxMove(-1,-1)
-				maxMoveUpRight = checkMaxMove(1,-1)
+				checkMaxAllMove()
 				theKingIsBehind()
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
-				if VariableGlobal.checkWhite == false:
-					moveWithPin()
-				elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
-					if pieceProtectsAgainstAnAttack == false:
-						defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-						defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+				moveFinal(VariableGlobal.checkWhite)
 			elif white == false and VariableGlobal.turnWhite == false:
-				if VariableGlobal.checkBlack == false:
-					moveWithPin()
-				elif VariableGlobal.checkBlack == true and pieceProtectTheKing == true:
-					if pieceProtectsAgainstAnAttack == false:
-						defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-						defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+				moveFinal(VariableGlobal.checkBlack)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -155,6 +142,14 @@ func moveWithPin():
 			move(-1,-1, maxMoveUpLeft)
 			move(1,1, maxMoveDownRight)
 
+func moveFinal(checkColor):
+	if checkColor == false:
+		moveWithPin()
+	elif checkColor == true and pieceProtectTheKing == true:
+		if pieceProtectsAgainstAnAttack == false:
+			defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+			defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+
 func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
@@ -172,6 +167,12 @@ func checkMaxMove(dx, dy):
 			else:
 				return f + 1
 				
+func checkMaxAllMove():
+	maxMoveDownRight = checkMaxMove(1,1)
+	maxMoveDownLeft = checkMaxMove(-1,1)
+	maxMoveUpLeft = checkMaxMove(-1,-1)
+	maxMoveUpRight = checkMaxMove(1,-1)
+	
 func directionOfAttack(bishopColor, rookColor, queenColor):
 	#On regarde d'où vient l'attaque
 	#Lignes

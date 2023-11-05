@@ -65,19 +65,9 @@ func _input(event):
 			get_node("Area2D/CollisionShape2D").disabled = false
 			for f in range (0,8):
 				if white == true and VariableGlobal.turnWhite == true:
-					if VariableGlobal.checkWhite == false:
-						moveWithPin()
-					elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
-						if pieceProtectsAgainstAnAttack == false:
-							defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-							defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+					moveFinal(VariableGlobal.checkWhite)
 				elif white == false and VariableGlobal.turnWhite == false:
-					if VariableGlobal.checkBlack == false:
-						moveWithPin()
-					elif VariableGlobal.checkBlack == true and pieceProtectTheKing == true:
-						if pieceProtectsAgainstAnAttack == false:
-							defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-							defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+					moveFinal(VariableGlobal.checkBlack)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -143,6 +133,14 @@ func moveWithPin():
 		move(-2,-1)
 		move(2,1)
 		move(-2,1)
+			
+func moveFinal(checkColor):
+	if checkColor == false:
+		moveWithPin()
+	elif checkColor == true and pieceProtectTheKing == true:
+		if pieceProtectsAgainstAnAttack == false:
+			defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+			defenceMove(attackerPositionshift2I,attackerPositionshift2J)
 			
 func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()

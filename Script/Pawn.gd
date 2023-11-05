@@ -74,19 +74,9 @@ func _input(event):
 		if dragging and not event.pressed:
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
-				if VariableGlobal.checkWhite == false:
-					moveWithPinWhite()
-				elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
-					if pieceProtectsAgainstAnAttack == false:
-						defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-						defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+				moveFinal(VariableGlobal.checkWhite,moveWithPinWhite())
 			elif white == false and VariableGlobal.turnWhite == false:
-				if VariableGlobal.checkBlack == false:
-					moveWithPinBlack()
-				elif VariableGlobal.checkBlack == true and pieceProtectTheKing == true:
-					if pieceProtectsAgainstAnAttack == false:
-						defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-						defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+				moveFinal(VariableGlobal.checkBlack,moveWithPinBlack())
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -263,6 +253,14 @@ func defenceMove(attacki,attackj):
 		pieceProtectTheKing = false
 	elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 		self.position = Vector2(Position.x, Position.y)
+
+func moveFinal(checkColor,moveWithPinColor):
+	if checkColor == false:
+		moveWithPinColor
+	elif checkColor == true and pieceProtectTheKing == true:
+		if pieceProtectsAgainstAnAttack == false:
+			defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+			defenceMove(attackerPositionshift2I,attackerPositionshift2J)
 
 func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()
