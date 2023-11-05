@@ -370,12 +370,13 @@ func enPassantFinish():
 	var numberOfChildren = get_node("/root/ChessBoard").get_child_count()
 	
 	for f in range(numberOfChildren):
-		var piece = get_child(f)
-		if piece == null:
-			break
-		else:
-			var pieceName = piece.get_name()
-			if pieceName.begins_with("Pawn"):
+		var piece = get_node("/root/ChessBoard").get_child(f)
+		var pieceName = piece.get_name()
+		if turnWhite == true:
+			if pieceName.begins_with("PawnWhite"):
+				piece.enPassant = false
+		elif turnWhite == false:
+			if pieceName.begins_with("PawnBlack"):
 				piece.enPassant = false
 
 func findAttackerDirectionRow(chessBoard,kingNode,piece1,piece2):
