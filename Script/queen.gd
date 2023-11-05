@@ -23,6 +23,13 @@ var maxMoveUpRight = 1
 var piece_protects_against_an_attack = false
 var direction_attack_protect_king = ""
 var promoteInProgress = false
+var pieceProtectTheKing = false
+var attacker_position_shift_i = 0
+var attacker_position_shift_j = 0
+var attacker_position_shift2_i = 0
+var attacker_position_shift2_j = 0
+var attacker_position_shift3_i = 0
+var attacker_position_shift3_j = 0
 
 func _ready():
 	await get_tree().process_frame
@@ -67,7 +74,12 @@ func _input(event):
 		if dragging and not event.pressed:
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
-				moveWithPin()
+				if VariableGlobal.checkWhite == false:
+					moveWithPin()
+				elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
+					defenceMove(attacker_position_shift_i,attacker_position_shift_j)
+					defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
+					defenceMove(attacker_position_shift3_i,attacker_position_shift3_j)
 			elif white == false and VariableGlobal.turnWhite == false:
 				moveWithPin()
 			self.position = Vector2(Position.x, Position.y)
@@ -102,6 +114,32 @@ func move(dx, dy, maxMove) :
 		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
 			self.position = Vector2(Position.x, Position.y)
 			
+func defenceMove(attacki,attackj):
+	print("Enter in defenceMove")
+	var targetCaseX = (attackj - j) * moveCase
+	var targetCaseY = (attacki - i) * moveCase
+	if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
+	and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
+	and ((chessBoard[attacki][attackj] == "0" or "Black" in chessBoard[attacki][attackj]) and VariableGlobal.turnWhite == true\
+	or (chessBoard[attacki][attackj] == "0" or "White" in chessBoard[attacki][attackj]) and VariableGlobal.turnWhite == false):
+		self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
+		Position = Vector2(self.position.x, self.position.y)
+		chessBoard[i][j] = "0"
+		i=attacki
+		j=attackj
+		chessBoard[i][j] = nameOfPiece.replace("@", "")
+		VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+		initialPosition = false
+		attacker_position_shift_i = 0
+		attacker_position_shift_j = 0
+		attacker_position_shift2_i = 0
+		attacker_position_shift2_j = 0
+		attacker_position_shift3_i = 0
+		attacker_position_shift3_j = 0
+		pieceProtectTheKing = false
+	elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
+		self.position = Vector2(Position.x, Position.y)
+		
 func moveWithPin():
 	if piece_protects_against_an_attack == false:
 		move(1,0, maxMoveRight)

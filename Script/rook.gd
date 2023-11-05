@@ -68,19 +68,13 @@ func _input(event):
 				maxMoveDown = checkMaxMove(0,1)
 				maxMoveUp = checkMaxMove(0,-1)
 				theKingIsBehind()
-				print("attacker_position_shift_i: ", attacker_position_shift_i)
-				print("attacker_position_shift_j: ", attacker_position_shift_j)
-				print("attacker_position_shift2_i: ", attacker_position_shift2_i)
-				print("attacker_position_shift2_j: ", attacker_position_shift2_j)
-				print("pieceProtectTheKing: ", pieceProtectTheKing)
-				print("VariableGlobal.checkWhite: ", VariableGlobal.checkWhite)
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
 				if VariableGlobal.checkWhite == false:
 					moveWithPin()
-				elif VariableGlobal.checkWhite == true:
+				elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
 					defenceMove(attacker_position_shift_i,attacker_position_shift_j)
 					defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
 			elif white == false and VariableGlobal.turnWhite == false:
