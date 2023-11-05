@@ -17,6 +17,7 @@ var textureBlack = preload("res://Sprite/Piece/Black/pawn_black.png")
 var piece_protects_against_an_attack = false
 var direction_attack_protect_king = ""
 var promoteInProgress = false
+var enPassant = false
 var pieceProtectTheKing = false
 var attacker_position_shift_i = 0
 var attacker_position_shift_j = 0
@@ -62,7 +63,7 @@ func _input(event):
 			promotionSelectionBlack()
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
-	and promoteInProgress == false:
+	and promoteInProgress == false and VariableGlobal.checkmate == false:
 		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
@@ -134,6 +135,7 @@ func moveWithPinWhite():
 				move(-1,-1)
 			if chessBoard[i-1][j+1] != "0":
 				move(1,-1)
+			enPassant = true
 		else :
 			if chessBoard[i-1][j] == "0":
 				move(0,-1)
@@ -141,6 +143,17 @@ func moveWithPinWhite():
 				move(-1,-1)
 			if chessBoard[i-1][j+1] != "0":
 				move(1,-1)
+			if i == 5 and chessBoard[i][j-1].begins_with("PawnBlack")\
+			and get_node("/root/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
+				get_node("/root/ChessBoard/" + chessBoard[i][j-1]).queue_free()
+				chessBoard[i][j-1] = "0"
+				move(-1,-1)
+			if i == 5 and chessBoard[i][j+1].begins_with("PawnBlack")\
+			and get_node("/root/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
+				get_node("/root/ChessBoard/" + chessBoard[i][j+1]).queue_free()
+				chessBoard[i][j+1] = "0"
+				move(1,-1)
+			enPassant = false
 	elif piece_protects_against_an_attack == true:
 		if initialPosition == true:
 			if direction_attack_protect_king == "Haut":
@@ -154,6 +167,7 @@ func moveWithPinWhite():
 			elif direction_attack_protect_king == "Haut/Droite":
 				if chessBoard[i-1][j+1] != "0":
 					move(1,-1)
+			enPassant = true
 		else :
 			if direction_attack_protect_king == "Haut":
 				if chessBoard[i-1][j] == "0":
@@ -164,6 +178,7 @@ func moveWithPinWhite():
 			elif direction_attack_protect_king == "Haut/Droite":
 				if chessBoard[i-1][j+1] != "0":
 					move(1,-1)
+			enPassant = false
 
 func moveWithPinBlack():
 	if piece_protects_against_an_attack == false:
@@ -176,6 +191,7 @@ func moveWithPinBlack():
 				move(-1,1)
 			if chessBoard[i+1][j+1] != "0":
 				move(1,1)
+			enPassant = true
 		else :
 			if chessBoard[i+1][j] == "0":
 				move(0,1)
@@ -183,6 +199,17 @@ func moveWithPinBlack():
 				move(-1,1)
 			if chessBoard[i+1][j+1] != "0":
 				move(1,1)
+			if i == 6 and chessBoard[i][j-1].begins_with("PawnWhite")\
+			and get_node("/root/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
+				get_node("/root/ChessBoard/" + chessBoard[i][j-1]).queue_free()
+				chessBoard[i][j-1] = "0"
+				move(-1,1)
+			if i == 6 and chessBoard[i][j+1].begins_with("PawnWhite")\
+			and get_node("/root/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
+				get_node("/root/ChessBoard/" + chessBoard[i][j+1]).queue_free()
+				chessBoard[i][j+1] = "0"
+				move(1,1)
+			enPassant = false
 	elif piece_protects_against_an_attack == true:
 		if initialPosition == true:
 			if direction_attack_protect_king == "Bas":
@@ -196,6 +223,7 @@ func moveWithPinBlack():
 			elif direction_attack_protect_king == "Bas/Droite":
 				if chessBoard[i+1][j+1] != "0":
 					move(1,1)
+			enPassant = true
 		else :
 			if direction_attack_protect_king == "Bas":
 				if chessBoard[i+1][j] == "0":
@@ -206,6 +234,7 @@ func moveWithPinBlack():
 			elif direction_attack_protect_king == "Bas/Droite":
 				if chessBoard[i+1][j+1] != "0":
 					move(1,1)
+			enPassant = false
 
 func defenceMove(attacki,attackj):
 	print("Enter in defenceMove")

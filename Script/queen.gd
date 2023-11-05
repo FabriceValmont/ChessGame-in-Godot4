@@ -54,7 +54,7 @@ func _process(delta):
 
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
-	and promoteInProgress == false:
+	and promoteInProgress == false and VariableGlobal.checkmate == false:
 		if (event.position - self.position).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
@@ -99,7 +99,6 @@ func _input(event):
 		# While dragging, move the sprite with the mouse.
 		self.position = event.position
 		get_node("Area2D/CollisionShape2D").disabled = true
-		
 		
 func move(dx, dy, maxMove) :
 	for f in range (1,maxMove):
