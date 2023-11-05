@@ -629,7 +629,7 @@ func searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop):
 			var target_piece = chessBoard[attackerPositionILoop+1][attackerPositionJLoop]
 			var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 			pieceProtectTheKing = true
-			sendDefenceCoordinates(pathPiece,attackerPositionILoop+1,attackerPositionJLoop,target_piece)
+			sendDefenceCoordinates(pathPiece,attackerPositionILoop,attackerPositionJLoop,target_piece)
 			print("pieceProtectTheKing: ", pieceProtectTheKing)
 			
 	#vers le bas de 2 si initialPosition == true
@@ -644,7 +644,7 @@ func searchDefenderPawnWhiteRow(attackerPositionILoop,attackerPositionJLoop):
 			var target_piece = chessBoard[attackerPositionILoop+2][attackerPositionJLoop]
 			var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 			pieceProtectTheKing = true
-			sendDefenceCoordinates(pathPiece,attackerPositionILoop+2,attackerPositionJLoop,target_piece)
+			sendDefenceCoordinates(pathPiece,attackerPositionILoop,attackerPositionJLoop,target_piece)
 			print("pieceProtectTheKing: ", pieceProtectTheKing)
 
 func searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop):
@@ -659,7 +659,7 @@ func searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop):
 			var target_piece = chessBoard[attackerPositionILoop-1][attackerPositionJLoop]
 			var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 			pieceProtectTheKing = true
-			sendDefenceCoordinates(pathPiece,attackerPositionILoop-1,attackerPositionJLoop,target_piece)
+			sendDefenceCoordinates(pathPiece,attackerPositionILoop,attackerPositionJLoop,target_piece)
 			print("pieceProtectTheKing: ", pieceProtectTheKing)
 			
 	#vers le haut de 2 si initialPosition == true
@@ -674,7 +674,7 @@ func searchDefenderPawnBlackRow(attackerPositionILoop,attackerPositionJLoop):
 			var target_piece = chessBoard[attackerPositionILoop-2][attackerPositionJLoop]
 			var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 			pieceProtectTheKing = true
-			sendDefenceCoordinates(pathPiece,attackerPositionILoop-2,attackerPositionJLoop,target_piece)
+			sendDefenceCoordinates(pathPiece,attackerPositionILoop,attackerPositionJLoop,target_piece)
 			print("pieceProtectTheKing: ", pieceProtectTheKing)
 
 func searchDefenderPawnWhiteDiagonal(attack1, attack2):
@@ -690,7 +690,7 @@ func searchDefenderPawnWhiteDiagonal(attack1, attack2):
 				var target_piece = chessBoard[attackerPositioni+1][attackerPositionj+1]
 				var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 				pieceProtectTheKing = true
-				sendDefenceCoordinates(pathPiece,attackerPositioni+1,attackerPositionj+1,target_piece)
+				sendDefenceCoordinates(pathPiece,attackerPositioni,attackerPositionj,target_piece)
 				print("pieceProtectTheKing: ", pieceProtectTheKing)
 				
 	if attack2 == true:
@@ -704,7 +704,7 @@ func searchDefenderPawnWhiteDiagonal(attack1, attack2):
 				var target_piece = chessBoard[attackerPositioni+1][attackerPositionj-1]
 				var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 				pieceProtectTheKing = true
-				sendDefenceCoordinates(pathPiece,attackerPositioni+1,attackerPositionj-1,target_piece)
+				sendDefenceCoordinates(pathPiece,attackerPositioni,attackerPositionj,target_piece)
 				print("pieceProtectTheKing: ", pieceProtectTheKing)
 
 func searchDefenderPawnBlackDiagonal(attack1, attack2):
@@ -720,7 +720,7 @@ func searchDefenderPawnBlackDiagonal(attack1, attack2):
 				var target_piece = chessBoard[attackerPositioni-1][attackerPositionj+1]
 				var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 				pieceProtectTheKing = true
-				sendDefenceCoordinates(pathPiece,attackerPositioni-1,attackerPositionj+1,target_piece)
+				sendDefenceCoordinates(pathPiece,attackerPositioni,attackerPositionj,target_piece)
 				print("pieceProtectTheKing: ", pieceProtectTheKing)
 				
 	if attack2 == true:
@@ -734,7 +734,7 @@ func searchDefenderPawnBlackDiagonal(attack1, attack2):
 				var target_piece = chessBoard[attackerPositioni-1][attackerPositionj-1]
 				var pathPiece = get_node("/root/ChessBoard/" + target_piece)
 				pieceProtectTheKing = true
-				sendDefenceCoordinates(pathPiece,attackerPositioni-1,attackerPositionj-1,target_piece)
+				sendDefenceCoordinates(pathPiece,attackerPositioni,attackerPositionj,target_piece)
 				print("pieceProtectTheKing: ", pieceProtectTheKing)
 
 func attackComingUp(knightColor,bishopColor,rookColor,queenColor,kingColor):

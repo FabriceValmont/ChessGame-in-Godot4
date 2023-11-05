@@ -70,11 +70,6 @@ func _input(event):
 				dragOffset = event.position - self.position
 				z_index = 10
 				theKingIsBehind()
-				print("attacker_position_shift_i: ", attacker_position_shift_i)
-				print("attacker_position_shift_j: ", attacker_position_shift_j)
-				print("attacker_position_shift2_i: ", attacker_position_shift2_i)
-				print("attacker_position_shift2_j: ", attacker_position_shift2_j)
-				print("pieceProtectTheKing: ", pieceProtectTheKing)
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
 			get_node("Area2D/CollisionShape2D").disabled = false
@@ -82,8 +77,9 @@ func _input(event):
 				if VariableGlobal.checkWhite == false:
 					moveWithPinWhite()
 				elif VariableGlobal.checkWhite == true and pieceProtectTheKing == true:
-					defenceMove(attacker_position_shift_i,attacker_position_shift_j)
-					defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
+					if piece_protects_against_an_attack == false:
+						defenceMove(attacker_position_shift_i,attacker_position_shift_j)
+						defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
 			elif white == false and VariableGlobal.turnWhite == false:
 				moveWithPinBlack()
 			self.position = Vector2(Position.x, Position.y)
