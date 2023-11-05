@@ -82,7 +82,13 @@ func _input(event):
 						defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
 						defenceMove(attacker_position_shift3_i,attacker_position_shift3_j)
 			elif white == false and VariableGlobal.turnWhite == false:
-				moveWithPin()
+				if VariableGlobal.checkBlack == false:
+					moveWithPin()
+				elif VariableGlobal.checkBlack == true and pieceProtectTheKing == true:
+					if piece_protects_against_an_attack == false:
+						defenceMove(attacker_position_shift_i,attacker_position_shift_j)
+						defenceMove(attacker_position_shift2_i,attacker_position_shift2_j)
+						defenceMove(attacker_position_shift3_i,attacker_position_shift3_j)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
