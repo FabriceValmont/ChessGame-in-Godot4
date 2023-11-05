@@ -33,6 +33,7 @@ func _process(delta):
 			updateAttackWhiteandBlack()
 			attackPiecesWhite()
 			attackPiecesBlack()
+			enPassantFinish()
 			verificationCheckAndCheckmate()
 			verificationStalemate("Black", "PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",attack_piece_black_on_the_chessboard)
 			update_of_the_parts_attack = true
@@ -43,6 +44,7 @@ func _process(delta):
 			updateAttackWhiteandBlack()
 			attackPiecesWhite()
 			attackPiecesBlack()
+			enPassantFinish()
 			verificationCheckAndCheckmate()
 			verificationStalemate("White", "PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",attack_piece_white_on_the_chessboard)
 			update_of_the_parts_attack = false
@@ -362,6 +364,19 @@ func attackPiecesBlack():
 				kingAttackBlack(i, j, chessBoard, attack_piece_black_on_the_chessboard)
 					
 	printAttackBlack()
+
+func enPassantFinish():
+	print("Enter in enPassantFinish")
+	var numberOfChildren = get_node("/root/ChessBoard").get_child_count()
+	
+	for f in range(numberOfChildren):
+		var piece = get_child(f)
+		if piece == null:
+			break
+		else:
+			var pieceName = piece.get_name()
+			if pieceName.begins_with("Pawn"):
+				piece.enPassant = false
 
 func findAttackerDirectionRow(chessBoard,kingNode,piece1,piece2):
 	var directions = ["Haut", "Bas", "Droite", "Gauche"]
