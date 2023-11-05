@@ -264,6 +264,17 @@ func directionOfAttack(bishopColor, rookColor, queenColor):
 	findDirectionAttackDiagonal(1, 1, bishopColor, queenColor)
 	findDirectionAttackDiagonal(-1, 1, bishopColor, queenColor)
 	
+func findtheKingIsBehind(dx, dy, kingColor):
+	for f in range(1,9):
+		if chessBoard[i+(dy*f)][j+(dx*f)] == "x":
+			break
+		elif chessBoard[i+(dy*f)][j+(dx*f)] != "0":
+			if chessBoard[i+(dy*f)][j+(dx*f)].begins_with(kingColor):
+				pieceProtectsAgainstAnAttack = true
+				break
+			else:
+				break
+
 func theKingIsBehind():
 	#Ensuite, on regarde si le roi est derrière la pièce
 	#qui le protège de l'attaque qui vient dans cette direction
@@ -278,100 +289,28 @@ func theKingIsBehind():
 	pieceProtectsAgainstAnAttack = false
 	if directionAttackProtectKing == "Haut":
 		#On cherche vers le bas
-		for f in range(1,9):
-			if chessBoard[i+f][j] == "x":
-				break
-			elif chessBoard[i+f][j] != "0":
-				
-				if chessBoard[i+f][j].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(0, 1, kingColor)
 	elif directionAttackProtectKing == "Bas":
 		#On cherche vers le haut
-		for f in range(1,9):
-			if chessBoard[i-f][j] == "x":
-				break
-			elif chessBoard[i-f][j] != "0":
-				
-				if chessBoard[i-f][j].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(0, -1, kingColor)
 	elif directionAttackProtectKing == "Droite":
 		#On cherche vers la gauche
-		for f in range(1,9):
-			if chessBoard[i][j-f] == "x":
-				break
-			elif chessBoard[i][j-f] != "0":
-				
-				if chessBoard[i][j-f].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(-1, 0, kingColor)
 	elif directionAttackProtectKing == "Gauche":
 		#On cherche vers la droite
-		for f in range(1,9):
-			if chessBoard[i][j+f] == "x":
-				break
-			elif chessBoard[i][j+f] != "0":
-				
-				if chessBoard[i][j+f].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(1, 0, kingColor)
 	elif directionAttackProtectKing == "Haut/Droite":
 		#On cherche vers le Bas/Gauche
-		for f in range(1,9):
-			if chessBoard[i+f][j-f] == "x":
-				break
-			elif chessBoard[i+f][j-f] != "0":
-				
-				if chessBoard[i+f][j-f].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(1, -1, kingColor)
 	elif directionAttackProtectKing == "Haut/Gauche":
 		#On cherche vers le Bas/Droite
-		for f in range(1,9):
-			if chessBoard[i+f][j+f] == "x":
-				break
-			elif chessBoard[i+f][j+f] != "0":
-				
-				if chessBoard[i+f][j+f].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(-1, -1, kingColor)
 	elif directionAttackProtectKing == "Bas/Droite":
 		#On cherche vers le Haut/Gauche
-		for f in range(1,9):
-			if chessBoard[i-f][j-f] == "x":
-				break
-			elif chessBoard[i-f][j-f] != "0":
-				
-				if chessBoard[i-f][j-f].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(1, 1, kingColor)
 	elif directionAttackProtectKing == "Bas/Gauche":
 		#On cherche vers le Haut/Droite
-		for f in range(1,9):
-			if chessBoard[i-f][j+f] == "x":
-				break
-			elif chessBoard[i-f][j+f] != "0":
-				
-				if chessBoard[i-f][j+f].begins_with(kingColor):
-					pieceProtectsAgainstAnAttack = true
-					break
-				else:
-					break
+		findtheKingIsBehind(-1, 1, kingColor)
 
 func get_promoteInProgress():
 	return promoteInProgress
