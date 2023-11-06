@@ -7,6 +7,7 @@ var moveCase = VariableGlobal.oneMoveCase
 var chessBoard = VariableGlobal.chessBoard
 var i = 9
 var j = 5
+var positionChessBoard
 var Position = Vector2(350, 750)
 @onready var nameOfPiece = get_name()
 var initialPosition = true
@@ -33,6 +34,7 @@ var attackerPositionshift3J = 0
 
 func _ready():
 	await get_tree().process_frame
+	positionChessBoard = get_parent().global_position
 	if self.position.y == 50 :
 		white = false
 		
@@ -55,11 +57,11 @@ func _process(delta):
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
 	and promoteInProgress == false and VariableGlobal.checkmate == false:
-		if (event.position - self.position).length() < clickRadius:
+		if (event.position - self.position - positionChessBoard).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
 				dragging = true
-				dragOffset = event.position - self.position
+				dragOffset = event.position - self.position - positionChessBoard
 				z_index = 10
 				checkMaxAllMove()
 				theKingIsBehind()
@@ -78,15 +80,17 @@ func _input(event):
 				
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
-		self.position = event.position
+		self.position = event.position - positionChessBoard
 		get_node("Area2D/CollisionShape2D").disabled = true
 		
 func move(dx, dy, maxMove) :
 	for f in range (1,maxMove):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
-		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
-		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
+		var newTargetCaseX = targetCaseX + positionChessBoard.x
+		var newTargetCaseY = targetCaseY + positionChessBoard.y
+		if global_position.x >= (Position.x - 50) + newTargetCaseX  and global_position.x <= (Position.x + 50) + newTargetCaseX \
+		and global_position.y >= (Position.y - 50) + newTargetCaseY and global_position.y <= (Position.y + 50) + newTargetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true\
 		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
@@ -105,8 +109,10 @@ func defenceMove(attacki,attackj):
 	print("Enter in defenceMove")
 	var targetCaseX = (attackj - j) * moveCase
 	var targetCaseY = (attacki - i) * moveCase
-	if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
-	and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
+	var newTargetCaseX = targetCaseX + positionChessBoard.x
+	var newTargetCaseY = targetCaseY + positionChessBoard.y
+	if global_position.x >= (Position.x - 50) + newTargetCaseX  and global_position.x <= (Position.x + 50) + newTargetCaseX \
+	and global_position.y >= (Position.y - 50) + newTargetCaseY and global_position.y <= (Position.y + 50) + newTargetCaseY \
 	and ((chessBoard[attacki][attackj] == "0" or "Black" in chessBoard[attacki][attackj]) and VariableGlobal.turnWhite == true\
 	or (chessBoard[attacki][attackj] == "0" or "White" in chessBoard[attacki][attackj]) and VariableGlobal.turnWhite == false):
 		self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
@@ -164,10 +170,10 @@ func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
 			if "Black" in pieceName and dragging == false :
-				get_node("/root/ChessBoard/" + pieceName).queue_free()
+				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
 		elif white == false and VariableGlobal.turnWhite == true:
 			if "White" in pieceName and dragging == false :
-				get_node("/root/ChessBoard/" + pieceName).queue_free()
+				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
 				
 func checkMaxMove(dx, dy):
 	for f in range (1,9):

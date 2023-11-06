@@ -50,6 +50,7 @@ func updateVariablePiecePromoted():
 				piece.Position = Vector2(((piece.j - 2) * 100) + 50, 750)
 			piece.nameOfPiece = pieceName
 			piece.initialPosition = false
+			piece.positionChessBoard = global_position
 			break
 
 func _on_pawn_promotion_turn(promoteInProgress):

@@ -137,13 +137,13 @@ func moveWithPinWhite():
 			if chessBoard[i-1][j+1] != "0":
 				move(1,-1)
 			if i == 5 and chessBoard[i][j-1].begins_with("PawnBlack")\
-			and get_node("/root/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
-				get_node("/root/ChessBoard/" + chessBoard[i][j-1]).queue_free()
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).queue_free()
 				chessBoard[i][j-1] = "0"
 				move(-1,-1)
 			if i == 5 and chessBoard[i][j+1].begins_with("PawnBlack")\
-			and get_node("/root/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
-				get_node("/root/ChessBoard/" + chessBoard[i][j+1]).queue_free()
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).queue_free()
 				chessBoard[i][j+1] = "0"
 				move(1,-1)
 			enPassant = false
@@ -193,13 +193,13 @@ func moveWithPinBlack():
 			if chessBoard[i+1][j+1] != "0":
 				move(1,1)
 			if i == 6 and chessBoard[i][j-1].begins_with("PawnWhite")\
-			and get_node("/root/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
-				get_node("/root/ChessBoard/" + chessBoard[i][j-1]).queue_free()
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).queue_free()
 				chessBoard[i][j-1] = "0"
 				move(-1,1)
 			if i == 6 and chessBoard[i][j+1].begins_with("PawnWhite")\
-			and get_node("/root/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
-				get_node("/root/ChessBoard/" + chessBoard[i][j+1]).queue_free()
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).queue_free()
 				chessBoard[i][j+1] = "0"
 				move(1,1)
 			enPassant = false
@@ -272,10 +272,10 @@ func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
 			if "Black" in pieceName and dragging == false :
-				get_node("/root/ChessBoard/" + pieceName).queue_free()
+				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
 		elif white == false and VariableGlobal.turnWhite == true:
 			if "White" in pieceName and dragging == false :
-				get_node("/root/ChessBoard/" + pieceName).queue_free()
+				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
 				
 func findDirectionAttackRow(dx, dy, rookColor, queenColor):
 	for f in range(1,9):
