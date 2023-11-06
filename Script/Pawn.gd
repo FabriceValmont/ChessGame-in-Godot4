@@ -9,6 +9,7 @@ var moveCase = VariableGlobal.oneMoveCase
 var chessBoard = VariableGlobal.chessBoard
 var i = 8
 var j = 2
+var positionChessBoard
 var Position = Vector2(50, 650)
 @onready var nameOfPiece = get_name()
 var initialPosition = true
@@ -26,6 +27,7 @@ var attackerPositionshift2J = 0
 
 func _ready():  
 	await get_tree().process_frame
+	positionChessBoard = get_parent().global_position
 	if self.position.y == 150 :
 		white = false
 		
@@ -35,7 +37,7 @@ func _ready():
 		for f in range(2, 9):
 			if nameOfPiece == "PawnWhite" + str(f) :
 				j = f + 1
-				Position.x = (50 + f * 100) - 100  
+				Position.x = ((50 + f * 100) - 100)
 				Position.y = 650
 	else:
 		i = 3
@@ -47,7 +49,7 @@ func _ready():
 		for f in range(2, 9):
 			if nameOfPiece == "PawnBlack" + str(f) :
 				j = f + 1
-				Position.x = (50 + f * 100) - 100  
+				Position.x = (50 + f * 100) - 100
 				Position.y = 150
 	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position)
 
@@ -63,11 +65,11 @@ func _input(event):
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
 	and promoteInProgress == false and VariableGlobal.checkmate == false:
-		if (event.position - self.position).length() < clickRadius:
+		if (event.position - self.position - positionChessBoard).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
 				dragging = true
-				dragOffset = event.position - self.position
+				dragOffset = event.position - self.position - positionChessBoard
 				z_index = 10
 				theKingIsBehind()
 		# Stop dragging if the button is released.
@@ -85,15 +87,17 @@ func _input(event):
 				
 	if event is InputEventMouseMotion and dragging:
 		# While dragging, move the sprite with the mouse.
-		self.position = event.position
+		self.position = event.position - positionChessBoard
 		get_node("Area2D/CollisionShape2D").disabled = true
 		
 func move(dx, dy) :
 	for f in range (1,2):
 		var targetCaseX = dx*(f*moveCase)
 		var targetCaseY = dy*(f*moveCase)
-		if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
-		and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
+		var newTargetCaseX = targetCaseX + positionChessBoard.x
+		var newTargetCaseY = targetCaseY + positionChessBoard.y
+		if global_position.x >= (Position.x - 50) + newTargetCaseX  and global_position.x <= (Position.x + 50) + newTargetCaseX \
+		and global_position.y >= (Position.y - 50) + newTargetCaseY and global_position.y <= (Position.y + 50) + newTargetCaseY \
 		and ((chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "Black" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == true and chessBoard[i+(dy*f)][j] == "0"\
 		or (chessBoard[i+(dy*f)][j+(dx*f)] == "0" or "White" in chessBoard[i+(dy*f)][j+(dx*f)]) and VariableGlobal.turnWhite == false and chessBoard[i+(dy*f)][j] == "0"):
 			self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))
@@ -229,8 +233,10 @@ func defenceMove(attacki,attackj):
 	print("Enter in defenceMove")
 	var targetCaseX = (attackj - j) * moveCase
 	var targetCaseY = (attacki - i) * moveCase
-	if global_position.x >= (Position.x - 50) + targetCaseX  and global_position.x <= (Position.x + 50) + targetCaseX \
-	and global_position.y >= (Position.y - 50) + targetCaseY and global_position.y <= (Position.y + 50) + targetCaseY \
+	var newTargetCaseX = targetCaseX + positionChessBoard.x
+	var newTargetCaseY = targetCaseY + positionChessBoard.y
+	if global_position.x >= (Position.x - 50) + newTargetCaseX  and global_position.x <= (Position.x + 50) + newTargetCaseX \
+	and global_position.y >= (Position.y - 50) + newTargetCaseY and global_position.y <= (Position.y + 50) + newTargetCaseY \
 	and ((chessBoard[attacki][attackj] == "0" or "Black" in chessBoard[attacki][attackj]) and VariableGlobal.turnWhite == true\
 	or (chessBoard[attacki][attackj] == "0" or "White" in chessBoard[attacki][attackj]) and VariableGlobal.turnWhite == false):
 		self.position = Vector2((Position.x + targetCaseX), (Position.y + targetCaseY))

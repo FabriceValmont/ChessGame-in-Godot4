@@ -28,7 +28,6 @@ func _ready():
 func _process(delta):
 	await get_tree().process_frame
 	if turnWhite == true:
-#		get_node("/root/ChessBoard/Camera2D").set_rotation_degrees(0)
 		if updateOfThePartsAttack == false:
 			updateAttackWhiteandBlack()
 			attackPiecesWhite()

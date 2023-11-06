@@ -11,7 +11,7 @@ func _process(delta):
 
 
 func _on_play_pressed():
-	get_tree().change_scene_to_file("res://Scene/chess_board.tscn")
+	get_tree().change_scene_to_file("res://Scene/gameScreen.tscn")
 
 
 func _on_editor_mod_pressed():
