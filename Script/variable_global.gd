@@ -367,17 +367,18 @@ func attackPiecesBlack():
 
 func enPassantFinish():
 	print("Enter in enPassantFinish")
-	var numberOfChildren = get_node("/root/ChessBoard").get_child_count()
+	if get_node("/root/ChessBoard") != null:
+		var numberOfChildren = get_node("/root/ChessBoard").get_child_count()
 	
-	for f in range(numberOfChildren):
-		var piece = get_node("/root/ChessBoard").get_child(f)
-		var pieceName = piece.get_name()
-		if turnWhite == true:
-			if pieceName.begins_with("PawnWhite"):
-				piece.enPassant = false
-		elif turnWhite == false:
-			if pieceName.begins_with("PawnBlack"):
-				piece.enPassant = false
+		for f in range(numberOfChildren):
+			var piece = get_node("/root/ChessBoard").get_child(f)
+			var pieceName = piece.get_name()
+			if turnWhite == true:
+				if pieceName.begins_with("PawnWhite"):
+					piece.enPassant = false
+			elif turnWhite == false:
+				if pieceName.begins_with("PawnBlack"):
+					piece.enPassant = false
 
 func findAttackerDirectionRow(chessBoard,kingNode,piece1,piece2):
 	var directions = ["Haut", "Bas", "Droite", "Gauche"]
@@ -1113,48 +1114,49 @@ func verificationStalemate(color,pawnColor,knightColor,bishopColor,rookColor,que
 		print("stalemate: ", stalemate)
 
 func verificationCheckAndCheckmate():
-	var KingWhite = get_node("/root/ChessBoard/KingWhite")
-	var KingBlack = get_node("/root/ChessBoard/KingBlack")
-	
-	print("Enter in verificationCheckAndCheckmate")
-	if turnWhite == true:
-		if attackPieceWhiteOnTheChessboard[KingBlack.i][KingBlack.j] == 0:
-			checkBlack = false
-			pieceProtectTheKing = false
-		if attackPieceBlackOnTheChessboard[KingWhite.i][KingWhite.j] >= 1:
-			checkWhite = true
-			
-			checkingDirectionOfAttack(chessBoard,KingWhite,"KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
-			print("directionOfAttack: ",directionOfAttack)
-			
-			verificationDefenderAllAttack("KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
-			
-			checkmateKing("PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",KingWhite,attackPieceBlackOnTheChessboard)
-			
-			if threatened == true:
-				checkmate = true
-				print("Echec et mat pour le roi blanc")
-			
-		print("King White check: ", checkWhite)
-		print("King Black check: ", checkBlack)
+	if get_node("/root/ChessBoard/KingWhite") != null:
+		var KingWhite = get_node("/root/ChessBoard/KingWhite")
+		var KingBlack = get_node("/root/ChessBoard/KingBlack")
 		
-	else:
-		if attackPieceBlackOnTheChessboard[KingWhite.i][KingWhite.j] == 0:
-			checkWhite = false
-			pieceProtectTheKing = false
-		if attackPieceWhiteOnTheChessboard[KingBlack.i][KingBlack.j] >= 1:
-			checkBlack = true
+		print("Enter in verificationCheckAndCheckmate")
+		if turnWhite == true:
+			if attackPieceWhiteOnTheChessboard[KingBlack.i][KingBlack.j] == 0:
+				checkBlack = false
+				pieceProtectTheKing = false
+			if attackPieceBlackOnTheChessboard[KingWhite.i][KingWhite.j] >= 1:
+				checkWhite = true
+				
+				checkingDirectionOfAttack(chessBoard,KingWhite,"KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
+				print("directionOfAttack: ",directionOfAttack)
+				
+				verificationDefenderAllAttack("KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
+				
+				checkmateKing("PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",KingWhite,attackPieceBlackOnTheChessboard)
+				
+				if threatened == true:
+					checkmate = true
+					print("Echec et mat pour le roi blanc")
+				
+			print("King White check: ", checkWhite)
+			print("King Black check: ", checkBlack)
 			
-			checkingDirectionOfAttack(chessBoard,KingBlack,"KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
-			print("directionOfAttack: ",directionOfAttack)
-			
-			verificationDefenderAllAttack("KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
-			
-			checkmateKing("PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",KingBlack,attackPieceWhiteOnTheChessboard)
-			
-			if threatened == true:
-				checkmate = true
-				print("Echec et mat pour le roi noir")
-			
-		print("King White check: ", checkWhite)
-		print("King Black check: ", checkBlack)
+		else:
+			if attackPieceBlackOnTheChessboard[KingWhite.i][KingWhite.j] == 0:
+				checkWhite = false
+				pieceProtectTheKing = false
+			if attackPieceWhiteOnTheChessboard[KingBlack.i][KingBlack.j] >= 1:
+				checkBlack = true
+				
+				checkingDirectionOfAttack(chessBoard,KingBlack,"KnightWhite","BishopWhite","RookWhite","QueenWhite","KingWhite")
+				print("directionOfAttack: ",directionOfAttack)
+				
+				verificationDefenderAllAttack("KnightBlack","BishopBlack","RookBlack","QueenBlack","KingBlack")
+				
+				checkmateKing("PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",KingBlack,attackPieceWhiteOnTheChessboard)
+				
+				if threatened == true:
+					checkmate = true
+					print("Echec et mat pour le roi noir")
+				
+			print("King White check: ", checkWhite)
+			print("King Black check: ", checkBlack)

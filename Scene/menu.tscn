@@ -1,8 +1,27 @@
 [gd_scene load_steps=2 format=3 uid="uid://b7lv6c8fb23jq"]
 
-[ext_resource type="PackedScene" uid="uid://dk1owigwb56dl" path="res://Scene/chess_board.tscn" id="1_8uy78"]
+[ext_resource type="Script" path="res://Script/menu.gd" id="1_1csow"]
 
-[node name="Menu" type="Node2D"]
+[node name="Menu" type="Control"]
+layout_mode = 3
+size_flags_horizontal = 4
+script = ExtResource("1_1csow")
 
-[node name="ChessBoard" parent="." instance=ExtResource("1_8uy78")]
-position = Vector2(50, 50)
+[node name="Play" type="Button" parent="."]
+layout_mode = 0
+offset_left = 399.0
+offset_top = 225.0
+offset_right = 476.0
+offset_bottom = 275.0
+text = "Jouer"
+
+[node name="EditorMod" type="Button" parent="."]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 317.0
+offset_right = 516.0
+offset_bottom = 361.0
+text = "Mode Edition"
+
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="EditorMod" to="." method="_on_editor_mod_pressed"]
