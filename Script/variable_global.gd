@@ -366,11 +366,11 @@ func attackPiecesBlack():
 
 func enPassantFinish():
 	print("Enter in enPassantFinish")
-	if get_node("/root/ChessBoard") != null:
-		var numberOfChildren = get_node("/root/ChessBoard").get_child_count()
+	if get_node("/root/gameScreen/ChessBoard") != null:
+		var numberOfChildren = get_node("/root/gameScreen/ChessBoard").get_child_count()
 	
 		for f in range(numberOfChildren):
-			var piece = get_node("/root/ChessBoard").get_child(f)
+			var piece = get_node("/root/gameScreen/ChessBoard").get_child(f)
 			var pieceName = piece.get_name()
 			if turnWhite == true:
 				if pieceName.begins_with("PawnWhite"):

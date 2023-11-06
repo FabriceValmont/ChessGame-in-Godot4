@@ -9,18 +9,18 @@ script = ExtResource("1_1csow")
 
 [node name="Play" type="Button" parent="."]
 layout_mode = 0
-offset_left = 399.0
-offset_top = 225.0
-offset_right = 476.0
-offset_bottom = 275.0
+offset_left = 456.0
+offset_top = 414.0
+offset_right = 533.0
+offset_bottom = 464.0
 text = "Jouer"
 
 [node name="EditorMod" type="Button" parent="."]
 layout_mode = 0
-offset_left = 360.0
-offset_top = 317.0
-offset_right = 516.0
-offset_bottom = 361.0
+offset_left = 417.0
+offset_top = 506.0
+offset_right = 573.0
+offset_bottom = 550.0
 text = "Mode Edition"
 
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
