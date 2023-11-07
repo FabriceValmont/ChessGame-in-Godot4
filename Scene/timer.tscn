@@ -12,10 +12,10 @@ autostart = true
 autostart = true
 
 [node name="TextTimerWhite" type="Label" parent="."]
-offset_left = 834.0
-offset_top = 932.0
-offset_right = 882.0
-offset_bottom = 958.0
+offset_left = 800.0
+offset_top = 930.0
+offset_right = 848.0
+offset_bottom = 956.0
 
 [node name="TextTimerBlack" type="Label" parent="."]
 offset_left = 110.0

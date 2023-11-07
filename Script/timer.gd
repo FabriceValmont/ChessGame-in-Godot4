@@ -2,10 +2,10 @@ extends Node2D
 
 var pathTextTimerWhite
 var pathTextTimerBlack 
-var timerWhiteSecondes = 60
+var timerWhiteSecondes = 600
 var timerWhiteMinutes = int(timerWhiteSecondes / 60)
 var whiteSecondsRemaining = timerWhiteSecondes % 60
-var timerBlackSecondes = 60
+var timerBlackSecondes = 600
 var timerBlackMinutes = int(timerBlackSecondes / 60)
 var blackSecondsRemaining = timerBlackSecondes % 60
 
