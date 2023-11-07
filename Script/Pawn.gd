@@ -114,7 +114,8 @@ func move(dx, dy) :
 				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
 			break
-		elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
+		elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
+		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
 			self.position = Vector2(Position.x, Position.y)
 			
 func moveWithPinWhite():
@@ -257,7 +258,8 @@ func defenceMove(attacki,attackj):
 		attackerPositionshift2I = 0
 		attackerPositionshift2J = 0
 		pieceProtectTheKing = false
-	elif global_position.x >= get_parent().texture.get_width() or global_position.y >= get_parent().texture.get_height() :
+	elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
+		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
 		self.position = Vector2(Position.x, Position.y)
 
 func moveFinal(checkColor,moveWithPinColor):
