@@ -17,3 +17,10 @@ func _on_play_pressed():
 
 func _on_editor_mod_pressed():
 	get_tree().change_scene_to_file("res://Scene/editorMod.tscn")
+
+
+func _on_check_button_pressed():
+	if get_node("Round").button_pressed ==  false:
+		VariableGlobalOption.roundOfThree = false
+	elif get_node("Round").button_pressed ==  true:
+		VariableGlobalOption.roundOfThree = true

@@ -24,5 +24,14 @@ offset_right = 573.0
 offset_bottom = 550.0
 text = "Mode Edition"
 
+[node name="Round" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 422.0
+offset_top = 468.0
+offset_right = 568.0
+offset_bottom = 499.0
+text = "Manche BO3"
+
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="EditorMod" to="." method="_on_editor_mod_pressed"]
+[connection signal="pressed" from="Round" to="." method="_on_check_button_pressed"]
