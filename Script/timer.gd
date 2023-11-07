@@ -2,10 +2,10 @@ extends Node2D
 
 var pathTextTimerWhite
 var pathTextTimerBlack 
-var timerWhiteSecondes = 5
+var timerWhiteSecondes = 600
 var timerWhiteMinutes = int(timerWhiteSecondes / 60)
 var whiteSecondsRemaining = timerWhiteSecondes % 60
-var timerBlackSecondes = 5
+var timerBlackSecondes = 600
 var timerBlackMinutes = int(timerBlackSecondes / 60)
 var blackSecondsRemaining = timerBlackSecondes % 60
 
@@ -34,6 +34,12 @@ func timer(_delta):
 					whiteSecondsRemaining = 0 #Le timer est terminé
 					VariableGlobal.checkmateWhite = true
 					VariableGlobal.checkmate = true
+					if VariableGlobalOption.roundOfThree == true:
+						VariableGlobal.turnWhite = true
+						VariableGlobal.updateOfThePartsAttack = false
+						VariableGlobal.pieceProtectTheKing = false
+						VariableGlobal.initialisingChessBoard()
+						VariableGlobal.initialisingAttackBoardWhiteAndBlack()
 		elif VariableGlobal.turnWhite == false :
 			blackSecondsRemaining -= _delta #Décompte des secondes
 			if blackSecondsRemaining < 0 : #Si les secondes atteignent 0
@@ -44,3 +50,9 @@ func timer(_delta):
 					blackSecondsRemaining = 0 #Le timer est terminé
 					VariableGlobal.checkmateBlack = true
 					VariableGlobal.checkmate = true
+					if VariableGlobalOption.roundOfThree == true:
+						VariableGlobal.turnWhite = true
+						VariableGlobal.updateOfThePartsAttack = false
+						VariableGlobal.pieceProtectTheKing = false
+						VariableGlobal.initialisingChessBoard()
+						VariableGlobal.initialisingAttackBoardWhiteAndBlack()

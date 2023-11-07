@@ -6,9 +6,9 @@ var pieceBlack = [null,null,"RookBlack","KnightBlack","BishopBlack","QueenBlack"
 var attackPieceWhiteOnTheChessboard = []
 var attackPieceBlackOnTheChessboard = []
 
+var gameLaunch = false
 var pathKingWhite
 var pathKingBlack
-var gameLaunch = false
 var oneMoveCase = 100
 var turnWhite = true
 var updateOfThePartsAttack = false
@@ -19,7 +19,7 @@ var checkWhite = false
 var checkBlack = false
 var pieceProtectTheKing = false
 var threatened = false
-var stalemate = true
+var stalemate = false
 var checkmateWhite = false
 var checkmateBlack = false
 var checkmate = false
@@ -1142,6 +1142,18 @@ func verificationCheckAndCheckmate():
 				checkmateWhite = true
 				checkmate = true
 				print("Echec et mat pour le roi blanc")
+				if VariableGlobalOption.roundOfThree == true:
+						VariableGlobalOption.scoreBlack += 1
+						turnWhite = true
+						updateOfThePartsAttack = false
+						pieceProtectTheKing = false
+						threatened = false
+						checkmateWhite = false
+						checkmate = false
+						initialisingChessBoard()
+						initialisingAttackBoardWhiteAndBlack()
+						get_tree().change_scene_to_file("res://Scene/gameScreen.tscn")
+				
 			
 		print("King White check: ", checkWhite)
 		print("King Black check: ", checkBlack)
@@ -1164,6 +1176,18 @@ func verificationCheckAndCheckmate():
 				checkmateBlack = true
 				checkmate = true
 				print("Echec et mat pour le roi noir")
+				if VariableGlobalOption.roundOfThree == true:
+						VariableGlobalOption.scoreWhite += 1
+						turnWhite = true
+						updateOfThePartsAttack = false
+						pieceProtectTheKing = false
+						threatened = false
+						checkmateBlack = false
+						checkmate = false
+						initialisingChessBoard()
+						initialisingAttackBoardWhiteAndBlack()
+						get_tree().change_scene_to_file("res://Scene/gameScreen.tscn")
+				
 			
 		print("King White check: ", checkWhite)
 		print("King Black check: ", checkBlack)

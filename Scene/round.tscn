@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cppdabhbp4hev"]
+
+[ext_resource type="Script" path="res://Script/round.gd" id="1_jgk3e"]
+
+[node name="Round" type="Node2D"]
+script = ExtResource("1_jgk3e")
+
+[node name="ScoreRoundWhite" type="Label" parent="."]
+offset_left = 706.0
+offset_top = 921.0
+offset_right = 764.0
+offset_bottom = 947.0
+
+[node name="ScoreRoundBlack" type="Label" parent="."]
+offset_left = 239.0
+offset_top = 45.0
+offset_right = 293.0
+offset_bottom = 71.0
