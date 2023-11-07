@@ -2,12 +2,13 @@ extends Node2D
 
 var pathTextTimerWhite
 var pathTextTimerBlack 
-var timerWhiteSecondes = 600
+var timerWhiteSecondes = 60
 var timerWhiteMinutes = int(timerWhiteSecondes / 60)
 var whiteSecondsRemaining = timerWhiteSecondes % 60
-var timerBlackSecondes = 600
+var timerBlackSecondes = 60
 var timerBlackMinutes = int(timerBlackSecondes / 60)
 var blackSecondsRemaining = timerBlackSecondes % 60
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,7 +19,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	timer(_delta)
+	if VariableGlobalOption.OpenMenu == false :
+		timer(_delta)
 
 func timer(_delta):
 	if get_node(pathTextTimerWhite) != null and get_node(pathTextTimerBlack) != null:

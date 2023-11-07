@@ -3,6 +3,7 @@ extends Node
 var roundOfThree = false
 var scoreWhite = 0
 var scoreBlack = 0
+var OpenMenu = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
