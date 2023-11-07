@@ -12,6 +12,7 @@ func _process(delta):
 
 func _on_play_pressed():
 	get_tree().change_scene_to_file("res://Scene/gameScreen.tscn")
+	VariableGlobal.gameLaunch = true
 
 
 func _on_editor_mod_pressed():
