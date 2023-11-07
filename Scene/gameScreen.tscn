@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvqyy2i46eb5v"]
+[gd_scene load_steps=6 format=3 uid="uid://bvqyy2i46eb5v"]
 
 [ext_resource type="PackedScene" uid="uid://dk1owigwb56dl" path="res://Scene/chess_board.tscn" id="1_867go"]
 [ext_resource type="PackedScene" uid="uid://8yq8uset58y6" path="res://Scene/timer.tscn" id="2_8fpir"]
 [ext_resource type="PackedScene" uid="uid://cppdabhbp4hev" path="res://Scene/round.tscn" id="3_cjper"]
 [ext_resource type="PackedScene" uid="uid://blu3cphe608kb" path="res://Scene/gameMenu.tscn" id="4_5a1u1"]
+[ext_resource type="PackedScene" uid="uid://dyxw1gnc2phsj" path="res://Scene/displayCheckmate.tscn" id="5_bgmvf"]
 
 [node name="gameScreen" type="Node2D"]
 
@@ -15,3 +16,5 @@ position = Vector2(100, 100)
 [node name="Round" parent="." instance=ExtResource("3_cjper")]
 
 [node name="GameMenu" parent="." instance=ExtResource("4_5a1u1")]
+
+[node name="DisplayCheckmate" parent="." instance=ExtResource("5_bgmvf")]

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyxw1gnc2phsj"]
+
+[ext_resource type="Script" path="res://Script/displayCheckmate.gd" id="1_53hdg"]
+
+[node name="DisplayCheckmate" type="Node2D"]
+script = ExtResource("1_53hdg")
+
+[node name="TextCheckmateWhite" type="Label" parent="."]
+offset_left = 37.0
+offset_top = 943.0
+offset_right = 77.0
+offset_bottom = 966.0
+
+[node name="TextCheckmateBlack" type="Label" parent="."]
+offset_left = 873.0
+offset_top = 29.0
+offset_right = 913.0
+offset_bottom = 52.0
