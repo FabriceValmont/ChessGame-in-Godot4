@@ -18,3 +18,5 @@ position = Vector2(100, 100)
 [node name="GameMenu" parent="." instance=ExtResource("4_5a1u1")]
 
 [node name="DisplayCheckmate" parent="." instance=ExtResource("5_bgmvf")]
+
+[node name="MovePreview" type="Node2D" parent="."]

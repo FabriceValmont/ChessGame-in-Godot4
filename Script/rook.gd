@@ -67,8 +67,10 @@ func _input(event):
 				z_index = 10
 				checkMaxAllMove()
 				theKingIsBehind()
+				previewMove()
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
+			deleteAllChildMovePreview()
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
 				moveFinal(VariableGlobal.checkWhite)
@@ -322,3 +324,18 @@ func theKingIsBehind():
 
 func get_promoteInProgress():
 	return promoteInProgress
+
+func previewMove():
+	var previewSprite = Sprite2D.new()
+	previewSprite.texture = load("res://Sprite/Piece/White/rook_white.png")
+	previewSprite.centered = true
+	previewSprite.position.x = Position.x + positionChessBoard.x
+	previewSprite.position.y = Position.y + positionChessBoard.y - 100
+	previewSprite.z_index = 10
+	previewSprite.modulate.a = 0.5
+	get_node("/root/gameScreen/MovePreview").add_child(previewSprite)
+
+func deleteAllChildMovePreview():
+	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
+	for f in range(numberOfChildren):
+		get_node("/root/gameScreen/MovePreview").get_child(f).queue_free()
