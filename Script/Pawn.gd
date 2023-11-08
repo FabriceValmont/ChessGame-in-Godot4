@@ -76,9 +76,9 @@ func _input(event):
 		if dragging and not event.pressed:
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
-				moveFinal(VariableGlobal.checkWhite,moveWithPinWhite())
+				moveFinal(VariableGlobal.checkWhite)
 			elif white == false and VariableGlobal.turnWhite == false:
-				moveFinal(VariableGlobal.checkBlack,moveWithPinBlack())
+				moveFinal(VariableGlobal.checkBlack)
 			self.position = Vector2(Position.x, Position.y)
 			dragging = false
 			z_index = 0
@@ -262,9 +262,12 @@ func defenceMove(attacki,attackj):
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
 		self.position = Vector2(Position.x, Position.y)
 
-func moveFinal(checkColor,moveWithPinColor):
+func moveFinal(checkColor):
 	if checkColor == false:
-		moveWithPinColor
+		if white == true:
+			moveWithPinWhite()
+		elif white == false:
+			moveWithPinBlack()
 	elif checkColor == true and pieceProtectTheKing == true:
 		if pieceProtectsAgainstAnAttack == false:
 			defenceMove(attackerPositionshiftI,attackerPositionshiftJ)

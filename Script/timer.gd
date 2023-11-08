@@ -26,7 +26,7 @@ func timer(_delta):
 	if get_node(pathTextTimerWhite) != null and get_node(pathTextTimerBlack) != null:
 		get_node(pathTextTimerWhite).set_text("Timer: " + str("%02d:%02d" % [timerWhiteMinutes, whiteSecondsRemaining]))
 		get_node(pathTextTimerBlack).set_text("Timer: " + str("%02d:%02d" % [timerBlackMinutes, blackSecondsRemaining]))
-		if VariableGlobal.turnWhite == true :
+		if VariableGlobal.turnWhite == true and VariableGlobal.checkmate == false :
 			whiteSecondsRemaining -= _delta #Décompte des secondes
 			if whiteSecondsRemaining < 0 : #Si les secondes atteignent 0
 				if timerWhiteMinutes > 0 : #Si des minutes restantes
@@ -42,7 +42,7 @@ func timer(_delta):
 						VariableGlobal.pieceProtectTheKing = false
 						VariableGlobal.initialisingChessBoard()
 						VariableGlobal.initialisingAttackBoardWhiteAndBlack()
-		elif VariableGlobal.turnWhite == false :
+		elif VariableGlobal.turnWhite == false and VariableGlobal.checkmate == false:
 			blackSecondsRemaining -= _delta #Décompte des secondes
 			if blackSecondsRemaining < 0 : #Si les secondes atteignent 0
 				if timerBlackMinutes > 0 : #Si des minutes restantes

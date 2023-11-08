@@ -28,9 +28,11 @@ func _on_abandon_pressed():
 	VariableGlobal.turnWhite = true
 	VariableGlobal.updateOfThePartsAttack = false
 	VariableGlobal.pieceProtectTheKing = false
+	VariableGlobal.checkmate = false
 	VariableGlobal.initialisingChessBoard()
 	VariableGlobal.initialisingAttackBoardWhiteAndBlack()
 	VariableGlobalOption.scoreWhite = 0
 	VariableGlobalOption.scoreBlack = 0
+	VariableGlobalOption.OpenMenu = false
 	get_tree().change_scene_to_file("res://Scene/menu.tscn")
 	
