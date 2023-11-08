@@ -28,30 +28,10 @@ var attackerPositionshift2J = 0
 func _ready():  
 	await get_tree().process_frame
 	positionChessBoard = get_parent().global_position
-	if self.position.y == 150 :
-		white = false
-		
-	if white == true:
-		set_name("PawnWhite")
-		nameOfPiece = get_name()
-		for f in range(2, 9):
-			if nameOfPiece == "PawnWhite" + str(f) :
-				j = f + 1
-				Position.x = ((50 + f * 100) - 100)
-				Position.y = 650
-	else:
-		i = 3
-		j = 2
-		Position = Vector2(50, 150)
-		texture = textureBlack
-		set_name("PawnBlack")
-		nameOfPiece = get_name()
-		for f in range(2, 9):
-			if nameOfPiece == "PawnBlack" + str(f) :
-				j = f + 1
-				Position.x = (50 + f * 100) - 100
-				Position.y = 150
-	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position)
+	if VariableGlobal.startWhite == true:
+		playWhite()
+	elif VariableGlobal.startWhite == false:
+		playBlack()
 
 func _process(delta):
 	pass
@@ -563,3 +543,70 @@ func resetLastMovePlay():
 		and get_parent().get_child(f).modulate.g == 0:
 			get_parent().get_child(f).modulate = Color(1, 1, 1, 1)
 			break
+
+func playWhite():
+	if self.position.y == 650 :
+		white = true
+	elif self.position.y == 150:
+		white = false
+		
+	if white == true:
+		set_name("PawnWhite")
+		nameOfPiece = get_name()
+		if nameOfPiece == "PawnWhite":
+			i = 8
+			j = 2
+			Position = Vector2(50, 650)
+		for f in range(2, 9):
+			if nameOfPiece == "PawnWhite" + str(f) :
+				j = f + 1
+				Position.x = ((50 + f * 100) - 100)
+				Position.y = 650
+	else:
+		i = 3
+		j = 2
+		Position = Vector2(50, 150)
+		texture = textureBlack
+		set_name("PawnBlack")
+		nameOfPiece = get_name()
+		for f in range(2, 9):
+			if nameOfPiece == "PawnBlack" + str(f) :
+				j = f + 1
+				Position.x = (50 + f * 100) - 100
+				Position.y = 150
+		
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+
+func playBlack():
+	if self.position.y == 650 :
+		white = false
+	elif self.position.y == 150:
+		white = true
+		
+	if white == true:
+		set_name("PawnWhite")
+		nameOfPiece = get_name()
+		if nameOfPiece == "PawnWhite":
+			i = 3
+			j = 2
+			Position = Vector2(50, 150)
+		for f in range(2, 9):
+			if nameOfPiece == "PawnWhite" + str(f) :
+				i = 3
+				j = f + 1
+				Position.x = ((50 + f * 100) - 100)
+				Position.y = 150
+	else:
+		i = 8
+		j = 2
+		Position = Vector2(50, 650)
+		texture = textureBlack
+		set_name("PawnBlack")
+		nameOfPiece = get_name()
+		for f in range(2, 9):
+			if nameOfPiece == "PawnBlack" + str(f) :
+				j = f + 1
+				Position.x = (50 + f * 100) - 100
+				Position.y = 650
+		
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )

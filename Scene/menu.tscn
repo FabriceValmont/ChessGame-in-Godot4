@@ -19,9 +19,9 @@ text = "Jouer"
 [node name="EditorMod" type="Button" parent="."]
 layout_mode = 0
 offset_left = 417.0
-offset_top = 506.0
+offset_top = 543.0
 offset_right = 573.0
-offset_bottom = 550.0
+offset_bottom = 587.0
 text = "Mode Edition"
 
 [node name="Round" type="CheckButton" parent="."]
@@ -32,6 +32,16 @@ offset_right = 568.0
 offset_bottom = 499.0
 text = "Manche BO3"
 
+[node name="StartColor" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 503.0
+offset_right = 567.0
+offset_bottom = 534.0
+text = "Black"
+alignment = 2
+
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="EditorMod" to="." method="_on_editor_mod_pressed"]
 [connection signal="pressed" from="Round" to="." method="_on_check_button_pressed"]
+[connection signal="pressed" from="StartColor" to="." method="_on_start_color_pressed"]

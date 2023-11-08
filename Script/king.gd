@@ -23,21 +23,10 @@ var promoteInProgress = false
 func _ready():
 	await get_tree().process_frame
 	positionChessBoard = get_parent().global_position
-	if self.position.y == 50 :
-		white = false
-		
-	if white == true:
-		set_name("KingWhite")
-		nameOfPiece = get_name()
-	else:
-		i = 2
-		j = 6
-		Position = Vector2(450, 50)
-		texture = textureBlack
-		set_name("KingBlack")
-		nameOfPiece = get_name()
-			
-	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+	if VariableGlobal.startWhite == true:
+		playWhite()
+	elif VariableGlobal.startWhite == false:
+		playBlack()
 
 func _process(delta):
 	pass
@@ -237,3 +226,49 @@ func resetLastMovePlay():
 		and get_parent().get_child(f).modulate.g == 0:
 			get_parent().get_child(f).modulate = Color(1, 1, 1, 1)
 			break
+
+func playWhite():
+	if self.position.y == 750 :
+		white = true
+	elif self.position.y == 50:
+		white = false
+		
+	if white == true:
+		set_name("KingWhite") #Si la pièce est déjà créer alors l'autre se nommera avec un chiffre à la fin
+		nameOfPiece = get_name()
+		if nameOfPiece == "KingWhite":
+			i = 9
+			j = 6
+			Position = Vector2(450,750)
+	else:
+		i = 2
+		j = 6
+		Position = Vector2(450, 50)
+		texture = textureBlack
+		set_name("KingBlack")
+		nameOfPiece = get_name()
+		
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+
+func playBlack():
+	if self.position.y == 750 :
+		white = false
+	elif self.position.y == 50:
+		white = true
+		
+	if white == true:
+		set_name("KingWhite") #Si la pièce est déjà créer alors l'autre se nommera avec un chiffre à la fin
+		nameOfPiece = get_name()
+		if nameOfPiece == "KingWhite":
+			i = 2
+			j = 6
+			Position = Vector2(450,50)
+	else:
+		i = 9
+		j = 6
+		Position = Vector2(450, 750)
+		texture = textureBlack
+		set_name("KingBlack")
+		nameOfPiece = get_name()
+		
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )

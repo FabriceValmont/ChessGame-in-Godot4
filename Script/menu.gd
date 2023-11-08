@@ -24,3 +24,10 @@ func _on_check_button_pressed():
 		VariableGlobalOption.roundOfThree = false
 	elif get_node("Round").button_pressed ==  true:
 		VariableGlobalOption.roundOfThree = true
+
+
+func _on_start_color_pressed():
+	if get_node("StartColor").button_pressed == false:
+		VariableGlobal.startWhite = true
+	elif get_node("StartColor").button_pressed ==  true:
+		VariableGlobal.startWhite = false

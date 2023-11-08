@@ -35,21 +35,10 @@ var attackerPositionshift3J = 0
 func _ready():
 	await get_tree().process_frame
 	positionChessBoard = get_parent().global_position
-	if self.position.y == 50 :
-		white = false
-		
-	if white == true:
-		set_name("QueenWhite")
-		nameOfPiece = get_name()
-	else:
-		i = 2
-		j = 5
-		Position = Vector2(350, 50)
-		texture = textureBlack
-		set_name("QueenBlack")
-		nameOfPiece = get_name()
-			
-	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+	if VariableGlobal.startWhite == true:
+		playWhite()
+	elif VariableGlobal.startWhite == false:
+		playBlack()
 
 func _process(delta):
 	pass
@@ -367,3 +356,49 @@ func resetLastMovePlay():
 		and get_parent().get_child(f).modulate.g == 0:
 			get_parent().get_child(f).modulate = Color(1, 1, 1, 1)
 			break
+
+func playWhite():
+	if self.position.y == 750 :
+		white = true
+	elif self.position.y == 50:
+		white = false
+		
+	if white == true:
+		set_name("QueenWhite") #Si la pièce est déjà créer alors l'autre se nommera avec un chiffre à la fin
+		nameOfPiece = get_name()
+		if nameOfPiece == "QueenWhite":
+			i = 9
+			j = 5
+			Position = Vector2(450,750)
+	else:
+		i = 2
+		j = 5
+		Position = Vector2(350, 50)
+		texture = textureBlack
+		set_name("QueenBlack")
+		nameOfPiece = get_name()
+		
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+
+func playBlack():
+	if self.position.y == 750 :
+		white = false
+	elif self.position.y == 50:
+		white = true
+		
+	if white == true:
+		set_name("QueenWhite") #Si la pièce est déjà créer alors l'autre se nommera avec un chiffre à la fin
+		nameOfPiece = get_name()
+		if nameOfPiece == "QueenWhite":
+			i = 2
+			j = 5
+			Position = Vector2(450,50)
+	else:
+		i = 9
+		j = 5
+		Position = Vector2(350, 750)
+		texture = textureBlack
+		set_name("QueenBlack")
+		nameOfPiece = get_name()
+		
+	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )

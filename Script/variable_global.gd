@@ -8,6 +8,7 @@ var attackPieceBlackOnTheChessboard = []
 
 var startWhite = true
 var gameLaunch = false
+var initialisationDone = false
 var pathKingWhite
 var pathKingBlack
 var oneMoveCase = 100
@@ -28,36 +29,40 @@ var checkmate = false
 func _ready():
 	await get_tree().process_frame
 	createBoard(12,12)
-	if startWhite == true :
-		initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
-	elif startWhite == false :
-		initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
 	createAttackBoardWhiteAndBlack(12,12)
-	initialisingAttackBoardWhiteAndBlack()
 	pathKingWhite = "/root/gameScreen/ChessBoard/KingWhite"
 	pathKingBlack = "/root/gameScreen/ChessBoard/KingBlack"
 	
 
 func _process(delta):
-	if turnWhite == true and gameLaunch == true:
-		if updateOfThePartsAttack == false:
-			updateAttackWhiteandBlack()
-			attackPiecesWhite()
-			attackPiecesBlack()
-			enPassantFinish()
-			verificationCheckAndCheckmate()
-			verificationStalemate("Black", "PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",attackPieceBlackOnTheChessboard)
-			updateOfThePartsAttack = true
+	if gameLaunch == true :
+		if initialisationDone == false:
+			if startWhite == true :
+				initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
+			elif startWhite == false :
+				initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
+			initialisingAttackBoardWhiteAndBlack()
+			initialisationDone = true
 			
-	elif turnWhite == false and gameLaunch == true:
-		if updateOfThePartsAttack == true:
-			updateAttackWhiteandBlack()
-			attackPiecesWhite()
-			attackPiecesBlack()
-			enPassantFinish()
-			verificationCheckAndCheckmate()
-			verificationStalemate("White", "PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",attackPieceWhiteOnTheChessboard)
-			updateOfThePartsAttack = false
+		if turnWhite == true:
+			if updateOfThePartsAttack == false:
+				updateAttackWhiteandBlack()
+				attackPiecesWhite()
+				attackPiecesBlack()
+				enPassantFinish()
+				verificationCheckAndCheckmate()
+				verificationStalemate("Black", "PawnWhite","KnightWhite","BishopWhite","RookWhite","QueenWhite",attackPieceBlackOnTheChessboard)
+				updateOfThePartsAttack = true
+				
+		elif turnWhite == false:
+			if updateOfThePartsAttack == true:
+				updateAttackWhiteandBlack()
+				attackPiecesWhite()
+				attackPiecesBlack()
+				enPassantFinish()
+				verificationCheckAndCheckmate()
+				verificationStalemate("White", "PawnBlack","KnightBlack","BishopBlack","RookBlack","QueenBlack",attackPieceWhiteOnTheChessboard)
+				updateOfThePartsAttack = false
 
 func createBoard(rowSize,columnSize):
 	for i in range(rowSize):
