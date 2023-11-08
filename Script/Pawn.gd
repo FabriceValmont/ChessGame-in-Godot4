@@ -115,6 +115,7 @@ func move(dx, dy) :
 			if promoteInProgress == false:
 				VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
+			get_node("SoundMovePiece").play()
 			resetLastMovePlay()
 			lastMovePlay()
 			break
@@ -262,6 +263,7 @@ func defenceMove(attacki,attackj):
 		attackerPositionshift2I = 0
 		attackerPositionshift2J = 0
 		pieceProtectTheKing = false
+		get_node("SoundMovePiece").play()
 		resetLastMovePlay()
 		lastMovePlay()
 	elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bs0bubiteqv4c"]
+[gd_scene load_steps=5 format=3 uid="uid://bs0bubiteqv4c"]
 
 [ext_resource type="Texture2D" uid="uid://bmtmgrni0a3nc" path="res://Sprite/Piece/White/queen_white.png" id="1_8g1ye"]
 [ext_resource type="Script" path="res://Script/queen.gd" id="2_73kd2"]
+[ext_resource type="AudioStream" uid="uid://qs3eil8a34hi" path="res://Sound/Sound_piece_move.mp3" id="3_j5ybm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mg3kx"]
 size = Vector2(50, 50)
@@ -15,5 +16,8 @@ script = ExtResource("2_73kd2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_mg3kx")
+
+[node name="SoundMovePiece" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_j5ybm")
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

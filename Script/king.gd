@@ -91,6 +91,7 @@ func move(dx, dy) :
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
+			get_node("SoundMovePiece").play()
 			resetLastMovePlay()
 			lastMovePlay()
 			break
@@ -137,6 +138,7 @@ func kingSizeCasteling(dx, dy, rookColor, attackColor):
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			get_node("SoundMovePiece").play()
 			resetLastMovePlay()
 			lastMovePlay()
 			emit_signal("kingSizeCastelingSignal")
@@ -162,6 +164,7 @@ func queenSizeCasteling(dx, dy, rookColor, attackColor):
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			get_node("SoundMovePiece").play()
 			resetLastMovePlay()
 			lastMovePlay()
 			emit_signal("queenSizeCastelingSignal")
