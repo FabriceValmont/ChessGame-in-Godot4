@@ -91,6 +91,8 @@ func move(dx, dy) :
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
+			resetLastMovePlay()
+			lastMovePlay()
 			break
 		elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
@@ -135,6 +137,8 @@ func kingSizeCasteling(dx, dy, rookColor, attackColor):
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			resetLastMovePlay()
+			lastMovePlay()
 			emit_signal("kingSizeCastelingSignal")
 		elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
@@ -158,6 +162,8 @@ func queenSizeCasteling(dx, dy, rookColor, attackColor):
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			initialPosition = false
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
+			resetLastMovePlay()
+			lastMovePlay()
 			emit_signal("queenSizeCastelingSignal")
 		elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
@@ -215,3 +221,16 @@ func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
 	for f in range(numberOfChildren):
 		get_node("/root/gameScreen/MovePreview").get_child(f).queue_free()
+
+func lastMovePlay():
+	modulate.r = 0
+	modulate.g = 0
+
+func resetLastMovePlay():
+	var numberOfChildren = get_parent().get_child_count()
+	
+	for f in range(numberOfChildren):
+		if get_parent().get_child(f).modulate.r == 0\
+		and get_parent().get_child(f).modulate.g == 0:
+			get_parent().get_child(f).modulate = Color(1, 1, 1, 1)
+			break

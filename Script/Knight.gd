@@ -101,6 +101,8 @@ func move(dx, dy) :
 			chessBoard[i][j] = nameOfPiece.replace("@", "")
 			VariableGlobal.turnWhite = !VariableGlobal.turnWhite
 			initialPosition = false
+			resetLastMovePlay()
+			lastMovePlay()
 			break
 		elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
@@ -129,6 +131,8 @@ func defenceMove(attacki,attackj):
 		attackerPositionshift2I = 0
 		attackerPositionshift2J = 0
 		pieceProtectTheKing = false
+		resetLastMovePlay()
+		lastMovePlay()
 	elif global_position.x >= get_parent().texture.get_width() + positionChessBoard.x\
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
 		self.position = Vector2(Position.x, Position.y)
@@ -313,3 +317,15 @@ func deleteAllChildMovePreview():
 	for f in range(numberOfChildren):
 		get_node("/root/gameScreen/MovePreview").get_child(f).queue_free()
 
+func lastMovePlay():
+	modulate.r = 0
+	modulate.g = 0
+
+func resetLastMovePlay():
+	var numberOfChildren = get_parent().get_child_count()
+	
+	for f in range(numberOfChildren):
+		if get_parent().get_child(f).modulate.r == 0\
+		and get_parent().get_child(f).modulate.g == 0:
+			get_parent().get_child(f).modulate = Color(1, 1, 1, 1)
+			break
