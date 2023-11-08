@@ -67,8 +67,10 @@ func _input(event):
 				z_index = 10
 				checkMaxAllMove()
 				theKingIsBehind()
+				previewAllMove()
 		# Stop dragging if the button is released.
 		if dragging and not event.pressed:
+			deleteAllChildMovePreview()
 			get_node("Area2D/CollisionShape2D").disabled = false
 			if white == true and VariableGlobal.turnWhite == true:
 				moveFinal(VariableGlobal.checkWhite)
@@ -284,3 +286,43 @@ func theKingIsBehind():
 
 func get_promoteInProgress():
 	return promoteInProgress
+
+func createNewPieceMovePreview(dx,dy,f,color):
+	var previewSprite = Sprite2D.new()
+	previewSprite.texture = load("res://Sprite/Piece/"+ color + "/bishop_" + color.to_lower() +  ".png")
+	previewSprite.centered = true
+	previewSprite.position.x = Position.x + positionChessBoard.x + (100 * f*dx)
+	previewSprite.position.y = Position.y + positionChessBoard.y + (100 * f*dy)
+	previewSprite.z_index = 9
+	previewSprite.modulate.a = 0.5
+	get_node("/root/gameScreen/MovePreview").add_child(previewSprite)
+
+func previewMove(dx, dy, color, color2):
+	for f in range (1,8):
+		if chessBoard[i+(f*dy)][j+(f*dx)] == "x":
+			break
+		if chessBoard[i+(f*dy)][j+(f*dx)] == "0":
+			createNewPieceMovePreview(dx,dy,f,color)
+		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color2 in chessBoard[i+(f*dy)][j+(f*dx)]:
+			createNewPieceMovePreview(dx,dy,f,color)
+			break
+		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color in chessBoard[i+(f*dy)][j+(f*dx)]:
+			break
+			
+			
+func previewAllMove():
+	if white == true:
+		previewMove(1, -1, "White", "Black")
+		previewMove(-1, 1, "White", "Black")
+		previewMove(-1, -1, "White", "Black")
+		previewMove(1, 1, "White", "Black")
+	elif white == false:
+		previewMove(1, -1, "Black", "White")
+		previewMove(-1, 1, "Black", "White")
+		previewMove(-1, -1, "Black", "White")
+		previewMove(1, 1, "Black", "White")
+
+func deleteAllChildMovePreview():
+	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
+	for f in range(numberOfChildren):
+		get_node("/root/gameScreen/MovePreview").get_child(f).queue_free()
