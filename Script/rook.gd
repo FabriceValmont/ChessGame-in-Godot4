@@ -383,3 +383,27 @@ func resetLastMovePlay():
 		and get_parent().get_child(f).modulate.g == 0:
 			get_parent().get_child(f).modulate = Color(1, 1, 1, 1)
 			break
+
+func playWhite():
+	if VariableGlobalOption.startWhite == true :
+		if self.position.y == 50 :
+			white = false
+			
+		if white == true:
+			set_name("RookWhite")
+			nameOfPiece = get_name()
+			if nameOfPiece == "RookWhite2":
+				i = 9
+				j = 9
+				Position = Vector2(750,750)
+		else:
+			i = 2
+			j = 2
+			Position = Vector2(50, 50)
+			texture = textureBlack
+			set_name("RookBlack")
+			nameOfPiece = get_name()
+			if nameOfPiece == "RookBlack2":
+				i = 2
+				j = 9
+				Position = Vector2(750,50)

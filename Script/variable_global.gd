@@ -6,6 +6,7 @@ var pieceBlack = [null,null,"RookBlack","KnightBlack","BishopBlack","QueenBlack"
 var attackPieceWhiteOnTheChessboard = []
 var attackPieceBlackOnTheChessboard = []
 
+var startWhite = true
 var gameLaunch = false
 var pathKingWhite
 var pathKingBlack
@@ -27,7 +28,10 @@ var checkmate = false
 func _ready():
 	await get_tree().process_frame
 	createBoard(12,12)
-	initialisingChessBoard()
+	if startWhite == true :
+		initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
+	elif startWhite == false :
+		initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
 	createAttackBoardWhiteAndBlack(12,12)
 	initialisingAttackBoardWhiteAndBlack()
 	pathKingWhite = "/root/gameScreen/ChessBoard/KingWhite"
@@ -64,22 +68,22 @@ func createBoard(rowSize,columnSize):
 	#	print(chessBoard)
 	#	print("ChessBoard created. Size: ", rowSize, "x", columnSize)
 
-func initialisingChessBoard():
+func initialisingChessBoard(pawnColor, pawnColor2, pieceColor, pieceColor2):
 	for i in range(2,3):
 		for j in range(2,10):
-			chessBoard[i][j] = pieceBlack[j]
+			chessBoard[i][j] = pieceColor[j]
 	for j in range(3, 10):
-		chessBoard[3][2] = "PawnBlack"
-		chessBoard[3][j] = "PawnBlack" + str(j-1)
+		chessBoard[3][2] = pawnColor
+		chessBoard[3][j] = pawnColor + str(j-1)
 	for i in range(4,8): 
 		for j in range(2,10):
 			chessBoard[i][j] = "0"
 	for j in range(3, 10):
-		chessBoard[8][2] = "PawnWhite"
-		chessBoard[8][j] = "PawnWhite" + str(j-1)
+		chessBoard[8][2] = pawnColor2
+		chessBoard[8][j] = pawnColor2 + str(j-1)
 	for i in range(9,10): 
 		for j in range(2,10):
-			chessBoard[i][j] = pieceWhite[j]
+			chessBoard[i][j] = pieceColor2[j]
 	for i in range(0,12):
 		for j in range(0,12):
 			if chessBoard[i][j] ==  null:
@@ -1150,7 +1154,10 @@ func verificationCheckAndCheckmate():
 						threatened = false
 						checkmateWhite = false
 						checkmate = false
-						initialisingChessBoard()
+						if startWhite == true :
+							initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
+						elif startWhite == false :
+							initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
 						initialisingAttackBoardWhiteAndBlack()
 						get_tree().change_scene_to_file("res://Scene/gameScreen.tscn")
 				
@@ -1184,7 +1191,10 @@ func verificationCheckAndCheckmate():
 						threatened = false
 						checkmateBlack = false
 						checkmate = false
-						initialisingChessBoard()
+						if startWhite == true :
+							initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
+						elif startWhite == false :
+							initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
 						initialisingAttackBoardWhiteAndBlack()
 						get_tree().change_scene_to_file("res://Scene/gameScreen.tscn")
 				

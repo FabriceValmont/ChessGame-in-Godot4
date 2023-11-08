@@ -29,7 +29,10 @@ func _on_abandon_pressed():
 	VariableGlobal.updateOfThePartsAttack = false
 	VariableGlobal.pieceProtectTheKing = false
 	VariableGlobal.checkmate = false
-	VariableGlobal.initialisingChessBoard()
+	if VariableGlobal.startWhite == true :
+		VariableGlobal.initialisingChessBoard("PawnBlack", "PawnWhite", VariableGlobal.pieceBlack, VariableGlobal.pieceWhite)
+	elif VariableGlobal.startWhite == false :
+		VariableGlobal.initialisingChessBoard("PawnWhite", "PawnBlack", VariableGlobal.pieceWhite, VariableGlobal.pieceBlack)
 	VariableGlobal.initialisingAttackBoardWhiteAndBlack()
 	VariableGlobalOption.scoreWhite = 0
 	VariableGlobalOption.scoreBlack = 0
