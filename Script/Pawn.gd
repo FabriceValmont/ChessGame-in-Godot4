@@ -509,27 +509,36 @@ func previewMove(dx, dy, color, color2):
 	for f in range (1,2):
 		if chessBoard[i+(f*dy)][j+(f*dx)] == "x":
 			break
-		if chessBoard[i+(f*dy)][j+(f*dx)] == "0":
+		if chessBoard[i+(f*dy)][j+(f*dx)] == "0" and dx == 0 :
 			createNewPieceMovePreview(dx,dy,f,color)
 		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color2 in chessBoard[i+(f*dy)][j+(f*dx)]:
 			createNewPieceMovePreview(dx,dy,f,color)
-			break
 		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color in chessBoard[i+(f*dy)][j+(f*dx)]:
 			break
 			
 			
 func previewAllMove():
 	if white == true:
-		previewMove(0, -1, "White", "Black")
-		previewMove(0, -2, "White", "Black")
-		previewMove(-1, -1, "White", "Black")
-		previewMove(1, -1, "White", "Black")
+		if initialPosition == true :
+			previewMove(0, -1, "White", "Black")
+			previewMove(0, -2, "White", "Black")
+			previewMove(-1, -1, "White", "Black")
+			previewMove(1, -1, "White", "Black")
+		elif initialPosition == false :
+			previewMove(0, -1, "White", "Black")
+			previewMove(-1, -1, "White", "Black")
+			previewMove(1, -1, "White", "Black")
 		
 	elif white == false:
-		previewMove(0, 1, "Black", "White")
-		previewMove(0, 2, "Black", "White")
-		previewMove(-1, 1, "Black", "White")
-		previewMove(1, 1, "Black", "White")
+		if initialPosition == true :
+			previewMove(0, 1, "Black", "White")
+			previewMove(0, 2, "Black", "White")
+			previewMove(-1, 1, "Black", "White")
+			previewMove(1, 1, "Black", "White")
+		elif initialPosition == false :
+			previewMove(0, 1, "Black", "White")
+			previewMove(-1, 1, "Black", "White")
+			previewMove(1, 1, "Black", "White")
 
 func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
