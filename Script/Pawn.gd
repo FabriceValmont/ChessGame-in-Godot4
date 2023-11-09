@@ -103,116 +103,116 @@ func move(dx, dy) :
 		 or global_position.y >= get_parent().texture.get_height() + positionChessBoard.y :
 			self.position = Vector2(Position.x, Position.y)
 			
-func moveWithPinWhite():
+func moveWithPinWhite(dx,dy,enPassantI):
 	if pieceProtectsAgainstAnAttack == false:
 		if initialPosition == true:
-			if chessBoard[i-1][j] == "0":
-				move(0,-1)
-			if chessBoard[i-2][j] == "0":
-				move(0,-2)
-			if chessBoard[i-1][j-1] != "0":
-				move(-1,-1)
-			if chessBoard[i-1][j+1] != "0":
-				move(1,-1)
+			if chessBoard[i+dy][j] == "0":
+				move(0,dy)
+			if chessBoard[i+dy*2][j] == "0":
+				move(0,dy*2)
+			if chessBoard[i+dy][j-dx] != "0":
+				move(-dx,dy)
+			if chessBoard[i+dy][j+dx] != "0":
+				move(dx,dy)
 			enPassant = true
 		else :
-			if chessBoard[i-1][j] == "0":
-				move(0,-1)
-			if chessBoard[i-1][j-1] != "0":
-				move(-1,-1)
-			if chessBoard[i-1][j+1] != "0":
-				move(1,-1)
-			if i == 5 and chessBoard[i][j-1].begins_with("PawnBlack")\
-			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
-				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).queue_free()
-				chessBoard[i][j-1] = "0"
-				move(-1,-1)
-			if i == 5 and chessBoard[i][j+1].begins_with("PawnBlack")\
-			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
-				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).queue_free()
-				chessBoard[i][j+1] = "0"
-				move(1,-1)
+			if chessBoard[i+dy][j] == "0":
+				move(0,dy)
+			if chessBoard[i+dy][j-dx] != "0":
+				move(-dx,dy)
+			if chessBoard[i+dy][j+dx] != "0":
+				move(dx,dy)
+			if i == enPassantI and chessBoard[i][j-dx].begins_with("PawnBlack")\
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).queue_free()
+				chessBoard[i][j-dx] = "0"
+				move(-dx,dy)
+			if i == enPassantI and chessBoard[i][j+dx].begins_with("PawnBlack")\
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).queue_free()
+				chessBoard[i][j+dx] = "0"
+				move(dx,dy)
 			enPassant = false
 	elif pieceProtectsAgainstAnAttack == true:
 		if initialPosition == true:
 			if directionAttackProtectKing == "Haut":
-				if chessBoard[i-1][j] == "0":
-					move(0,-1)
-				if chessBoard[i-2][j] == "0":
-					move(0,-2)
+				if chessBoard[i+dy][j] == "0":
+					move(0,dy)
+				if chessBoard[i+dy*2][j] == "0":
+					move(0,dy*2)
 			elif directionAttackProtectKing == "Haut/Gauche":
-				if chessBoard[i-1][j-1] != "0":
-					move(-1,-1)
+				if chessBoard[i+dy][j-dx] != "0":
+					move(-dx,dy)
 			elif directionAttackProtectKing == "Haut/Droite":
-				if chessBoard[i-1][j+1] != "0":
-					move(1,-1)
+				if chessBoard[i+dy][j+dx] != "0":
+					move(dx,dy)
 			enPassant = true
 		else :
 			if directionAttackProtectKing == "Haut":
-				if chessBoard[i-1][j] == "0":
-					move(0,-1)
+				if chessBoard[i+dy][j] == "0":
+					move(0,dy)
 			elif directionAttackProtectKing == "Haut/Gauche":
-				if chessBoard[i-1][j-1] != "0":
-					move(-1,-1)
+				if chessBoard[i+dy][j-dx] != "0":
+					move(-dx,dy)
 			elif directionAttackProtectKing == "Haut/Droite":
-				if chessBoard[i-1][j+1] != "0":
-					move(1,-1)
+				if chessBoard[i+dy][j+dx] != "0":
+					move(dx,dy)
 			enPassant = false
 
-func moveWithPinBlack():
+func moveWithPinBlack(dx,dy,enPassantI):
 	if pieceProtectsAgainstAnAttack == false:
 		if initialPosition == true:
-			if chessBoard[i+1][j] == "0":
-				move(0,1)
-			if chessBoard[i+2][j] == "0":
-				move(0,2)
-			if chessBoard[i+1][j-1] != "0":
-				move(-1,1)
-			if chessBoard[i+1][j+1] != "0":
-				move(1,1)
+			if chessBoard[i+dy][j] == "0":
+				move(0,dy)
+			if chessBoard[i+dy*2][j] == "0":
+				move(0,dy*2)
+			if chessBoard[i+dy][j-dx] != "0":
+				move(-dx,dy)
+			if chessBoard[i+dy][j+dx] != "0":
+				move(dx,dy)
 			enPassant = true
 		else :
-			if chessBoard[i+1][j] == "0":
-				move(0,1)
-			if chessBoard[i+1][j-1] != "0":
-				move(-1,1)
-			if chessBoard[i+1][j+1] != "0":
-				move(1,1)
-			if i == 6 and chessBoard[i][j-1].begins_with("PawnWhite")\
-			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).enPassant == true:
-				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-1]).queue_free()
-				chessBoard[i][j-1] = "0"
-				move(-1,1)
-			if i == 6 and chessBoard[i][j+1].begins_with("PawnWhite")\
-			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).enPassant == true:
-				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+1]).queue_free()
-				chessBoard[i][j+1] = "0"
-				move(1,1)
+			if chessBoard[i+dy][j] == "0":
+				move(0,dy)
+			if chessBoard[i+dy][j-dx] != "0":
+				move(-dx,dy)
+			if chessBoard[i+dy][j+dx] != "0":
+				move(dx,dy)
+			if i == enPassantI and chessBoard[i][j-1].begins_with("PawnWhite")\
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).queue_free()
+				chessBoard[i][j-dx] = "0"
+				move(-dx,dy)
+			if i == enPassantI and chessBoard[i][j+1].begins_with("PawnWhite")\
+			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).enPassant == true:
+				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).queue_free()
+				chessBoard[i][j+dx] = "0"
+				move(dx,dy)
 			enPassant = false
 	elif pieceProtectsAgainstAnAttack == true:
 		if initialPosition == true:
 			if directionAttackProtectKing == "Bas":
-				if chessBoard[i+1][j] == "0":
-					move(0,1)
-				if chessBoard[i+2][j] == "0":
-					move(0,2)
+				if chessBoard[i+dy][j] == "0":
+					move(0,dy)
+				if chessBoard[i+dy*2][j] == "0":
+					move(0,dy*2)
 			elif directionAttackProtectKing == "Bas/Gauche":
-				if chessBoard[i+1][j-1] != "0":
-					move(-1,1)
+				if chessBoard[i+dy][j-dx] != "0":
+					move(-dx,dy)
 			elif directionAttackProtectKing == "Bas/Droite":
-				if chessBoard[i+1][j+1] != "0":
-					move(1,1)
+				if chessBoard[i+dy][j+dx] != "0":
+					move(dx,dy)
 			enPassant = true
 		else :
 			if directionAttackProtectKing == "Bas":
-				if chessBoard[i+1][j] == "0":
-					move(0,1)
+				if chessBoard[i+dy][j] == "0":
+					move(0,dy)
 			elif directionAttackProtectKing == "Bas/Gauche":
-				if chessBoard[i+1][j-1] != "0":
-					move(-1,1)
+				if chessBoard[i+dy][j-dx] != "0":
+					move(-dx,dy)
 			elif directionAttackProtectKing == "Bas/Droite":
-				if chessBoard[i+1][j+1] != "0":
-					move(1,1)
+				if chessBoard[i+dy][j+dx] != "0":
+					move(dx,dy)
 			enPassant = false
 
 func defenceMove(attacki,attackj):
@@ -251,15 +251,26 @@ func defenceMove(attacki,attackj):
 		self.position = Vector2(Position.x, Position.y)
 
 func moveFinal(checkColor):
-	if checkColor == false:
-		if white == true:
-			moveWithPinWhite()
-		elif white == false:
-			moveWithPinBlack()
-	elif checkColor == true and pieceProtectTheKing == true:
-		if pieceProtectsAgainstAnAttack == false:
-			defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
-			defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+	if VariableGlobal.startWhite == true:
+		if checkColor == false:
+			if white == true:
+				moveWithPinWhite(1,-1,5) #Le premier paramètre restera toujours 1, le 2nd doit varier entre 1 et -1 (bas/haut).
+			elif white == false:
+				moveWithPinBlack(1,1,6) #Le premier paramètre restera toujours 1, le 2nd doit varier entre 1 et -1 (bas/haut).
+		elif checkColor == true and pieceProtectTheKing == true:
+			if pieceProtectsAgainstAnAttack == false:
+				defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+				defenceMove(attackerPositionshift2I,attackerPositionshift2J)
+	if VariableGlobal.startWhite == false:
+		if checkColor == false:
+			if white == true:
+				moveWithPinWhite(1,1,6)
+			elif white == false:
+				moveWithPinBlack(1,-1,5)
+		elif checkColor == true and pieceProtectTheKing == true:
+			if pieceProtectsAgainstAnAttack == false:
+				defenceMove(attackerPositionshiftI,attackerPositionshiftJ)
+				defenceMove(attackerPositionshift2I,attackerPositionshift2J)
 
 func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()

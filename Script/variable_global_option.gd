@@ -40,6 +40,7 @@ func _process(_delta):
 				
 				# Ajouter le sprite comme enfant du nœud gameScreen
 				get_node("/root/gameScreen").add_child(deadSprite)
+				break
 				
 		for piece_data in piecesWhite:
 			var piece_type = piece_data[0]  # Type de la pièce (Pawn, Knight, Bishop, Rook, Queen)
@@ -59,4 +60,5 @@ func _process(_delta):
 				
 				# Ajouter le sprite comme enfant du nœud gameScreen
 				get_node("/root/gameScreen").add_child(deadSprite)
+				break
 
