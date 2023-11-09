@@ -228,7 +228,7 @@ func findtheKingIsBehind(dx, dy, kingColor):
 		if chessBoard[i+(dy*f)][j+(dx*f)] == "x":
 			break
 		elif chessBoard[i+(dy*f)][j+(dx*f)] != "0":
-			if chessBoard[i+(dy*f)][j+(dx*f)].begins_with(kingColor):
+			if chessBoard[i+(dy*f)][j+(dx*f)] == kingColor:
 				pieceProtectsAgainstAnAttack = true
 				break
 			else:
@@ -260,16 +260,16 @@ func theKingIsBehind():
 		findtheKingIsBehind(1, 0, kingColor)
 	elif directionAttackProtectKing == "Haut/Droite":
 		#On cherche vers le Bas/Gauche
-		findtheKingIsBehind(1, -1, kingColor)
+		findtheKingIsBehind(-1, 1, kingColor)
 	elif directionAttackProtectKing == "Haut/Gauche":
 		#On cherche vers le Bas/Droite
-		findtheKingIsBehind(-1, -1, kingColor)
+		findtheKingIsBehind(1, 1, kingColor)
 	elif directionAttackProtectKing == "Bas/Droite":
 		#On cherche vers le Haut/Gauche
-		findtheKingIsBehind(1, 1, kingColor)
+		findtheKingIsBehind(-1, -1, kingColor)
 	elif directionAttackProtectKing == "Bas/Gauche":
 		#On cherche vers le Haut/Droite
-		findtheKingIsBehind(-1, 1, kingColor)
+		findtheKingIsBehind(1, -1, kingColor)
 
 func get_promoteInProgress():
 	return promoteInProgress
