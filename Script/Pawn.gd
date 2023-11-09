@@ -116,12 +116,6 @@ func moveWithPinWhite(dx,dy,enPassantI):
 				move(dx,dy)
 			enPassant = true
 		else :
-			if chessBoard[i+dy][j] == "0":
-				move(0,dy)
-			if chessBoard[i+dy][j-dx] != "0":
-				move(-dx,dy)
-			if chessBoard[i+dy][j+dx] != "0":
-				move(dx,dy)
 			if i == enPassantI and chessBoard[i][j-dx].begins_with("PawnBlack")\
 			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).enPassant == true:
 				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).queue_free()
@@ -131,6 +125,12 @@ func moveWithPinWhite(dx,dy,enPassantI):
 			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).enPassant == true:
 				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).queue_free()
 				chessBoard[i][j+dx] = "0"
+				move(dx,dy)
+			if chessBoard[i+dy][j] == "0":
+				move(0,dy)
+			if chessBoard[i+dy][j-dx] != "0":
+				move(-dx,dy)
+			if chessBoard[i+dy][j+dx] != "0":
 				move(dx,dy)
 			enPassant = false
 	elif pieceProtectsAgainstAnAttack == true:
@@ -172,12 +172,6 @@ func moveWithPinBlack(dx,dy,enPassantI):
 				move(dx,dy)
 			enPassant = true
 		else :
-			if chessBoard[i+dy][j] == "0":
-				move(0,dy)
-			if chessBoard[i+dy][j-dx] != "0":
-				move(-dx,dy)
-			if chessBoard[i+dy][j+dx] != "0":
-				move(dx,dy)
 			if i == enPassantI and chessBoard[i][j-1].begins_with("PawnWhite")\
 			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).enPassant == true:
 				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j-dx]).queue_free()
@@ -187,6 +181,12 @@ func moveWithPinBlack(dx,dy,enPassantI):
 			and get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).enPassant == true:
 				get_node("/root/gameScreen/ChessBoard/" + chessBoard[i][j+dx]).queue_free()
 				chessBoard[i][j+dx] = "0"
+				move(dx,dy)
+			if chessBoard[i+dy][j] == "0":
+				move(0,dy)
+			if chessBoard[i+dy][j-dx] != "0":
+				move(-dx,dy)
+			if chessBoard[i+dy][j+dx] != "0":
 				move(dx,dy)
 			enPassant = false
 	elif pieceProtectsAgainstAnAttack == true:
