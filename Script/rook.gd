@@ -322,30 +322,51 @@ func createNewPieceMovePreview(dx,dy,f,color):
 	previewSprite.modulate.a = 0.5
 	get_node("/root/gameScreen/MovePreview").add_child(previewSprite)
 
-func previewMove(dx, dy, color, color2):
-	for f in range (1,8):
-		if chessBoard[i+(f*dy)][j+(f*dx)] == "x":
-			break
-		if chessBoard[i+(f*dy)][j+(f*dx)] == "0":
-			createNewPieceMovePreview(dx,dy,f,color)
-		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color2 in chessBoard[i+(f*dy)][j+(f*dx)]:
-			createNewPieceMovePreview(dx,dy,f,color)
-			break
-		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color in chessBoard[i+(f*dy)][j+(f*dx)]:
-			break
+
+func createNewPieceDefenceMovePreview(attackI, attackJ, color):
+	var previewSprite = Sprite2D.new()
+	previewSprite.texture = load("res://Sprite/Piece/"+ color + "/rook_" + color.to_lower() +  ".png")
+	previewSprite.centered = true
+	previewSprite.position.x = Position.x + positionChessBoard.x + (100 * (attackJ - j))
+	previewSprite.position.y = Position.y + positionChessBoard.y + (100 * (attackI - i))
+	previewSprite.z_index = 9
+	previewSprite.modulate.a = 0.5
+	get_node("/root/gameScreen/MovePreview").add_child(previewSprite)
+
+func previewMove(dx, dy, color, color2, attackI, attackJ, attack2I, attack2J):
+	if (VariableGlobal.checkWhite == false and white == true)\
+	or (VariableGlobal.checkBlack == false and white == false):
+		for f in range (1,8):
+			if chessBoard[i+(f*dy)][j+(f*dx)] == "x":
+				break
+			if chessBoard[i+(f*dy)][j+(f*dx)] == "0":
+				createNewPieceMovePreview(dx,dy,f,color)
+			elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color2 in chessBoard[i+(f*dy)][j+(f*dx)]:
+				createNewPieceMovePreview(dx,dy,f,color)
+				break
+			elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color in chessBoard[i+(f*dy)][j+(f*dx)]:
+				break
+	elif (VariableGlobal.checkWhite == true and white == true)\
+	or (VariableGlobal.checkBlack == true and white == false):
+		if chessBoard[attackI][attackJ] == "0"\
+		or chessBoard[attackI][attackJ] != "0":
+			createNewPieceDefenceMovePreview(attackI, attackJ, color)
+		if chessBoard[attack2I][attack2J] == "0"\
+		or chessBoard[attack2I][attack2J] != "0":
+			createNewPieceDefenceMovePreview(attack2I, attack2J, color)
 			
 			
 func previewAllMove():
 	if white == true:
-		previewMove(0, -1, "White", "Black")
-		previewMove(0, 1, "White", "Black")
-		previewMove(-1, 0, "White", "Black")
-		previewMove(1, 0, "White", "Black")
+		previewMove(0, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(0, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(-1, 0, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(1, 0, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
 	elif white == false:
-		previewMove(0, -1, "Black", "White")
-		previewMove(0, 1, "Black", "White")
-		previewMove(-1, 0, "Black", "White")
-		previewMove(1, 0, "Black", "White")
+		previewMove(0, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(0, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(-1, 0, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(1, 0, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
 
 func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
