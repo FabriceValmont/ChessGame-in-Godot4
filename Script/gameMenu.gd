@@ -25,6 +25,7 @@ func _on_resume_pressed():
 
 func _on_abandon_pressed():
 	VariableGlobal.gameLaunch = false
+	VariableGlobal.startWhite = true
 	VariableGlobal.turnWhite = true
 	VariableGlobal.updateOfThePartsAttack = false
 	VariableGlobal.pieceProtectTheKing = false

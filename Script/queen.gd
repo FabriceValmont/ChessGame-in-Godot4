@@ -369,7 +369,7 @@ func playWhite():
 		if nameOfPiece == "QueenWhite":
 			i = 9
 			j = 5
-			Position = Vector2(450,750)
+			Position = Vector2(350,750)
 	else:
 		i = 2
 		j = 5
@@ -392,7 +392,7 @@ func playBlack():
 		if nameOfPiece == "QueenWhite":
 			i = 2
 			j = 5
-			Position = Vector2(450,50)
+			Position = Vector2(350,50)
 	else:
 		i = 9
 		j = 5
