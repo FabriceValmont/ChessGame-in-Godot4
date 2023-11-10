@@ -1,5 +1,6 @@
 extends Node
 
+var pieceTaken = false
 var roundOfThree = false
 var scoreWhite = 0
 var scoreBlack = 0
@@ -21,7 +22,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if VariableGlobal.gameLaunch == true :
+	if VariableGlobal.gameLaunch == true and pieceTaken == true:
 		for piece_data in piecesBlack:
 			var piece_type = piece_data[0]  # Type de la pièce (Pawn, Knight, Bishop, Rook, Queen)
 			var position_y = piece_data[1]  # Position y du sprite
@@ -40,6 +41,7 @@ func _process(_delta):
 				
 				# Ajouter le sprite comme enfant du nœud gameScreen
 				get_node("/root/gameScreen").add_child(deadSprite)
+				pieceTaken = false
 				break
 				
 		for piece_data in piecesWhite:
@@ -60,5 +62,6 @@ func _process(_delta):
 				
 				# Ajouter le sprite comme enfant du nœud gameScreen
 				get_node("/root/gameScreen").add_child(deadSprite)
+				pieceTaken = false
 				break
 

@@ -151,9 +151,11 @@ func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()
 		if white == true and VariableGlobal.turnWhite == false:
 			if "Black" in pieceName and dragging == false :
+				VariableGlobalOption.pieceTaken = true
 				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
 		elif white == false and VariableGlobal.turnWhite == true:
 			if "White" in pieceName and dragging == false :
+				VariableGlobalOption.pieceTaken = true
 				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
 				
 func checkMaxMove(dx, dy):
@@ -291,7 +293,7 @@ func createNewPieceDefenceMovePreview(attackI, attackJ, color):
 	previewSprite.position.x = Position.x + positionChessBoard.x + (100 * (attackJ - j))
 	previewSprite.position.y = Position.y + positionChessBoard.y + (100 * (attackI - i))
 	previewSprite.z_index = 9
-	previewSprite.modulate.a = 0.5
+	previewSprite.modulate.a = 0.1
 	get_node("/root/gameScreen/MovePreview").add_child(previewSprite)
 
 func previewMove(dx, dy, color, color2, attackI, attackJ, attack2I, attack2J):
