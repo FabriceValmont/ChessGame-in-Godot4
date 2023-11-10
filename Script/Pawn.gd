@@ -37,6 +37,8 @@ func _process(delta):
 	pass
 
 func _input(event):
+	#J'ai un problème quand je met le bouton MOUSE_BUTTON_LEFT 2 fois dans deux if différent.
+	#J'ai donc mit le MOUSE_BUTTON_RIGHT pour la promotion
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if VariableGlobal.startWhite == true:
 			if promoteInProgress == true and VariableGlobal.turnWhite == true and i == 2:
