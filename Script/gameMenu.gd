@@ -20,7 +20,10 @@ func _on_resume_pressed():
 	get_node("Resume").visible = false
 	get_node("Abandon").visible = false
 	VariableGlobalOption.OpenMenu = false
-	VariableGlobal.checkmate = false
+	if VariableGlobal.threatened == false:
+		VariableGlobal.checkmate = false
+	elif VariableGlobal.threatened == true:
+		VariableGlobal.checkmate = true
 
 
 func _on_abandon_pressed():
@@ -30,6 +33,8 @@ func _on_abandon_pressed():
 	VariableGlobal.turnWhite = true
 	VariableGlobal.updateOfThePartsAttack = false
 	VariableGlobal.pieceProtectTheKing = false
+	VariableGlobal.checkmateWhite = false
+	VariableGlobal.checkmateBlack = false
 	VariableGlobal.checkmate = false
 	VariableGlobal.threatened = false
 	VariableGlobalOption.scoreWhite = 0
