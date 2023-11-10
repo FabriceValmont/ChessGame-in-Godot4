@@ -318,15 +318,32 @@ func previewMove(dx, dy, color, color2, attackI, attackJ, attack2I, attack2J):
 			
 func previewAllMove():
 	if white == true:
-		previewMove(1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		if pieceProtectsAgainstAnAttack == false:
+			previewMove(1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			previewMove(-1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			previewMove(-1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			previewMove(1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		elif pieceProtectsAgainstAnAttack == true:
+			if directionAttackProtectKing == "Haut/Droite" or directionAttackProtectKing == "Bas/Gauche":
+				previewMove(1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+				previewMove(-1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			elif directionAttackProtectKing == "Haut/Gauche" or directionAttackProtectKing == "Bas/Droite":
+				previewMove(-1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+				previewMove(1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
 	elif white == false:
-		previewMove(1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		if pieceProtectsAgainstAnAttack == false:
+			previewMove(1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			previewMove(-1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			previewMove(-1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			previewMove(1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		elif pieceProtectsAgainstAnAttack == true:
+			if directionAttackProtectKing == "Haut/Droite" or directionAttackProtectKing == "Bas/Gauche":
+				previewMove(1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+				previewMove(-1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+			elif directionAttackProtectKing == "Haut/Gauche" or directionAttackProtectKing == "Bas/Droite":
+				previewMove(-1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+				previewMove(1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+	
 
 func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
