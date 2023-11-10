@@ -25,16 +25,12 @@ func _on_resume_pressed():
 
 func _on_abandon_pressed():
 	VariableGlobal.gameLaunch = false
+	VariableGlobal.initialisationDone = false
 	VariableGlobal.startWhite = true
 	VariableGlobal.turnWhite = true
 	VariableGlobal.updateOfThePartsAttack = false
 	VariableGlobal.pieceProtectTheKing = false
 	VariableGlobal.checkmate = false
-	if VariableGlobal.startWhite == true :
-		VariableGlobal.initialisingChessBoard("PawnBlack", "PawnWhite", VariableGlobal.pieceBlack, VariableGlobal.pieceWhite)
-	elif VariableGlobal.startWhite == false :
-		VariableGlobal.initialisingChessBoard("PawnWhite", "PawnBlack", VariableGlobal.pieceWhite, VariableGlobal.pieceBlack)
-	VariableGlobal.initialisingAttackBoardWhiteAndBlack()
 	VariableGlobalOption.scoreWhite = 0
 	VariableGlobalOption.scoreBlack = 0
 	VariableGlobalOption.OpenMenu = false

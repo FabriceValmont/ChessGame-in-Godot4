@@ -31,27 +31,50 @@ func updateVariablePiecePromoted():
 	print("Enter in updateVariablePiecePromoted")
 	var numberOfChildren = get_child_count()
 	
-	for f in range(numberOfChildren):
-		var piece = get_child(f)
-		var pieceName = piece.get_name()
-		if piece.get_instance_id() == promotionID:
-			if "White" in pieceName:
-				piece.i = 2
-				piece.white = true
-			elif "Black" in pieceName:
-				piece.i = 9
-				piece.white = false
-			for ff in range(2,10):
-				if VariableGlobal.chessBoard[piece.i][ff] == pieceName:
-					piece.j = ff
-			if piece.i == 2:
-				piece.Position = Vector2(((piece.j - 2) * 100) + 50, 50)
-			elif piece.i == 9:
-				piece.Position = Vector2(((piece.j - 2) * 100) + 50, 750)
-			piece.nameOfPiece = pieceName
-			piece.initialPosition = false
-			piece.positionChessBoard = global_position
-			break
+	if VariableGlobal.startWhite == true:
+		for f in range(numberOfChildren):
+			var piece = get_child(f)
+			var pieceName = piece.get_name()
+			if piece.get_instance_id() == promotionID:
+				if "White" in pieceName:
+					piece.i = 2
+					piece.white = true
+				elif "Black" in pieceName:
+					piece.i = 9
+					piece.white = false
+				for ff in range(2,10):
+					if VariableGlobal.chessBoard[piece.i][ff] == pieceName:
+						piece.j = ff
+				if piece.i == 2:
+					piece.Position = Vector2(((piece.j - 2) * 100) + 50, 50)
+				elif piece.i == 9:
+					piece.Position = Vector2(((piece.j - 2) * 100) + 50, 750)
+				piece.nameOfPiece = pieceName
+				piece.initialPosition = false
+				piece.positionChessBoard = global_position
+				break
+	elif VariableGlobal.startWhite == false:
+		for f in range(numberOfChildren):
+			var piece = get_child(f)
+			var pieceName = piece.get_name()
+			if piece.get_instance_id() == promotionID:
+				if "White" in pieceName:
+					piece.i = 9
+					piece.white = true
+				elif "Black" in pieceName:
+					piece.i = 2
+					piece.white = false
+				for ff in range(2,10):
+					if VariableGlobal.chessBoard[piece.i][ff] == pieceName:
+						piece.j = ff
+				if piece.i == 2:
+					piece.Position = Vector2(((piece.j - 2) * 100) + 50, 50)
+				elif piece.i == 9:
+					piece.Position = Vector2(((piece.j - 2) * 100) + 50, 750)
+				piece.nameOfPiece = pieceName
+				piece.initialPosition = false
+				piece.positionChessBoard = global_position
+				break
 
 func _on_pawn_promotion_turn(promoteInProgress):
 	print("Enter _on_pawn_promotion_turn")
