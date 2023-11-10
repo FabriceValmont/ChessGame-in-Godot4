@@ -31,6 +31,7 @@ func _on_abandon_pressed():
 	VariableGlobal.updateOfThePartsAttack = false
 	VariableGlobal.pieceProtectTheKing = false
 	VariableGlobal.checkmate = false
+	VariableGlobal.threatened = false
 	VariableGlobalOption.scoreWhite = 0
 	VariableGlobalOption.scoreBlack = 0
 	VariableGlobalOption.OpenMenu = false
