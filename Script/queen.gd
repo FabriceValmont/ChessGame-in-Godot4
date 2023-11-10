@@ -341,26 +341,35 @@ func previewMove(dx, dy, color, color2, attackI, attackJ, attack2I, attack2J, at
 		or chessBoard[attack3I][attack3J] != "0":
 			createNewPieceDefenceMovePreview(attack3I, attack3J, color)
 			
-			
+func previewMovePattern(color, color2):
+	if pieceProtectsAgainstAnAttack == false:
+		previewMove(0, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(0, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(-1, 0, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(1, 0, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(1, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(-1, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(-1, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMove(1, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+	elif pieceProtectsAgainstAnAttack == true:
+		if directionAttackProtectKing == "Haut" or directionAttackProtectKing == "Bas":
+			previewMove(0, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+			previewMove(0, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		elif directionAttackProtectKing == "Droite" or directionAttackProtectKing == "Gauche":
+			previewMove(-1, 0, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+			previewMove(1, 0, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		elif directionAttackProtectKing == "Haut/Droite" or directionAttackProtectKing == "Bas/Gauche":
+			previewMove(1, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+			previewMove(-1, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		elif directionAttackProtectKing == "Haut/Gauche" or directionAttackProtectKing == "Bas/Droite":
+			previewMove(-1, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+			previewMove(1, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+
 func previewAllMove():
 	if white == true:
-		previewMove(0, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(0, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(-1, 0, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(1, 0, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(-1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(-1, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(1, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMovePattern("White", "Black")
 	elif white == false:
-		previewMove(0, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(0, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(-1, 0, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(1, 0, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(-1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(-1, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
-		previewMove(1, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J,attackerPositionshift3I,attackerPositionshift3J)
+		previewMovePattern("Black", "White")
 
 func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()

@@ -188,26 +188,21 @@ func previewMove(dx, dy, color, color2, attackColor):
 		elif chessBoard[i+(f*dy)][j+(f*dx)] != "0" and color in chessBoard[i+(f*dy)][j+(f*dx)]:
 			break
 			
-			
+func previewMovePattern(color, color2, attackPieceColorOnTheChessboard):
+	previewMove(0, -1, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(0, 1, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(-1, 0, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(1, 0, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(1, -1, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(-1, 1, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(-1, -1, color, color2, attackPieceColorOnTheChessboard)
+	previewMove(1, 1, color, color2, attackPieceColorOnTheChessboard)
+	
 func previewAllMove():
 	if white == true:
-		previewMove(0, -1, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(0, 1, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(-1, 0, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(1, 0, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(1, -1, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(-1, 1, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(-1, -1, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
-		previewMove(1, 1, "White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
+		previewMovePattern("White", "Black", VariableGlobal.attackPieceBlackOnTheChessboard)
 	elif white == false:
-		previewMove(0, -1, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(0, 1, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(-1, 0, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(1, 0, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(1, -1, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(-1, 1, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(-1, -1, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
-		previewMove(1, 1, "Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
+		previewMovePattern("Black", "White", VariableGlobal.attackPieceWhiteOnTheChessboard)
 
 func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()

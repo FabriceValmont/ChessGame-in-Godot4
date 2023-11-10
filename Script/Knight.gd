@@ -294,26 +294,22 @@ func previewMove(dx, dy, color, color2, attackI, attackJ, attack2I, attack2J):
 		or chessBoard[attack2I][attack2J] != "0":
 			createNewPieceDefenceMovePreview(attack2I, attack2J, color)
 			
+func previewMovePattern(color, color2):
+	if pieceProtectsAgainstAnAttack == false:
+		previewMove(1, -2, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(-1, -2, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(1, 2, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(-1, 2, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(2, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(-2, -1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(2, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMove(-2, 1, color, color2,attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
 			
 func previewAllMove():
 	if white == true:
-		previewMove(1, -2, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, -2, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(1, 2, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, 2, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(2, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-2, -1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(2, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-2, 1, "White", "Black",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMovePattern("White", "Black")
 	elif white == false:
-		previewMove(1, -2, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, -2, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(1, 2, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-1, 2, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(2, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-2, -1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(2, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
-		previewMove(-2, 1, "Black", "White",attackerPositionshiftI,attackerPositionshiftJ,attackerPositionshift2I,attackerPositionshift2J)
+		previewMovePattern("Black", "White")
 
 func deleteAllChildMovePreview():
 	var numberOfChildren = get_node("/root/gameScreen/MovePreview").get_child_count()
