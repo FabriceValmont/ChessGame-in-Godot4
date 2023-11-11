@@ -15,12 +15,13 @@ func _process(delta):
 func _input(event):
 	var mousePosition = get_global_mouse_position()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
-		pieceSelect = ""
-		print("pieceSelect: ",pieceSelect)
-	
+		if pieceSelect != "":
+			pieceSelect = ""
+			print("pieceSelect: ",pieceSelect)
+			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		selectPiece(mousePosition)
-		insertPieceSelectOnSquare(mousePosition)
+		insertPiece(mousePosition)
 
 func selectPiece(mousePosition):
 	var pieces = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
@@ -31,7 +32,7 @@ func selectPiece(mousePosition):
 			print("pieceSelect: ", pieceSelect)
 			break
 
-func insertPieceSelectOnSquare(mousePosition):
+func insertPiece(mousePosition):
 	print("Enter in insertPieceSelectPosition")
 	var pieces = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
 	for i in range(10): 
@@ -40,19 +41,24 @@ func insertPieceSelectOnSquare(mousePosition):
 			and mousePosition.y >= 100 + j * 100 and mousePosition.y <= 200 + j * 100:
 				for piece in pieces:
 					if pieceSelect == piece and white == true:
-						var promotion_sprite = Sprite2D.new()
-						promotion_sprite.texture = load("res://Sprite/Piece/White/"+piece.to_lower()+"_white.png")
-						promotion_sprite.centered = true
-						promotion_sprite.position.x = i * 100 + 50
-						promotion_sprite.position.y = j * 100 + 50
-						get_node("ChessBoard").add_child(promotion_sprite)
+						var sceneInstance = load("res://Scene/"+piece.to_lower()+".tscn").instantiate()
+						sceneInstance.white = true
+						sceneInstance.position.x = i * 100 + 50
+						sceneInstance.position.y = j * 100 + 50
+						get_node("ChessBoard").add_child(sceneInstance)
 					elif pieceSelect == piece and white == false:
-						var promotion_sprite = Sprite2D.new()
-						promotion_sprite.texture = load("res://Sprite/Piece/Black/"+piece.to_lower()+"_black.png")
-						promotion_sprite.centered = true
-						promotion_sprite.position.x = i * 100 + 50
-						promotion_sprite.position.y = j * 100 + 50
-						get_node("ChessBoard").add_child(promotion_sprite)
+						var sceneInstance = load("res://Scene/"+piece.to_lower()+".tscn").instantiate()
+						sceneInstance.white = false
+						sceneInstance.position.x = i * 100 + 50
+						sceneInstance.position.y = j * 100 + 50
+						get_node("ChessBoard").add_child(sceneInstance)
+
+func deletePiece(mousePosition):
+	for i in range(10): 
+		for j in range(10):
+			if mousePosition.x >= 100 + i * 100 and mousePosition.x <= 200 + i * 100\
+			and mousePosition.y >= 100 + j * 100 and mousePosition.y <= 200 + j * 100:
+				pass
 
 func _on_button_pressed():
 	white = !white
@@ -70,3 +76,10 @@ func _on_button_pressed():
 		get_node("EditorRook").texture = preload("res://Sprite/Piece/Black/rook_black.png")
 		get_node("EditorQueen").texture = preload("res://Sprite/Piece/Black/queen_black.png")
 		get_node("EditorKing").texture = preload("res://Sprite/Piece/Black/king_black.png")
+
+func _on_delete_all_piece_pressed():
+	var numberOfChildren = get_node("ChessBoard").get_child_count()
+	
+	for f in range(numberOfChildren):
+		var piece = get_node("ChessBoard").get_child(f)
+		piece.queue_free()

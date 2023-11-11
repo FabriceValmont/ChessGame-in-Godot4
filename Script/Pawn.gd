@@ -687,3 +687,4 @@ func playBlack():
 				Position.y = 650
 		
 	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+

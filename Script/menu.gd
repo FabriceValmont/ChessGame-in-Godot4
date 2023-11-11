@@ -17,6 +17,7 @@ func _on_play_pressed():
 
 func _on_editor_mod_pressed():
 	get_tree().change_scene_to_file("res://Scene/editorMod.tscn")
+	VariableGlobalOption.modeEditor = true
 
 
 func _on_check_button_pressed():

@@ -1,5 +1,6 @@
 extends Node
 
+var modeEditor = false
 var pieceTaken = false
 var roundOfThree = false
 var scoreWhite = 0
