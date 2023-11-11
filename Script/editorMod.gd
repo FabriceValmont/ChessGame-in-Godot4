@@ -23,27 +23,36 @@ func _input(event):
 		insertPieceSelectOnSquare(mousePosition)
 
 func selectPiece(mousePosition):
-	var piece = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
+	var pieces = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
 	for f in range(6):
 		if mousePosition.x >= 0 and mousePosition.x <= 100 \
 		and mousePosition.y >= 200 + f * 100 and mousePosition.y <= 300 + f * 100:
-			pieceSelect = piece[f]
+			pieceSelect = pieces[f]
 			print("pieceSelect: ", pieceSelect)
 			break
 
 func insertPieceSelectOnSquare(mousePosition):
 	print("Enter in insertPieceSelectPosition")
+	var pieces = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
 	for i in range(10): 
 		for j in range(10):
 			if mousePosition.x >= 100 + i * 100 and mousePosition.x <= 200 + i * 100\
 			and mousePosition.y >= 100 + j * 100 and mousePosition.y <= 200 + j * 100:
-				if pieceSelect == "Pawn":
-					var promotion_sprite = Sprite2D.new()
-					promotion_sprite.texture = load("res://Sprite/Piece/White/pawn_white.png")
-					promotion_sprite.centered = false
-					promotion_sprite.position.x = i * 100
-					promotion_sprite.position.y = j * 100
-					get_node("ChessBoard").add_child(promotion_sprite)
+				for piece in pieces:
+					if pieceSelect == piece and white == true:
+						var promotion_sprite = Sprite2D.new()
+						promotion_sprite.texture = load("res://Sprite/Piece/White/"+piece.to_lower()+"_white.png")
+						promotion_sprite.centered = true
+						promotion_sprite.position.x = i * 100 + 50
+						promotion_sprite.position.y = j * 100 + 50
+						get_node("ChessBoard").add_child(promotion_sprite)
+					elif pieceSelect == piece and white == false:
+						var promotion_sprite = Sprite2D.new()
+						promotion_sprite.texture = load("res://Sprite/Piece/Black/"+piece.to_lower()+"_black.png")
+						promotion_sprite.centered = true
+						promotion_sprite.position.x = i * 100 + 50
+						promotion_sprite.position.y = j * 100 + 50
+						get_node("ChessBoard").add_child(promotion_sprite)
 
 func _on_button_pressed():
 	white = !white
