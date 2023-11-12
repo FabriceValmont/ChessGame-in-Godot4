@@ -42,6 +42,8 @@ func _ready():
 			texture = textureBlack
 			playModeEditor("Black")
 		print(nameOfPiece, " i: ", i, " j: ", j, " PositionX: ", Position.x, " PositionY: ", Position.y )
+		for f in range(0,12):
+			print(chessBoard[f])
 
 func _process(delta):
 	pass
@@ -710,7 +712,11 @@ func playModeEditor(color):
 				j = f + 2
 				Position.x = position.x
 				Position.y = position.y
+				chessBoard[i][j] = nameOfPiece.replace("@", "")
 
 func _on_area_2d_mouse_entered():
 	if VariableGlobalOption.modeEditor == true and VariableGlobalOption.modeDelete == true:
+		chessBoard[i][j] = "0"
+		for f in range(0,12):
+			print(chessBoard[f])
 		queue_free()
