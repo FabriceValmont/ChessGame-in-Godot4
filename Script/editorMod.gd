@@ -83,3 +83,11 @@ func _on_delete_all_piece_pressed():
 	for f in range(numberOfChildren):
 		var piece = get_node("ChessBoard").get_child(f)
 		piece.queue_free()
+
+func _on_mode_delete_pressed():
+	if VariableGlobalOption.modeDelete == false:
+		get_node("ModeDelete").set_text("Delete: \nEnabled")
+		VariableGlobalOption.modeDelete = true
+	elif VariableGlobalOption.modeDelete == true:
+		get_node("ModeDelete").set_text("Delete: \nDisabled")
+		VariableGlobalOption.modeDelete = false

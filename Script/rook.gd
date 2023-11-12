@@ -455,3 +455,7 @@ func playBlack():
 			Position = Vector2(750,750)
 		
 	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
+
+func _on_area_2d_mouse_entered():
+	if VariableGlobalOption.modeEditor == true and VariableGlobalOption.modeDelete == true:
+		queue_free()

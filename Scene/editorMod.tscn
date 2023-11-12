@@ -19,10 +19,17 @@ offset_bottom = 154.0
 text = "Change
 Color"
 
-[node name="DeleteAllPiece" type="Button" parent="."]
+[node name="ModeDelete" type="Button" parent="."]
 offset_top = 800.0
 offset_right = 99.0
-offset_bottom = 831.0
+offset_bottom = 854.0
+text = "Delete: 
+Disabled"
+
+[node name="DeleteAllPiece" type="Button" parent="."]
+offset_top = 870.0
+offset_right = 99.0
+offset_bottom = 901.0
 text = "Delete All"
 
 [node name="EditorPawn" type="Sprite2D" parent="."]
@@ -55,4 +62,5 @@ texture = ExtResource("2_7eyyb")
 centered = false
 
 [connection signal="pressed" from="ChangeColor" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ModeDelete" to="." method="_on_mode_delete_pressed"]
 [connection signal="pressed" from="DeleteAllPiece" to="." method="_on_delete_all_piece_pressed"]
