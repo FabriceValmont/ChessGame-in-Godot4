@@ -12,6 +12,7 @@ var Position = Vector2(50, 750)
 @onready var nameOfPiece = get_name()
 var initialPosition = true
 var white = true
+var textureWhite = preload("res://Sprite/Piece/White/rook_white.png")
 var textureBlack = preload("res://Sprite/Piece/Black/rook_black.png")
 var maxMoveUp = 1
 var maxMoveDown = 1
@@ -29,10 +30,21 @@ var attackerPositionshift2J = 0
 func _ready():
 	await get_tree().process_frame
 	positionChessBoard = get_parent().global_position
-	if VariableGlobal.startWhite == true:
-		playWhite()
-	elif VariableGlobal.startWhite == false:
-		playBlack()
+	if VariableGlobalOption.modeEditor == false:
+		if VariableGlobal.startWhite == true:
+			playWhite()
+		elif VariableGlobal.startWhite == false:
+			playBlack()
+	elif VariableGlobalOption.modeEditor == true:
+		if white == true:
+			texture = textureWhite
+			playModeEditor("White")
+		elif white == false:
+			texture = textureBlack
+			playModeEditor("Black")
+		print(nameOfPiece, " i: ", i, " j: ", j, " PositionX: ", Position.x, " PositionY: ", Position.y )
+		for f in range(0,12):
+			print(chessBoard[f])
 
 func _process(delta):
 	pass
@@ -456,6 +468,23 @@ func playBlack():
 		
 	print(nameOfPiece, " i: ", i, " j: ", j, " new position: ", Position )
 
+func playModeEditor(color):
+	print("Enter in playWhiteModeEditor")
+	set_name("Rook"+color)
+	nameOfPiece = get_name()
+	for f in range(10): 
+		for ff in range(10):
+			if global_position.x >= 100 + f * 100 and global_position.x <= 200 + f * 100\
+			and global_position.y >= 100 + ff * 100 and global_position.y <= 200 + ff * 100:
+				i = ff + 2
+				j = f + 2
+				Position.x = position.x
+				Position.y = position.y
+				chessBoard[i][j] = nameOfPiece.replace("@", "")
+
 func _on_area_2d_mouse_entered():
 	if VariableGlobalOption.modeEditor == true and VariableGlobalOption.modeDelete == true:
+		chessBoard[i][j] = "0"
+		for f in range(0,12):
+			print(chessBoard[f])
 		queue_free()
