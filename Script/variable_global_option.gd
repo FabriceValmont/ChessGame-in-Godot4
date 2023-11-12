@@ -2,6 +2,8 @@ extends Node
 
 var modeEditor = false
 var modeDelete = false
+var kingWhitePresent = false
+var kingBlackPresent = false
 var pieceTaken = false
 var roundOfThree = false
 var scoreWhite = 0

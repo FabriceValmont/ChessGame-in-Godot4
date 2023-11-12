@@ -298,6 +298,10 @@ func playModeEditor(color):
 
 func _on_area_2d_mouse_entered():
 	if VariableGlobalOption.modeEditor == true and VariableGlobalOption.modeDelete == true:
+		if white == true:
+			VariableGlobalOption.kingWhitePresent = false
+		elif white == false:
+			VariableGlobalOption.kingBlackPresent = false
 		chessBoard[i][j] = "0"
 		for f in range(0,12):
 			print(chessBoard[f])

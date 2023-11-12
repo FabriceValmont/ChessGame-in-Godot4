@@ -32,6 +32,13 @@ func selectPiece(mousePosition):
 			print("pieceSelect: ", pieceSelect)
 			break
 
+func createPiece(i,j,piece,white):
+	var sceneInstance = load("res://Scene/"+piece.to_lower()+".tscn").instantiate()
+	sceneInstance.white = white
+	sceneInstance.position.x = i * 100 + 50
+	sceneInstance.position.y = j * 100 + 50
+	get_node("ChessBoard").add_child(sceneInstance)
+
 func insertPiece(mousePosition):
 	print("Enter in insertPieceSelectPosition")
 	var pieces = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
@@ -41,17 +48,17 @@ func insertPiece(mousePosition):
 			and mousePosition.y >= 100 + j * 100 and mousePosition.y <= 200 + j * 100:
 				for piece in pieces:
 					if pieceSelect == piece and white == true:
-						var sceneInstance = load("res://Scene/"+piece.to_lower()+".tscn").instantiate()
-						sceneInstance.white = true
-						sceneInstance.position.x = i * 100 + 50
-						sceneInstance.position.y = j * 100 + 50
-						get_node("ChessBoard").add_child(sceneInstance)
+						if piece != "King":
+							createPiece(i,j,piece,true)
+						elif piece == "King" and VariableGlobalOption.kingWhitePresent == false:
+							createPiece(i,j,piece,true)
+							VariableGlobalOption.kingWhitePresent = true
 					elif pieceSelect == piece and white == false:
-						var sceneInstance = load("res://Scene/"+piece.to_lower()+".tscn").instantiate()
-						sceneInstance.white = false
-						sceneInstance.position.x = i * 100 + 50
-						sceneInstance.position.y = j * 100 + 50
-						get_node("ChessBoard").add_child(sceneInstance)
+						if piece != "King":
+							createPiece(i,j,piece,false)
+						elif piece == "King" and VariableGlobalOption.kingBlackPresent == false:
+							createPiece(i,j,piece,false)
+							VariableGlobalOption.kingBlackPresent = true
 
 func _on_button_pressed():
 	white = !white
@@ -80,6 +87,8 @@ func _on_delete_all_piece_pressed():
 			VariableGlobal.chessBoard[i][j] = null
 	for f in range(0,12):
 		print(VariableGlobal.chessBoard[f])
+	VariableGlobalOption.kingWhitePresent = false
+	VariableGlobalOption.kingBlackPresent = false
 
 func _on_mode_delete_pressed():
 	if VariableGlobalOption.modeDelete == false:
@@ -91,19 +100,25 @@ func _on_mode_delete_pressed():
 
 func _on_quit_pressed():
 	pieceSelect = ""
-	VariableGlobalOption.modeEditor = true
+	VariableGlobalOption.modeEditor = false
 	VariableGlobalOption.modeDelete = false
+	VariableGlobalOption.kingWhitePresent = false
+	VariableGlobalOption.kingBlackPresent = false
 	get_tree().change_scene_to_file("res://Scene/menu.tscn")
 
 func _on_play_pressed():
-	var movePreviewNode = Node2D.new()
-	movePreviewNode.name = "MovePreview"
-	for f in range(11):
-		get_child(f).queue_free()
-	add_child(load("res://Scene/gameMenu.tscn").instantiate())
-	add_child(load("res://Scene/displayCheckmate.tscn").instantiate())
-	add_child(movePreviewNode)
-	set_name("gameScreen")
-	set_script(null)
-	VariableGlobal.gameLaunch = true
-	
+	#Vérification s'il y a un roi pour chaque camp et un seul.
+	if VariableGlobalOption.kingWhitePresent == true\
+	and VariableGlobalOption.kingBlackPresent == true:
+		var movePreviewNode = Node2D.new()
+		movePreviewNode.name = "MovePreview"
+		for f in range(11):
+			get_child(f).queue_free()
+		add_child(load("res://Scene/gameMenu.tscn").instantiate())
+		add_child(load("res://Scene/displayCheckmate.tscn").instantiate())
+		add_child(movePreviewNode)
+		set_name("gameScreen")
+		set_script(null)
+		VariableGlobalOption.kingWhitePresent = false
+		VariableGlobalOption.kingBlackPresent = false
+		VariableGlobal.gameLaunch = true
