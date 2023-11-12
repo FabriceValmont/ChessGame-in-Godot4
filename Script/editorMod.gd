@@ -53,13 +53,6 @@ func insertPiece(mousePosition):
 						sceneInstance.position.y = j * 100 + 50
 						get_node("ChessBoard").add_child(sceneInstance)
 
-func deletePiece(mousePosition):
-	for i in range(10): 
-		for j in range(10):
-			if mousePosition.x >= 100 + i * 100 and mousePosition.x <= 200 + i * 100\
-			and mousePosition.y >= 100 + j * 100 and mousePosition.y <= 200 + j * 100:
-				pass
-
 func _on_button_pressed():
 	white = !white
 	if white == true:
@@ -91,3 +84,9 @@ func _on_mode_delete_pressed():
 	elif VariableGlobalOption.modeDelete == true:
 		get_node("ModeDelete").set_text("Delete: \nDisabled")
 		VariableGlobalOption.modeDelete = false
+
+func _on_quit_pressed():
+	pieceSelect = ""
+	VariableGlobalOption.modeEditor = true
+	VariableGlobalOption.modeDelete = false
+	get_tree().change_scene_to_file("res://Scene/menu.tscn")
