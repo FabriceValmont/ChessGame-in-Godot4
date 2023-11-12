@@ -72,10 +72,14 @@ func _on_button_pressed():
 
 func _on_delete_all_piece_pressed():
 	var numberOfChildren = get_node("ChessBoard").get_child_count()
-	
 	for f in range(numberOfChildren):
 		var piece = get_node("ChessBoard").get_child(f)
 		piece.queue_free()
+	for i in range(2,10):
+		for j in range(2,10):
+			VariableGlobal.chessBoard[i][j] = null
+	for f in range(0,12):
+		print(VariableGlobal.chessBoard[f])
 
 func _on_mode_delete_pressed():
 	if VariableGlobalOption.modeDelete == false:
@@ -90,3 +94,16 @@ func _on_quit_pressed():
 	VariableGlobalOption.modeEditor = true
 	VariableGlobalOption.modeDelete = false
 	get_tree().change_scene_to_file("res://Scene/menu.tscn")
+
+func _on_play_pressed():
+	var movePreviewNode = Node2D.new()
+	movePreviewNode.name = "MovePreview"
+	for f in range(11):
+		get_child(f).queue_free()
+	add_child(load("res://Scene/gameMenu.tscn").instantiate())
+	add_child(load("res://Scene/displayCheckmate.tscn").instantiate())
+	add_child(movePreviewNode)
+	set_name("gameScreen")
+	set_script(null)
+	VariableGlobal.gameLaunch = true
+	

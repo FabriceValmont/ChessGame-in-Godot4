@@ -35,14 +35,20 @@ func _ready():
 	
 
 func _process(delta):
-	if gameLaunch == true :
-		if initialisationDone == false:
-			if startWhite == true :
-				initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
-			elif startWhite == false :
-				initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
-			initialisingAttackBoardWhiteAndBlack()
-			initialisationDone = true
+	if gameLaunch == true:
+		if VariableGlobalOption.modeEditor == false:
+			if initialisationDone == false:
+				if startWhite == true :
+					initialisingChessBoard("PawnBlack", "PawnWhite", pieceBlack, pieceWhite)
+				elif startWhite == false :
+					initialisingChessBoard("PawnWhite", "PawnBlack", pieceWhite, pieceBlack)
+				initialisingAttackBoardWhiteAndBlack()
+				initialisationDone = true
+		elif VariableGlobalOption.modeEditor == true:
+			if initialisationDone == false:
+				initialisingChessBoardModeEditor()
+				initialisingAttackBoardWhiteAndBlack()
+				initialisationDone = true
 			
 		if turnWhite == true:
 			if updateOfThePartsAttack == false:
@@ -89,6 +95,20 @@ func initialisingChessBoard(pawnColor, pawnColor2, pieceColor, pieceColor2):
 	for i in range(9,10): 
 		for j in range(2,10):
 			chessBoard[i][j] = pieceColor2[j]
+	for i in range(0,12):
+		for j in range(0,12):
+			if chessBoard[i][j] ==  null:
+				chessBoard[i][j] = "x"
+	
+	print("ChessBoard: ")
+	for i in range(0,12):
+		print(chessBoard[i])
+
+func initialisingChessBoardModeEditor():
+	for i in range(2,10):
+		for j in range(2,10):
+			if chessBoard[i][j] ==  null:
+				chessBoard[i][j] = "0"
 	for i in range(0,12):
 		for j in range(0,12):
 			if chessBoard[i][j] ==  null:

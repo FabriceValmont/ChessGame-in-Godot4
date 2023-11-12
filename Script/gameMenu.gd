@@ -37,6 +37,7 @@ func _on_abandon_pressed():
 	VariableGlobal.checkmateBlack = false
 	VariableGlobal.checkmate = false
 	VariableGlobal.threatened = false
+	VariableGlobalOption.modeEditor = false
 	VariableGlobalOption.scoreWhite = 0
 	VariableGlobalOption.scoreBlack = 0
 	VariableGlobalOption.OpenMenu = false

@@ -18,9 +18,9 @@ offset_bottom = 35.0
 text = "Quit"
 
 [node name="ChangeColor" type="Button" parent="."]
-offset_top = 100.0
+offset_top = 140.0
 offset_right = 100.0
-offset_bottom = 154.0
+offset_bottom = 194.0
 text = "Change
 Color"
 
@@ -36,6 +36,13 @@ offset_top = 870.0
 offset_right = 99.0
 offset_bottom = 901.0
 text = "Delete All"
+
+[node name="Play" type="Button" parent="."]
+offset_left = 1.0
+offset_top = 100.0
+offset_right = 99.0
+offset_bottom = 131.0
+text = "Play"
 
 [node name="EditorPawn" type="Sprite2D" parent="."]
 position = Vector2(50, 250)
@@ -70,3 +77,4 @@ centered = false
 [connection signal="pressed" from="ChangeColor" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="ModeDelete" to="." method="_on_mode_delete_pressed"]
 [connection signal="pressed" from="DeleteAllPiece" to="." method="_on_delete_all_piece_pressed"]
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
