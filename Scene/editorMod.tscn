@@ -13,7 +13,7 @@
 script = ExtResource("1_mp0h6")
 
 [node name="Quit" type="Button" parent="."]
-offset_right = 86.0
+offset_right = 99.0
 offset_bottom = 35.0
 text = "Quit"
 
@@ -36,6 +36,13 @@ offset_top = 870.0
 offset_right = 99.0
 offset_bottom = 901.0
 text = "Delete All"
+
+[node name="StartWhite" type="Button" parent="."]
+offset_top = 40.0
+offset_right = 100.0
+offset_bottom = 94.0
+text = "StartWhite:
+True"
 
 [node name="Play" type="Button" parent="."]
 offset_left = 1.0
@@ -77,4 +84,5 @@ centered = false
 [connection signal="pressed" from="ChangeColor" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="ModeDelete" to="." method="_on_mode_delete_pressed"]
 [connection signal="pressed" from="DeleteAllPiece" to="." method="_on_delete_all_piece_pressed"]
+[connection signal="pressed" from="StartWhite" to="." method="_on_start_white_pressed"]
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]

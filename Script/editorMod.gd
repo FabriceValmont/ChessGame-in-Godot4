@@ -5,8 +5,9 @@ var pieceSelect = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	for i in range(2,10):
+		for j in range(2,10):
+			VariableGlobal.chessBoard[i][j] = null
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -98,12 +99,23 @@ func _on_mode_delete_pressed():
 		get_node("ModeDelete").set_text("Delete: \nDisabled")
 		VariableGlobalOption.modeDelete = false
 
+func _on_start_white_pressed():
+	if VariableGlobal.startWhite == false:
+		VariableGlobal.startWhite = true
+		get_node("StartWhite").set_text("StatWhite: \nTrue")
+	elif VariableGlobal.startWhite == true:
+		get_node("StartWhite").set_text("StatWhite: \nFalse")
+		VariableGlobal.startWhite = false
+
 func _on_quit_pressed():
 	pieceSelect = ""
 	VariableGlobalOption.modeEditor = false
 	VariableGlobalOption.modeDelete = false
 	VariableGlobalOption.kingWhitePresent = false
 	VariableGlobalOption.kingBlackPresent = false
+	for i in range(2,10):
+		for j in range(2,10):
+			VariableGlobal.chessBoard[i][j] = null
 	get_tree().change_scene_to_file("res://Scene/menu.tscn")
 
 func _on_play_pressed():
@@ -112,7 +124,7 @@ func _on_play_pressed():
 	and VariableGlobalOption.kingBlackPresent == true:
 		var movePreviewNode = Node2D.new()
 		movePreviewNode.name = "MovePreview"
-		for f in range(11):
+		for f in range(get_child_count()-1):
 			get_child(f).queue_free()
 		add_child(load("res://Scene/gameMenu.tscn").instantiate())
 		add_child(load("res://Scene/displayCheckmate.tscn").instantiate())
@@ -121,4 +133,6 @@ func _on_play_pressed():
 		set_script(null)
 		VariableGlobalOption.kingWhitePresent = false
 		VariableGlobalOption.kingBlackPresent = false
+		VariableGlobalOption.modeDelete = false
 		VariableGlobal.gameLaunch = true
+
