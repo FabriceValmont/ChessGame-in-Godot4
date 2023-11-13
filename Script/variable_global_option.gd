@@ -33,10 +33,12 @@ func _process(_delta):
 			var number = piece_data[2]
 		
 			# Vérifier si le nœud n'existe pas déjà
-			if get_node("/root/gameScreen/ChessBoard/" + piece_type + "Black" + number) == null:
+			if get_node("/root/gameScreen/ChessBoard/" + piece_type + "Black" + number) == null\
+			and get_node("/root/gameScreen/" + piece_type + "Black" + number) == null:
 			# Créer un nouveau sprite
 				var deadSprite = Sprite2D.new()
 				deadSprite.texture = load("res://Sprite/Piece/Black/" + piece_type.to_lower() + "_black.png")
+				deadSprite.name = piece_type + "Black" + number
 				deadSprite.centered = true
 				deadSprite.position.x = 50
 				deadSprite.position.y = position_y
@@ -54,10 +56,12 @@ func _process(_delta):
 			var number = piece_data[2]
 		
 			# Vérifier si le nœud n'existe pas déjà
-			if get_node("/root/gameScreen/ChessBoard/" + piece_type + "White" + number) == null:
+			if get_node("/root/gameScreen/ChessBoard/" + piece_type + "White" + number) == null\
+			and get_node("/root/gameScreen/ChessBoard/" + piece_type + "White" + number) == null:
 			# Créer un nouveau sprite
 				var deadSprite = Sprite2D.new()
 				deadSprite.texture = load("res://Sprite/Piece/White/" + piece_type.to_lower() + "_white.png")
+				deadSprite.name = piece_type + "White" + number
 				deadSprite.centered = true
 				deadSprite.position.x = 950
 				deadSprite.position.y = position_y
