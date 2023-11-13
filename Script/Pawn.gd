@@ -302,15 +302,25 @@ func moveFinal(checkColor):
 
 func _on_area_2d_area_entered(area):
 		var pieceName = area.get_parent().get_name()
-		if white == true and VariableGlobal.turnWhite == false:
-			if "Black" in pieceName and dragging == false :
-				VariableGlobalOption.pieceTaken = true
-				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
-		elif white == false and VariableGlobal.turnWhite == true:
-			if "White" in pieceName and dragging == false :
-				VariableGlobalOption.pieceTaken = true
-				get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
-				
+		if promoteInProgress == false:
+			if white == true and VariableGlobal.turnWhite == false:
+				if "Black" in pieceName and dragging == false :
+					VariableGlobalOption.pieceTaken = true
+					get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
+			elif white == false and VariableGlobal.turnWhite == true:
+				if "White" in pieceName and dragging == false :
+					VariableGlobalOption.pieceTaken = true
+					get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
+		elif promoteInProgress == true:
+			if white == true and VariableGlobal.turnWhite == true:
+				if "Black" in pieceName and dragging == false :
+					VariableGlobalOption.pieceTaken = true
+					get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
+			elif white == false and VariableGlobal.turnWhite == false:
+				if "White" in pieceName and dragging == false :
+					VariableGlobalOption.pieceTaken = true
+					get_node("/root/gameScreen/ChessBoard/" + pieceName).queue_free()
+
 func findDirectionAttackRow(dx, dy, rookColor, queenColor):
 	for f in range(1,9):
 		if chessBoard[i+(dy*f)][j+(dx*f)] == "x":
