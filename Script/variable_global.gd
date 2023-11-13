@@ -1168,18 +1168,45 @@ func verificationDefenderAllAttack(knightColor,bishopColor,rookColor,queenColor,
 
 func checkmateKing(pawnColor,knightColor,bishopColor,rookColor,queenColor,kingNode,attackColor):
 	#On verifie l'échec et mat si aucune pièce ne peut protèger le roi
+	var case1 = false
+	var case2 = false
+	var case3 = false
+	var case4 = false
+	var case5 = false
+	var case6 = false
+	var case7 = false
+	var case8 = false
+	
 	if not pieceProtectTheKing:
 		
 		for i in range(kingNode.i - 1, kingNode.i + 2):
 			for j in range(kingNode.j - 1, kingNode.j + 2):
 				if i != kingNode.i or j != kingNode.j:
-					if (i >= 0 and i < 12 and j >= 0 and j < 12
-						and (attackColor[i][j] >= 1 or attackColor[i][j] <= -1
+					if i >= 0 and i < 12 and j >= 0 and j < 12:
+						if (attackColor[i][j] >= 1 or attackColor[i][j] <= -1
 						or chessBoard[i][j].begins_with(pawnColor) or chessBoard[i][j].begins_with(knightColor)
 						or chessBoard[i][j].begins_with(bishopColor) or chessBoard[i][j].begins_with(rookColor)
-						or chessBoard[i][j].begins_with(queenColor))):
-						threatened = true
-						break
+						or chessBoard[i][j].begins_with(queenColor)):
+							if i == kingNode.i - 1 and j == kingNode.j:
+								case1 = true
+							if i == kingNode.i - 1 and j == kingNode.j + 1:
+								case2 = true
+							if i == kingNode.i and j == kingNode.j + 1:
+								case3 = true
+							if i == kingNode.i + 1 and j == kingNode.j + 1:
+								case4 = true
+							if i == kingNode.i + 1 and j == kingNode.j:
+								case5 = true
+							if i == kingNode.i + 1 and j == kingNode.j - 1:
+								case6 = true
+							if i == kingNode.i and j == kingNode.j - 1:
+								case7 = true
+							if i == kingNode.i - 1 and j == kingNode.j - 1:
+								case8 = true
+							
+	if case1 == true and case2 == true and case3 == true and case4 == true\
+	and case5 == true and case6 == true and case7 == true and case8 == true:
+		threatened = true
 
 func stalemateOnlyKing():
 	var pieceFinded = false
