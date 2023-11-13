@@ -1211,6 +1211,8 @@ func checkmateKing(pawnColor,knightColor,bishopColor,rookColor,queenColor,kingNo
 func stalemateOnlyKing():
 	var pieceFinded = false
 	for i in range(2,10): 
+		if pieceFinded == true:
+			break
 		for j in range(2,10):
 			if chessBoard[i][j].begins_with("PawnWhite") or chessBoard[i][j].begins_with("KnightWhite")\
 			or chessBoard[i][j].begins_with("BishopWhite") or chessBoard[i][j].begins_with("RookWhite")\
@@ -1222,8 +1224,6 @@ func stalemateOnlyKing():
 				break
 			else:
 				stalemate = true
-		if pieceFinded == true:
-			break
 	print("stalemateOnlyKing: ", stalemate)
 
 func verificationStalemate(color,pawnColor,knightColor,bishopColor,rookColor,queenColor,attackColor):

@@ -64,7 +64,7 @@ func _input(event):
 				promotionSelectionBlack()
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
-	and promoteInProgress == false and VariableGlobal.checkmate == false:
+	and promoteInProgress == false and VariableGlobal.checkmate == false and VariableGlobal.stalemate == false:
 		if (event.position - self.position - positionChessBoard).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
@@ -713,6 +713,16 @@ func playModeEditor(color):
 				Position.x = position.x
 				Position.y = position.y
 				chessBoard[i][j] = nameOfPiece.replace("@", "")
+				if VariableGlobal.startWhite == true:
+					if i != 8 and color == "White":
+						initialPosition = false
+					if i != 3 and color == "Black":
+						initialPosition = false
+				elif VariableGlobal.startWhite == false:
+					if i != 3 and color == "White":
+						initialPosition = false
+					if i != 8 and color == "Black":
+						initialPosition = false
 
 func _on_area_2d_mouse_entered():
 	if VariableGlobalOption.modeEditor == true and VariableGlobalOption.modeDelete == true:

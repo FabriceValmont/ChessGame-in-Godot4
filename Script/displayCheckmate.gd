@@ -17,7 +17,11 @@ func _process(delta):
 		get_node("TextCheckmateBlack").set_text("Echec")
 	elif VariableGlobal.checkBlack == false:
 		get_node("TextCheckmateBlack").set_text("")
-		
+	
+	if VariableGlobal.stalemate == true:
+		get_node("TextCheckmateWhite").set_text("Pat")
+		get_node("TextCheckmateBlack").set_text("Pat")
+	
 	if VariableGlobal.checkmateWhite == true and VariableGlobal.checkmate == true:
 		get_node("TextCheckmateWhite").set_text("Echec et Mat")
 	elif VariableGlobal.checkmateBlack == true and VariableGlobal.checkmate == true:

@@ -57,7 +57,7 @@ func _process(delta):
 
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT\
-	and promoteInProgress == false and VariableGlobal.checkmate == false:
+	and promoteInProgress == false and VariableGlobal.checkmate == false and VariableGlobal.stalemate == false:
 		if (event.position - self.position - positionChessBoard).length() < clickRadius:
 			# Start dragging if the click is on the sprite.
 			if not dragging and event.pressed:
